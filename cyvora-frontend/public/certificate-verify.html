@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Verify Certificate | Cyvora</title>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700;900&amp;family=Work+Sans:wght@500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="../assets/css/tailwind-output.css"/>
+<link rel="stylesheet" href="../assets/css/site.css"/>
+</head>
+<body class="bg-background text-on-background min-h-screen flex items-center justify-center p-4 antialiased">
+
+<div class="w-full max-w-lg">
+  <div class="text-center mb-8">
+    <div class="inline-flex items-center justify-center w-16 h-16 rounded-xl bg-primary text-on-primary mb-4">
+      <span class="material-symbols-outlined text-3xl">verified</span>
+    </div>
+    <h1 class="text-headline-md font-bold">Certificate verification</h1>
+    <p class="text-on-surface-variant mt-1">Confirm authenticity of Cyvora digital safety certificates</p>
+  </div>
+  <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-8">
+    <div class="flex items-center gap-3 p-4 rounded-lg bg-secondary/10 border border-secondary/30 mb-6">
+      <span class="material-symbols-outlined text-secondary text-3xl" style="font-variation-settings:'FILL' 1">check_circle</span>
+      <div>
+        <p class="font-semibold text-secondary">Valid certificate</p>
+        <p class="text-label-md text-on-surface-variant">This credential is authentic and has not been revoked.</p>
+      </div>
+    </div>
+    <dl class="space-y-3 text-body-md">
+      <div class="flex justify-between border-b border-outline-variant pb-2"><dt class="text-on-surface-variant">Certificate ID</dt><dd class="font-semibold" id="vid">CYV-BR-2026-00482</dd></div>
+      <div class="flex justify-between border-b border-outline-variant pb-2"><dt class="text-on-surface-variant">Holder</dt><dd class="font-semibold">Citizen User</dd></div>
+      <div class="flex justify-between border-b border-outline-variant pb-2"><dt class="text-on-surface-variant">Tier</dt><dd class="font-semibold text-amber-800">Bronze</dd></div>
+      <div class="flex justify-between border-b border-outline-variant pb-2"><dt class="text-on-surface-variant">Issued</dt><dd class="font-semibold">14 July 2026</dd></div>
+      <div class="flex justify-between border-b border-outline-variant pb-2"><dt class="text-on-surface-variant">Expires</dt><dd class="font-semibold">14 July 2028</dd></div>
+      <div class="flex justify-between"><dt class="text-on-surface-variant">Issuer</dt><dd class="font-semibold">ANTIC · Cyvora Platform</dd></div>
+    </dl>
+    <a href="login.html" class="mt-8 block text-center text-primary font-label-lg hover:underline">Go to Cyvora →</a>
+  </div>
+</div>
+<script>
+const id=new URLSearchParams(location.search).get('id');
+if(id) document.getElementById('vid').textContent=id;
+</script>
+
+
+</body>
+</html>

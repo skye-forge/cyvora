@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Register | Cyvora</title>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700;900&amp;family=Work+Sans:wght@500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="../assets/css/tailwind-output.css"/>
+<link rel="stylesheet" href="../assets/css/site.css"/>
+</head>
+<body class="bg-background text-on-background min-h-screen flex items-center justify-center p-4 antialiased">
+
+<div class="w-full max-w-md">
+  <div class="text-center mb-8">
+    <div class="inline-flex items-center justify-center w-16 h-16 rounded-xl bg-primary text-on-primary mb-4">
+      <span class="material-symbols-outlined text-3xl" style="font-variation-settings:'FILL' 1">shield</span>
+    </div>
+    <h1 class="text-headline-lg font-bold text-primary">Create account</h1>
+    <p class="text-on-surface-variant text-label-md mt-1">Join Cameroon's digital safety community</p>
+  </div>
+  <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-8">
+    <form class="flex flex-col gap-4" onsubmit="event.preventDefault(); location.href='otp.html';">
+      <div>
+        <label class="block font-label-lg text-on-surface-variant mb-2">Full name</label>
+        <input type="text" required class="w-full h-12 px-4 border border-outline-variant rounded-lg bg-surface focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary" placeholder="Jean Dupont"/>
+      </div>
+      <div>
+        <label class="block font-label-lg text-on-surface-variant mb-2">Phone number</label>
+        <input type="tel" required class="w-full h-12 px-4 border border-outline-variant rounded-lg bg-surface focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary" placeholder="+237 6XX XXX XXX"/>
+      </div>
+      <div>
+        <label class="block font-label-lg text-on-surface-variant mb-2">Email (optional)</label>
+        <input type="email" class="w-full h-12 px-4 border border-outline-variant rounded-lg bg-surface focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary" placeholder="you@example.com"/>
+      </div>
+      <div>
+        <label class="block font-label-lg text-on-surface-variant mb-2">Password</label>
+        <input type="password" required minlength="8" class="w-full h-12 px-4 border border-outline-variant rounded-lg bg-surface focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary" placeholder="Min. 8 characters"/>
+      </div>
+      <label class="flex items-start gap-2 text-label-md text-on-surface-variant cursor-pointer">
+        <input type="checkbox" required class="mt-1 rounded border-outline-variant text-primary"/>
+        <span>I agree to the Terms of Governance and consent to data processing under CPDP regulations.</span>
+      </label>
+      <button type="submit" class="w-full h-12 bg-primary text-on-primary rounded-lg font-label-lg hover:opacity-90">Register &amp; verify</button>
+    </form>
+    <p class="text-center text-label-md text-on-surface-variant mt-6">
+      Already have an account? <a href="login.html" class="text-primary font-label-lg hover:underline">Sign in</a>
+    </p>
+  </div>
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Cyvora | Civic Safety Dashboard</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700;900&amp;family=Work+Sans:wght@500;600&amp;display=swap" rel="stylesheet"/>
+<!-- Icons -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind -->
+<link rel="stylesheet" href="../assets/css/tailwind-output.css" />
+<style>
+         tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-tint": "#345baf",
+                      "on-secondary-container": "#00723d",
+                      "secondary": "#006d3b",
+                      "on-error-container": "#93000a",
+                      "surface-container-high": "#e8e8ea",
+                      "secondary-fixed": "#7bfba8",
+                      "tertiary-fixed": "#dde3ec",
+                      "surface": "#f9f9fc",
+                      "inverse-primary": "#b1c5ff",
+                      "on-primary-fixed-variant": "#144296",
+                      "error": "#ba1a1a",
+                      "tertiary-fixed-dim": "#c1c7d0",
+                      "error-container": "#ffdad6",
+                      "on-background": "#1a1c1e",
+                      "on-tertiary-fixed": "#161c23",
+                      "primary-fixed": "#dae2ff",
+                      "on-tertiary": "#ffffff",
+                      "on-surface": "#1a1c1e",
+                      "secondary-fixed-dim": "#5dde8e",
+                      "surface-bright": "#f9f9fc",
+                      "surface-container-low": "#f3f3f6",
+                      "outline-variant": "#c4c6d3",
+                      "surface-variant": "#e2e2e5",
+                      "surface-container": "#eeeef0",
+                      "inverse-surface": "#2f3133",
+                      "on-secondary-fixed": "#00210e",
+                      "surface-dim": "#dadadc",
+                      "on-primary-fixed": "#001947",
+                      "inverse-on-surface": "#f0f0f3",
+                      "on-primary": "#ffffff",
+                      "outline": "#747783",
+                      "on-error": "#ffffff",
+                      "surface-container-highest": "#e2e2e5",
+                      "primary-container": "#0b3d91",
+                      "on-surface-variant": "#434652",
+                      "on-tertiary-container": "#a9afb8",
+                      "on-secondary": "#ffffff",
+                      "secondary-container": "#78f8a6",
+                      "tertiary": "#262d33",
+                      "primary-fixed-dim": "#b1c5ff",
+                      "primary": "#002869",
+                      "background": "#f9f9fc",
+                      "on-primary-container": "#8dadff",
+                      "surface-container-lowest": "#ffffff",
+                      "tertiary-container": "#3c434a",
+                      "on-secondary-fixed-variant": "#00522b",
+                      "on-tertiary-fixed-variant": "#41474f"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "unit": "8px",
+                      "stack-sm": "8px",
+                      "gutter": "24px",
+                      "stack-md": "16px",
+                      "section-gap": "64px",
+                      "margin-desktop": "48px",
+                      "container-max-width": "1440px",
+                      "stack-lg": "32px"
+              },
+              "fontFamily": {
+                      "label-lg": ["Work Sans"],
+                      "label-md": ["Work Sans"],
+                      "headline-lg": ["Public Sans"],
+                      "body-lg": ["Public Sans"],
+                      "display-lg": ["Public Sans"],
+                      "body-md": ["Public Sans"],
+                      "headline-md": ["Public Sans"],
+                      "caption": ["Public Sans"]
+              },
+              "fontSize": {
+                      "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.02em", "fontWeight": "600"}],
+                      "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.04em", "fontWeight": "500"}],
+                      "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                      "caption": ["12px", {"lineHeight": "16px", "fontWeight": "400"}]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #f9f9fc;
+            -webkit-font-smoothing: antialiased;
+        }
+        .bento-card {
+            background: white;
+            border: 1px solid #D1D5DB;
+            border-radius: 8px;
+            padding: 32px;
+            transition: all 0.2s ease-in-out;
+        }
+        .bento-card:hover {
+            box-shadow: 0 4px 12px rgba(11, 61, 145, 0.08);
+            border-color: #002869;
+        }
+    </style>
+<script src="../assets/js/config.js"></script>
+<script src="../assets/js/mock-data.js"></script>
+<script src="../assets/js/api.js"></script>
+<script src="../assets/js/templates.js"></script>
+<script src="../assets/js/app.js"></script>
+<link rel="stylesheet" href="../assets/css/site.css"/>
+</head>
+<body class="">
+<!-- SideNavBar (Authority: JSON Rail) -->
+<aside class="bg-primary dark:bg-primary-container text-on-primary dark:text-on-primary-container font-label-md text-label-md h-screen w-64 fixed left-0 top-0 flex flex-col h-full py-unit z-50">
+<div class="px-6 py-8 mb-4">
+<h1 class="text-headline-md font-headline-md font-bold text-on-primary">Cyvora</h1>
+<p class="text-on-primary/60 text-label-md">Civic Safety Portal</p>
+</div>
+<nav class="flex-1 flex flex-col gap-1 px-2">
+<a class="bg-surface-container-highest/10 text-on-primary border-l-4 border-secondary-fixed flex items-center gap-4 px-4 py-3 duration-200 ease-in-out hover:bg-on-primary/10 transition-colors" href="index.html">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">home</span>
+<span>Home</span>
+</a>
+<a class="text-on-primary/70 flex items-center gap-4 px-4 py-3 duration-200 ease-in-out hover:bg-on-primary/10 transition-colors" href="my-reports.html">
+<span class="material-symbols-outlined">assessment</span>
+<span>Reports</span>
+</a>
+<a class="text-on-primary/70 flex items-center gap-4 px-4 py-3 duration-200 ease-in-out hover:bg-on-primary/10 transition-colors" href="community.html">
+<span class="material-symbols-outlined">groups</span>
+<span>Community</span>
+</a>
+<a class="text-on-primary/70 flex items-center gap-4 px-4 py-3 duration-200 ease-in-out hover:bg-on-primary/10 transition-colors" href="learn.html">
+<span class="material-symbols-outlined">school</span>
+<span>Learn</span>
+</a>
+<a class="text-on-primary/70 flex items-center gap-4 px-4 py-3 duration-200 ease-in-out hover:bg-on-primary/10 transition-colors" href="leaderboard.html">
+<span class="material-symbols-outlined">emoji_events</span>
+<span>Leaderboard</span>
+</a>
+<a class="text-on-primary/70 flex items-center gap-4 px-4 py-3 duration-200 ease-in-out hover:bg-on-primary/10 transition-colors" href="monitor.html">
+<span class="material-symbols-outlined">public</span>
+<span>Monitor</span>
+</a>
+<a class="text-on-primary/70 flex items-center gap-4 px-4 py-3 duration-200 ease-in-out hover:bg-on-primary/10 transition-colors" href="certificates.html">
+<span class="material-symbols-outlined">workspace_premium</span>
+<span>Certificates</span>
+</a>
+
+<a class="text-on-primary/70 flex items-center gap-4 px-4 py-3 duration-200 ease-in-out hover:bg-on-primary/10 transition-colors" href="profile.html">
+<span class="material-symbols-outlined">account_circle</span>
+<span>Profile</span>
+</a>
+</nav>
+<div class="mt-auto px-4 py-4 flex flex-col gap-4">
+<button class="w-full bg-error text-on-error py-3 rounded font-label-lg uppercase tracking-wider flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">campaign</span>
+                Emergency Alert
+            </button>
+<div class="flex flex-col gap-1">
+<a class="text-on-primary/70 flex items-center gap-4 px-4 py-2 hover:bg-on-primary/10 transition-colors" href="profile.html">
+<span class="material-symbols-outlined">settings</span>
+<span>Settings</span>
+</a>
+<a class="text-on-primary/70 flex items-center gap-4 px-4 py-2 hover:bg-on-primary/10 transition-colors" href="support.html">
+<span class="material-symbols-outlined">help</span>
+<span>Support</span>
+</a>
+</div>
+</div>
+</aside>
+<!-- TopNavBar (Authority: JSON TopBar) -->
+<header class="fixed top-0 right-0 w-[calc(100%-16rem)] h-16 bg-surface dark:bg-surface-dim text-primary dark:text-primary-fixed border-b border-outline-variant flex items-center justify-between px-margin-desktop ml-64 z-40">
+<div class="flex items-center flex-1 max-w-md">
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-surface-container border border-outline-variant rounded-full text-label-md focus:outline-none focus:ring-2 focus:ring-primary/20" placeholder="Search safety database..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined p-2 rounded-full hover:bg-surface-container-low transition-colors scale-98 active:scale-95 text-on-surface-variant">notifications</button>
+<a class="material-symbols-outlined p-2 rounded-full hover:bg-surface-container-low transition-colors scale-98 active:scale-95 text-on-surface-variant inline-flex items-center justify-center" href="profile.html">settings</a>
+<a class="material-symbols-outlined p-2 rounded-full hover:bg-surface-container-low transition-colors scale-98 active:scale-95 text-on-surface-variant inline-flex items-center justify-center" href="support.html">help</a>
+</div>
+<a class="bg-primary text-on-primary px-6 py-2 rounded-lg font-label-lg scale-98 active:scale-95 transition-transform inline-flex" href="report-incident.html">Report Incident</a>
+<div class="h-10 w-10 rounded-full bg-surface-container-highest overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A professional headshot of a middle-aged male citizen wearing a smart-casual blazer, looking confidently into the camera. The background is a blurred office environment with soft white and cool blue tones, matching the institutional modernism style of the platform. High-key lighting ensures clarity and trust." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD8PqbaJtBDJHb_vR1AoCnLMXbTNZDsEb-kivxqcP6sXSlpgBl7_uECr5E0RWCtma7ZBjD8Zcj_s7hM2BiWGqrjPDedkDGgA-ShLO8wfUXZqwSGPJAtTHlwRdpcsbKd-PfrG5lPCDe-0I3nvMLzAQSRRrnKld1BzrqJajWVj0-ifqqRsrNf9H2r8rlGYFIJgRYMr7rjkI7tKFbCQ3x9Hhg8245DkdzcXJvVaW4EHfM2OnYHgatVPYwN"/>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="ml-64 mt-16 p-4 md:p-margin-desktop w-[calc(100%-16rem)] min-h-[calc(100vh-4rem)] flex flex-col gap-section-gap max-w-container-max-width mx-auto">
+<div class="mb-6 flex flex-wrap gap-3">
+  <a href="daily-challenge.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-secondary/10 text-secondary font-label-lg text-sm border border-secondary/20">
+    <span class="material-symbols-outlined text-[18px]">local_fire_department</span> Daily challenge
+  </a>
+  <a href="monitor.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary/10 text-primary font-label-lg text-sm border border-primary/20">
+    <span class="material-symbols-outlined text-[18px]">public</span> National monitor
+  </a>
+  <a href="leaderboard.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-surface-container text-on-surface font-label-lg text-sm border border-outline-variant">
+    <span class="material-symbols-outlined text-[18px]">emoji_events</span> Leaderboard
+  </a>
+  <a href="certificates.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-surface-container text-on-surface font-label-lg text-sm border border-outline-variant">
+    <span class="material-symbols-outlined text-[18px]">workspace_premium</span> Certificates
+  </a>
+</div>
+
+<!-- Header Greeting -->
+<section class="flex flex-col gap-4 lg:flex-row lg:justify-between lg:items-end">
+<div>
+<h2 class="font-display-lg text-display-lg text-primary" data-greeting>Good Morning, Citizen.</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant mt-2" data-district-line>Your district is currently at <span class="text-secondary font-bold">Standard Alert Level</span>.</p>
+</div>
+<div class="text-right">
+<p class="font-label-lg text-label-lg text-outline" data-live-date>Loading date…</p>
+<p class="font-body-md text-body-md text-on-surface" data-live-weather>Weather: 18°C · Clear Sky</p>
+</div>
+</section>
+<!-- Main Dashboard Grid -->
+<div class="grid grid-cols-1 gap-gutter lg:grid-cols-12">
+<!-- Left & Center Column: Activity & Cards (8 Cols) -->
+<div class="col-span-1 lg:col-span-8 flex flex-col gap-gutter">
+<!-- Quick Access / Summary Row -->
+<div class="grid grid-cols-1 gap-gutter md:grid-cols-2 xl:grid-cols-3">
+<!-- Pending Reports -->
+<div class="bento-card flex flex-col justify-between">
+<div>
+<p class="font-label-lg text-label-lg text-on-surface-variant uppercase tracking-widest">Pending Reports</p>
+<h3 class="font-display-lg text-display-lg mt-2 text-primary" data-counter="0" data-stat="pending">0</h3>
+</div>
+<p class="font-caption text-caption text-outline mt-4">Last update: 4 hours ago</p>
+</div>
+<!-- Approved Reports -->
+<div class="bento-card flex flex-col justify-between">
+<div>
+<p class="font-label-lg text-label-lg text-on-surface-variant uppercase tracking-widest">Approved</p>
+<h3 class="font-display-lg text-display-lg mt-2 text-secondary" data-counter="0" data-stat="approved">0</h3>
+</div>
+<p class="font-caption text-caption text-outline mt-4">Status: Verified by Authority</p>
+</div>
+<!-- Community Trust Score -->
+<div class="bento-card bg-primary-container text-on-primary-container flex flex-col justify-between border-none">
+<div>
+<p class="font-label-lg text-label-lg opacity-70 uppercase tracking-widest">Trust Rating</p>
+<h3 class="font-display-lg text-display-lg mt-2" data-counter="0" data-decimals="1" data-stat="trust">0</h3>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">verified</span>
+<span class="font-label-md text-label-md">Verified Citizen</span>
+</div>
+</div>
+</div>
+<!-- Featured Learning Module Card -->
+<div class="bento-card relative overflow-hidden group">
+<div class="relative z-10 grid grid-cols-2 gap-stack-lg">
+<div class="flex flex-col justify-center">
+<span class="inline-flex items-center px-3 py-1 bg-surface-container-highest rounded-full text-label-md font-label-md text-primary mb-4 w-fit">FEATURED LEARN</span>
+<h3 class="font-headline-lg text-headline-lg text-primary mb-2">Emergency Response: Cyber Threats</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-6">Learn how to identify and report phishing attempts targeting municipal utilities. Earn the "Cyber Vigilant" badge upon completion.</p>
+<button class="w-fit bg-primary text-on-primary px-8 py-3 rounded font-label-lg group-hover:bg-primary-container transition-colors">Start Training</button>
+</div>
+<div class="rounded-xl overflow-hidden aspect-video shadow-lg">
+<img class="w-full h-full object-cover" data-alt="A clean, cinematic visualization of digital network security. Abstract glowing blue lines weave through a dark high-tech interface. The visual style is crisp and corporate, utilizing Deep Trust Blue and sharp white accents to convey technical reliability and modern security. High-end 3D render quality." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDnu_qGBwwXh1a58rcqEj39Yc8REY8VuweEk1frvyYwUE-_xzCHhqDSxxqs_ixm3pW38ffkZ1axlQFpjjV0CCoZKWomXZbLruOZ2h_sB96sr1vKBhfoW2Gk_P1mftXm3J9HRqfcpyrqnXmyIRpO5lrILasO77xRSXKEDmaxgzrmpX21mcEubG4y9OGLZvTWMSrWZ-XJmyYRROMaXBkN7dvGINwiQr-BXlDnz_OrruD1bl6EGXt-_E42"/>
+</div>
+</div>
+</div>
+<!-- Community Highlights Section -->
+<section>
+<div class="flex justify-between items-center mb-6">
+<h4 class="font-headline-md text-headline-md text-primary">Community Highlights</h4>
+<a class="text-primary font-label-lg hover:underline" href="community.html">View Community Board</a>
+</div>
+<div class="grid grid-cols-1 gap-gutter md:grid-cols-2" data-community-highlights>
+<!-- Highlight 1 -->
+<div class="bento-card p-6 flex gap-gutter">
+<div class="w-20 h-20 bg-surface-container rounded-lg overflow-hidden shrink-0">
+<img class="w-full h-full object-cover" data-alt="A photo of a local neighborhood park during a bright, sunny afternoon. The grass is lush and green, and there is a clean, modern gazebo in the background. The scene is peaceful and tidy, suggesting community care and civic pride. The lighting is soft and warm, creating an inviting, light-mode atmosphere." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAercCnZBVEN49F_VrQ1GnMMDzDWerUI6f_4Kpxu6Ew-OCE7ZbwShyQBO-B5wNJFcsTPLAR6e4UNyZEr9DM1hHtYv6O4fNOg_RfHG3iGMuKLeDFoeoyAL4sE57tLT868Thy6zgXjAM2VyGrknlzjl9UW04ZHSfqrzpbwJAqjQepWSEEE5LyM7RFeQ9E4kgefarsBvzNWtBth15CzSRBufkto4HorsViJ6Of-LahjUxKOAJ_sYBxf8Wp"/>
+</div>
+<div class="flex flex-col justify-center">
+<h5 class="font-label-lg text-label-lg text-primary">Park Lighting Initiative</h5>
+<p class="font-body-md text-body-md text-on-surface-variant line-clamp-2">Success! New solar LED paths installed in North Sector Park thanks to resident reports.</p>
+</div>
+</div>
+<!-- Highlight 2 -->
+<div class="bento-card p-6 flex gap-gutter">
+<div class="w-20 h-20 bg-surface-container rounded-lg overflow-hidden shrink-0">
+<img class="w-full h-full object-cover" data-alt="A macro shot of a shiny silver civic medal resting on a dark blue velvet cushion. The medal features an emblem of a stylized eagle, representing authority and protection. The lighting is dramatic but clean, highlighting the metallic texture and the formal, prestigious nature of the award. Professional corporate photography." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDwRdU8auzKrXr8CXD23hr_mPA_2sehcCttfn2hEIc_PbHsXHRhjozZmH-73-H1NTdUUgwNWKkefC5QZdQhYNyXH_HMHsx2HdneHW99STsvX7GSLUjwhx8oaETttjiH1eIGoarb8M9X4TQWi4A_2_JtOvzTiegQqulIv43Kx4_9bA_epB_L5smnM9wlBalks7b4qGevu4apFf_uXOObshi5CTLh8HgxD6097QoYMA2nBe-DIKSikXwg"/>
+</div>
+<div class="flex flex-col justify-center">
+<h5 class="font-label-lg text-label-lg text-primary">Citizen Excellence Award</h5>
+<p class="font-body-md text-body-md text-on-surface-variant line-clamp-2">Mr. James Sterling recognized for reporting critical infrastructure fault in Sector 7.</p>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- Right Sidebar: Alerts & Tips (4 Cols) -->
+<aside class="col-span-1 lg:col-span-4 flex flex-col gap-gutter">
+<!-- National Alerts Sidebar -->
+<div class="bento-card bg-surface-container border-none flex flex-col gap-6">
+<div class="flex items-center justify-between">
+<h4 class="font-headline-md text-headline-md text-primary flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">notifications_active</span>
+                            National Alerts
+                        </h4>
+<span class="bg-error text-on-error px-2 py-0.5 rounded text-caption font-bold">LIVE</span>
+</div>
+<div class="space-y-4" data-alerts-list>
+<!-- Alert Item 1 -->
+<div class="bg-white p-4 rounded-lg border-l-4 border-error shadow-sm">
+<p class="font-label-md text-label-md text-error mb-1">SEVERE WEATHER</p>
+<h5 class="font-label-lg text-label-lg text-primary">High Wind Warning: Zone B</h5>
+<p class="font-caption text-caption text-on-surface-variant mt-2">Authorities advise securing outdoor items. Expected duration: 6 hours.</p>
+</div>
+<!-- Alert Item 2 -->
+<div class="bg-white p-4 rounded-lg border-l-4 border-surface-tint shadow-sm">
+<p class="font-label-md text-label-md text-primary mb-1">INFRASTRUCTURE</p>
+<h5 class="font-label-lg text-label-lg text-primary">Main St Bridge Maintenance</h5>
+<p class="font-caption text-caption text-on-surface-variant mt-2">Limited access between 11 PM - 4 AM tonight. Plan routes accordingly.</p>
+</div>
+<!-- Alert Item 3 -->
+<div class="bg-white p-4 rounded-lg border-l-4 border-secondary shadow-sm">
+<p class="font-label-md text-label-md text-secondary mb-1">PUBLIC HEALTH</p>
+<h5 class="font-label-lg text-label-lg text-primary">Seasonal Immunization Drive</h5>
+<p class="font-caption text-caption text-on-surface-variant mt-2">Mobile clinics stationed at all Community Hubs this weekend.</p>
+</div>
+</div>
+<button class="w-full text-primary font-label-lg py-2 border border-primary/20 rounded hover:bg-primary/5 transition-colors">See Historical Data</button>
+</div>
+<!-- Quick Tips Card -->
+<div class="bento-card border-dashed border-2 flex flex-col gap-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary">lightbulb</span>
+<h4 class="font-headline-md text-headline-md text-primary">Quick Safety Tips</h4>
+</div>
+<ul class="space-y-3">
+<li class="flex gap-3 text-on-surface-variant font-body-md">
+<span class="material-symbols-outlined text-[18px] text-outline shrink-0">check_circle</span>
+<span>Ensure your Cyvora Mobile app has 'Critical Alerts' enabled in OS settings.</span>
+</li>
+<li class="flex gap-3 text-on-surface-variant font-body-md">
+<span class="material-symbols-outlined text-[18px] text-outline shrink-0">check_circle</span>
+<span>Report non-emergency graffiti via the 'Urban Improvement' sub-tab for faster routing.</span>
+</li>
+<li class="flex gap-3 text-on-surface-variant font-body-md">
+<span class="material-symbols-outlined text-[18px] text-outline shrink-0">check_circle</span>
+<span>Participate in local Town Hall threads to influence district safety budgeting.</span>
+</li>
+</ul>
+<div class="mt-4 p-4 bg-tertiary-fixed rounded-lg text-on-tertiary-fixed-variant">
+<p class="font-label-lg text-label-lg mb-1">Did you know?</p>
+<p class="font-caption text-caption">84% of street lighting issues are resolved within 24 hours of a Cyvora report.</p>
+</div>
+</div>
+</aside>
+</div>
+<!-- Reporting Quick-Access Row -->
+<section class="mb-12">
+<h4 class="font-headline-md text-headline-md text-primary mb-6">Quick-Access Reporting</h4>
+<div class="grid grid-cols-1 gap-gutter sm:grid-cols-2 xl:grid-cols-4">
+<button class="bento-card group flex flex-col items-center text-center gap-4 hover:bg-primary hover:text-on-primary transition-all duration-300">
+<span class="material-symbols-outlined text-[40px] text-primary group-hover:text-on-primary">report_problem</span>
+<span class="font-label-lg text-label-lg">Road Hazards</span>
+</button>
+<button class="bento-card group flex flex-col items-center text-center gap-4 hover:bg-primary hover:text-on-primary transition-all duration-300">
+<span class="material-symbols-outlined text-[40px] text-primary group-hover:text-on-primary">visibility</span>
+<span class="font-label-lg text-label-lg">Suspicious Activity</span>
+</button>
+<button class="bento-card group flex flex-col items-center text-center gap-4 hover:bg-primary hover:text-on-primary transition-all duration-300">
+<span class="material-symbols-outlined text-[40px] text-primary group-hover:text-on-primary">electric_bolt</span>
+<span class="font-label-lg text-label-lg">Utility Failure</span>
+</button>
+<button class="bento-card group flex flex-col items-center text-center gap-4 hover:bg-primary hover:text-on-primary transition-all duration-300">
+<span class="material-symbols-outlined text-[40px] text-primary group-hover:text-on-primary">shield</span>
+<span class="font-label-lg text-label-lg">Law Enforcement Assistance</span>
+</button>
+</div>
+</section>
+</main>
+<!-- Footer / Legal (Canvas Priority) -->
+<footer class="ml-64 bg-surface-container-low border-t border-outline-variant p-margin-desktop text-on-surface-variant">
+<div class="max-w-container-max-width mx-auto flex justify-between items-center">
+<div class="flex items-center gap-8">
+<span class="font-headline-md font-bold text-primary">Cyvora</span>
+<nav class="flex gap-6 font-label-md text-label-md">
+<a class="hover:text-primary" href="report-incident.html">Privacy Policy</a>
+<a class="hover:text-primary" href="report-incident.html">Terms of Governance</a>
+<a class="hover:text-primary" href="report-incident.html">Accessibility Statement</a>
+</nav>
+</div>
+<p class="font-caption text-caption">© 2023 National Safety Council. All rights reserved.</p>
+</div>
+</footer>
+<script>
+        // Simple micro-interaction for cards
+        document.querySelectorAll('.bento-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-4px)';
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0)';
+            });
+        });
+    </script>
+<script defer="" src="../assets/js/site.js"></script>
+</body></html>

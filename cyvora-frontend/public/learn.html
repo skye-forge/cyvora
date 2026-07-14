@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Cyvora | Learning Academy</title>
+<!-- Google Fonts: Public Sans & Work Sans -->
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700;900&amp;family=Work+Sans:wght@500;600&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="../assets/css/tailwind-output.css" />
+<style>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-tint": "#345baf",
+                        "on-secondary-container": "#00723d",
+                        "secondary": "#006d3b",
+                        "on-error-container": "#93000a",
+                        "surface-container-high": "#e8e8ea",
+                        "secondary-fixed": "#7bfba8",
+                        "tertiary-fixed": "#dde3ec",
+                        "surface": "#f9f9fc",
+                        "inverse-primary": "#b1c5ff",
+                        "on-primary-fixed-variant": "#144296",
+                        "error": "#ba1a1a",
+                        "tertiary-fixed-dim": "#c1c7d0",
+                        "error-container": "#ffdad6",
+                        "on-background": "#1a1c1e",
+                        "on-tertiary-fixed": "#161c23",
+                        "primary-fixed": "#dae2ff",
+                        "on-tertiary": "#ffffff",
+                        "on-surface": "#1a1c1e",
+                        "secondary-fixed-dim": "#5dde8e",
+                        "surface-bright": "#f9f9fc",
+                        "surface-container-low": "#f3f3f6",
+                        "outline-variant": "#c4c6d3",
+                        "surface-variant": "#e2e2e5",
+                        "surface-container": "#eeeef0",
+                        "inverse-surface": "#2f3133",
+                        "on-secondary-fixed": "#00210e",
+                        "surface-dim": "#dadadc",
+                        "on-primary-fixed": "#001947",
+                        "inverse-on-surface": "#f0f0f3",
+                        "on-primary": "#ffffff",
+                        "outline": "#747783",
+                        "on-error": "#ffffff",
+                        "surface-container-highest": "#e2e2e5",
+                        "primary-container": "#0b3d91",
+                        "on-surface-variant": "#434652",
+                        "on-tertiary-container": "#a9afb8",
+                        "on-secondary": "#ffffff",
+                        "secondary-container": "#78f8a6",
+                        "tertiary": "#262d33",
+                        "primary-fixed-dim": "#b1c5ff",
+                        "primary": "#002869",
+                        "background": "#f9f9fc",
+                        "on-primary-container": "#8dadff",
+                        "surface-container-lowest": "#ffffff",
+                        "tertiary-container": "#3c434a",
+                        "on-secondary-fixed-variant": "#00522b",
+                        "on-tertiary-fixed-variant": "#41474f"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "unit": "8px",
+                        "stack-sm": "8px",
+                        "gutter": "24px",
+                        "stack-md": "16px",
+                        "section-gap": "64px",
+                        "margin-desktop": "48px",
+                        "container-max-width": "1440px",
+                        "stack-lg": "32px"
+                    },
+                    "fontFamily": {
+                        "label-lg": ["Work Sans"],
+                        "label-md": ["Work Sans"],
+                        "headline-lg": ["Public Sans"],
+                        "body-lg": ["Public Sans"],
+                        "display-lg": ["Public Sans"],
+                        "body-md": ["Public Sans"],
+                        "headline-md": ["Public Sans"],
+                        "caption": ["Public Sans"]
+                    },
+                    "fontSize": {
+                        "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.02em", "fontWeight": "600"}],
+                        "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.04em", "fontWeight": "500"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "caption": ["12px", {"lineHeight": "16px", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            background-color: #F8F9FA;
+            color: #1A1C1E;
+        }
+        .card-shadow {
+            border: 1px solid #D1D5DB;
+        }
+        .card-shadow:hover {
+            box-shadow: 0 4px 12px rgba(11, 61, 145, 0.08);
+            border-color: #002869;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<script src="../assets/js/config.js"></script>
+<script src="../assets/js/mock-data.js"></script>
+<script src="../assets/js/api.js"></script>
+<script src="../assets/js/templates.js"></script>
+<script src="../assets/js/app.js"></script>
+<link rel="stylesheet" href="../assets/css/site.css"/>
+</head>
+<body class="flex min-h-screen">
+<!-- SideNavBar Component (Rail) -->
+<aside class="bg-primary flex flex-col h-full py-unit h-screen w-64 fixed left-0 top-0 z-50">
+<div class="px-6 py-8 flex items-center gap-3">
+<div class="w-10 h-10 bg-on-primary rounded flex items-center justify-center text-primary font-bold">C</div>
+<div>
+<h1 class="font-headline-md text-headline-md font-bold text-on-primary leading-tight">Cyvora</h1>
+<p class="font-label-md text-label-md text-on-primary/70">Civic Safety Portal</p>
+</div>
+</div>
+<nav class="flex-grow mt-8">
+<a class="text-on-primary/70 flex items-center gap-4 px-4 py-3 duration-200 ease-in-out hover:bg-on-primary/10 transition-colors" href="index.html">
+<span class="material-symbols-outlined">home</span>
+<span>Home</span>
+</a>
+<a class="text-on-primary/70 flex items-center gap-4 px-4 py-3 duration-200 ease-in-out hover:bg-on-primary/10 transition-colors" href="my-reports.html">
+<span class="material-symbols-outlined">assessment</span>
+<span>Reports</span>
+</a>
+<a class="text-on-primary/70 flex items-center gap-4 px-4 py-3 duration-200 ease-in-out hover:bg-on-primary/10 transition-colors" href="community.html">
+<span class="material-symbols-outlined">groups</span>
+<span>Community</span>
+</a>
+<a class="bg-surface-container-highest/10 text-on-primary border-l-4 border-secondary-fixed flex items-center gap-4 px-4 py-3 duration-200 ease-in-out hover:bg-on-primary/10 transition-colors" href="learn.html">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">school</span>
+<span>Learn</span>
+</a>
+<a class="text-on-primary/70 flex items-center gap-4 px-4 py-3 duration-200 ease-in-out hover:bg-on-primary/10 transition-colors" href="leaderboard.html">
+<span class="material-symbols-outlined">emoji_events</span>
+<span>Leaderboard</span>
+</a>
+<a class="text-on-primary/70 flex items-center gap-4 px-4 py-3 duration-200 ease-in-out hover:bg-on-primary/10 transition-colors" href="monitor.html">
+<span class="material-symbols-outlined">public</span>
+<span>Monitor</span>
+</a>
+<a class="text-on-primary/70 flex items-center gap-4 px-4 py-3 duration-200 ease-in-out hover:bg-on-primary/10 transition-colors" href="certificates.html">
+<span class="material-symbols-outlined">workspace_premium</span>
+<span>Certificates</span>
+</a>
+
+<a class="text-on-primary/70 flex items-center gap-4 px-4 py-3 duration-200 ease-in-out hover:bg-on-primary/10 transition-colors" href="profile.html">
+<span class="material-symbols-outlined">account_circle</span>
+<span>Profile</span>
+</a>
+</nav>
+<div class="px-6 mb-8">
+<button class="w-full bg-error text-on-error py-3 rounded-lg font-label-lg text-label-lg flex items-center justify-center gap-2 hover:bg-error/90 transition-all">
+<span class="material-symbols-outlined text-sm">emergency</span>
+                Emergency Alert
+            </button>
+</div>
+<div class="border-t border-on-primary/10 pt-4">
+<a class="flex items-center px-6 py-3 text-on-primary/70 font-label-md text-label-md hover:bg-on-primary/10 transition-colors duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined mr-4">settings</span>
+                Settings
+            </a>
+<a class="flex items-center px-6 py-3 text-on-primary/70 font-label-md text-label-md hover:bg-on-primary/10 transition-colors duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined mr-4">help</span>
+                Support
+            </a>
+</div>
+</aside>
+<!-- Main Content Shell -->
+<main class="ml-64 w-full flex flex-col">
+<div class="mb-6 p-4 rounded-lg bg-primary/5 border border-primary/20 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+  <div>
+    <p class="font-semibold text-primary">8 Learning Zones</p>
+    <p class="text-label-md text-on-surface-variant">Track zone progress, lives &amp; XP on the zones board.</p>
+  </div>
+  <div class="flex gap-2 flex-wrap">
+    <a href="zones.html" class="bg-primary text-on-primary px-4 py-2 rounded-lg font-label-lg text-sm">Open zones</a>
+    <a href="daily-challenge.html" class="border border-outline-variant px-4 py-2 rounded-lg font-label-lg text-sm">Daily challenge</a>
+  </div>
+</div>
+
+<!-- TopNavBar Component -->
+<header class="bg-surface fixed top-0 right-0 w-[calc(100%-16rem)] h-16 flex items-center justify-between px-margin-desktop z-40 border-b border-outline-variant">
+<div class="flex items-center gap-6 flex-grow">
+<div class="relative w-full max-w-md">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="w-full bg-surface-container-low border-none rounded-full pl-10 pr-4 py-2 text-label-md focus:ring-2 focus:ring-primary" placeholder="Search courses, guides, or stats..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 text-on-surface-variant hover:bg-surface-container-low rounded-full transition-colors relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<a class="p-2 text-on-surface-variant hover:bg-surface-container-low rounded-full transition-colors inline-flex items-center justify-center" href="profile.html">
+<span class="material-symbols-outlined">settings</span>
+</a>
+<div class="h-8 w-px bg-outline-variant mx-2"></div>
+<a class="bg-primary text-on-primary px-4 py-2 rounded-lg font-label-lg text-label-lg hover:bg-primary/90 transition-transform scale-98 active:scale-95 inline-flex" href="report-incident.html">Report Incident</a>
+<div class="w-10 h-10 rounded-full bg-primary-container overflow-hidden border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="Professional headshot of a focused male government official in a sharp navy suit, clean-cut, against a neutral gray professional studio background. The lighting is crisp and authoritative, matching a high-trust corporate environment. The image uses a cool-toned color grade with deep blues and neutral whites." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBWLwSTXQREhG1DrV2CFFA0A80D1yIK89gajVD5oc0_gQg7I6w75LHg-SgAJThT3O27iKr0l0yym67cBCxtUllWPMQQNYaKdfKYCYooVqdhX8g4pKbidJt4d_UImBefdv1wVOpP11LIKWuYEoKVNasftNvx3q_frVL1reQYp9xMIl3_oth-WcPOhy5p6jM7x3jcxs6TWw_c02IVRhK9CQYJclbKgwl2N9ndr4H7rYZkVp88BlNrOle8"/>
+</div>
+</div>
+</header>
+<!-- Page Canvas -->
+<div class="mt-16 p-4 md:p-margin-desktop max-w-container-max-width mx-auto w-full grid grid-cols-1 gap-gutter lg:grid-cols-12">
+<!-- Left Column: Academy Content -->
+<section class="col-span-1 lg:col-span-8 space-y-section-gap">
+<!-- Hero: Continue Learning -->
+<div class="relative overflow-hidden rounded-xl bg-primary-container p-stack-lg flex flex-col md:flex-row items-center gap-8 group">
+<div class="relative z-10 w-full md:w-1/2">
+<span class="inline-block px-3 py-1 bg-secondary-fixed text-on-secondary-fixed rounded text-label-md mb-4 uppercase tracking-wider">Most Recent</span>
+<h2 class="font-headline-lg text-headline-lg text-on-primary mb-2">Advanced Civic Coordination &amp; Emergency Response</h2>
+<p class="font-body-md text-body-md text-on-primary/80 mb-6">You're 68% through this module. Complete the final assessment to earn your "Senior Coordinator" badge.</p>
+<div class="space-y-4">
+<div class="w-full h-2 bg-on-primary/20 rounded-full overflow-hidden">
+<div class="h-full bg-secondary-fixed transition-all duration-1000" style="width: 68%;"></div>
+</div>
+<div class="flex items-center justify-between text-on-primary/70 font-label-md text-label-md">
+<span>6 of 9 Modules Completed</span>
+<span>68% Total Progress</span>
+</div>
+</div>
+<button class="mt-8 bg-on-primary text-primary px-8 py-4 rounded-lg font-label-lg text-label-lg flex items-center gap-3 hover:shadow-xl transition-all" onclick="window.location='lesson-cybersecurity.html'">
+                            Continue Learning
+                            <span class="material-symbols-outlined">play_circle</span>
+</button>
+</div>
+<div class="relative z-10 w-full md:w-1/2 h-64 rounded-lg overflow-hidden border border-on-primary/10 shadow-2xl">
+<img class="w-full h-full object-cover" data-alt="High-resolution interface of a digital learning platform showing a 3D isometric view of a futuristic city grid with emergency response hotspots. The aesthetic is clean and modern, featuring deep navy blues and vibrant emerald greens for status indicators. The lighting is bright and clear, reflecting a high-stakes, professional simulation environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCiQ060LM6wWCYqGSjF4ZePhDWLmDLQ_lKdSVMne8f3no5knd8SvCqJd2bhLIFuucOGIk5i4P8Otisa95GSKN9emb42fcio4x5tXDsAuRpAkkz68TCuhcAPlBCGHh6uaQXrb-nKSqI2mtgtu1qA81EC4suz7jcRgIEdXkq-5crChtT5xy5enRoYUGJsSEtFg2LCwB6fFJACh5WSSYk3FH5ggtQfh8YwnSXQKYAzXX1bzqR17RYfxvkU"/>
+</div>
+</div>
+<!-- Course Grid -->
+<div>
+<div class="flex items-center justify-between mb-8">
+<h3 class="font-headline-md text-headline-md">Your Enrolled Courses</h3>
+<div class="flex gap-2">
+<button class="p-2 border border-outline-variant rounded hover:bg-surface-container-low"><span class="material-symbols-outlined">grid_view</span></button>
+<button class="p-2 border border-outline-variant rounded hover:bg-surface-container-low"><span class="material-symbols-outlined">list</span></button>
+</div>
+</div>
+<div id="courses-grid" data-courses-grid class="grid grid-cols-1 md:grid-cols-2 gap-stack-lg">
+<!-- Course Card 1 -->
+<div class="bg-surface-container-lowest rounded-xl p-stack-md card-shadow transition-all group cursor-pointer course-card flex flex-col" onclick="window.location='lesson-phishing.html'" data-course-id="course-phishing">
+<div class="relative h-40 rounded-lg overflow-hidden mb-4">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A macro photograph of an official metal security badge resting on a clean white desk next to a digital tablet. The background is a blurred office space with natural daylight. The color palette is composed of cool grays, deep blues, and white. Minimalist and authoritative vibe." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCxFvZqNuCD8RnC_MzoSGQRS4OPm9fsrAHd_OLuNXAU-mv2I4dP3BISx1E5MdvNL4us23ZP99LR8iIYFf3I8o-xFZPuRnSmnG4tMBTGEiaTk1dqrQl41rWdQ8mF9dFLM2JE-G7iNVCSf4eTAHYOam3rUbE-VeSN59tP-YebyxJx9qQ1M_Lqqk32V0WuBQQBSORgPjKuAzT43w4j0ovjX3eVNfQ8AmmhvoWWK3Fy59h0lHtYELUwGJqA"/>
+<div class="absolute top-2 right-2 px-2 py-1 bg-surface/90 backdrop-blur rounded text-caption font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">schedule</span> 12h left
+                                </div>
+</div>
+<h4 class="font-label-lg text-label-lg text-on-surface mb-2">Ethics in Public Data Management</h4>
+<p class="font-caption text-caption text-on-surface-variant flex-grow mb-4">Essential protocols for handling citizen sensitive information in a digital-first governance model.</p>
+<div class="pt-4 border-t border-outline-variant">
+<div class="flex items-center justify-between mb-2">
+<span class="font-label-md text-label-md text-primary course-progress-text">45% Complete</span>
+<span class="material-symbols-outlined text-primary">arrow_forward</span>
+</div>
+<div class="w-full h-1.5 bg-surface-container-high rounded-full">
+<div class="h-full bg-primary rounded-full course-progress-bar" style="width: 45%;"></div>
+</div>
+</div>
+</div>
+<!-- Course Card 2 -->
+<div class="bg-surface-container-lowest rounded-xl p-stack-md card-shadow transition-all group cursor-pointer course-card flex flex-col" onclick="window.location='lesson-cybersecurity.html'" data-course-id="course-cyber">
+<div class="relative h-40 rounded-lg overflow-hidden mb-4">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Abstract digital rendering of networked nodes glowing in a calm, sapphire blue environment. The visual style represents secure communication and data flow. Soft lighting, high-contrast crisp lines, and an atmosphere of technological sophistication. Perfect for a safety platform learning module." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA3l1SMIVTSiY0aOXoLrkh9B2Mn6EAfAUoUUc41aEVdwdZ5g8EOnqYeGfghso3ANffF1GWF-30YF9voVKfwwFS6ufuyRcljXKNQZamTL4xsQ1zyDdWFq5JjZ-757IQqWvww5xct6qgdLfs_8__1A5-c3kxV9HBpbwCwfHEL6BSPn28rPdK6hdkFGHVdZZ4PzNzAo82rTbEBWryPVvSZDqkGC99OuncugzG2rbkvlGA4WPDw0Lo4wG0R"/>
+<div class="absolute top-2 right-2 px-2 py-1 bg-surface/90 backdrop-blur rounded text-caption font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">schedule</span> 4h left
+                                </div>
+</div>
+<h4 class="font-label-lg text-label-lg text-on-surface mb-2">Community Resilience Networking</h4>
+<p class="font-caption text-caption text-on-surface-variant flex-grow mb-4">How to leverage community leaders and local assets during systemic infrastructure challenges.</p>
+<div class="pt-4 border-t border-outline-variant">
+<div class="flex items-center justify-between mb-2">
+<span class="font-label-md text-label-md text-primary course-progress-text">82% Complete</span>
+<span class="material-symbols-outlined text-primary">arrow_forward</span>
+</div>
+<div class="w-full h-1.5 bg-surface-container-high rounded-full">
+<div class="h-full bg-primary rounded-full course-progress-bar" style="width: 82%;"></div>
+</div>
+</div>
+</div>
+<!-- Course Card 3 -->
+<div class="bg-surface-container-lowest rounded-xl p-stack-md card-shadow transition-all group cursor-pointer flex flex-col">
+<div class="relative h-40 rounded-lg overflow-hidden mb-4">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A crisp, high-key photograph of a modern first aid kit and an encrypted radio handset resting on a polished wooden surface. The setting suggests prepared readiness and official duty. The palette is dominated by pure white, charcoal gray, and subtle deep red accents. Professional and reassuring lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBwmaQzubYM-74NvCQi4AYM883lXX8K_EgKlGUMH2vBLQCu6TqDPmuhPTCy9J5qq8K-AjN4F61eO3Cea0H0wkhuazeE9dOA1AXVa6HZ91PHws19WedjiNshuW458PUnHWuzjxB4_hM3Fztc1tTNvHIp_5uwPrcAZvHXnfk3tX8dLa8nHUxSSrn0wI4YnVoMVgAqp6HUbZyVVnMzAAMqXLtvnfetjKCAJCVY9bDKUIEZyIUk16UfTBlp"/>
+<div class="absolute top-2 right-2 px-2 py-1 bg-secondary-container text-on-secondary-container rounded text-caption font-bold">New</div>
+</div>
+<h4 class="font-label-lg text-label-lg text-on-surface mb-2">First Responder Digital Protocols</h4>
+<p class="font-caption text-caption text-on-surface-variant flex-grow mb-4">Synchronizing field actions with real-time digital command centers for zero-latency response.</p>
+<div class="pt-4 border-t border-outline-variant">
+<div class="flex items-center justify-between mb-2">
+<span class="font-label-md text-label-md text-on-surface-variant course-progress-text">Not Started</span>
+<span class="material-symbols-outlined text-on-surface-variant">play_arrow</span>
+</div>
+<div class="w-full h-1.5 bg-surface-container-high rounded-full">
+<div class="h-full bg-primary rounded-full course-progress-bar" style="width: 0%;"></div>
+</div>
+</div>
+</div>
+<!-- Course Card 4 -->
+<div class="bg-surface-container-lowest rounded-xl p-stack-md card-shadow transition-all group cursor-pointer flex flex-col">
+<div class="relative h-40 rounded-lg overflow-hidden mb-4">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Professional wide shot of a modern city at dusk, with digital data overlays representing traffic patterns and energy usage. The style is futuristic but grounded in reality. The lighting uses soft twilight purples and deep blues with golden sparks of city lights. High-density information aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBdAUN3IuvA9kVzJewxc1zr1cBrJXe4mEpvE1UM_9CKW5SQed1XOwfFBqwv3ShTlISJjy6ioPkPMjyR2Ba5_Dd8CHAHrJWE5dDB71Auw4ywZVesP1KnCFoyv1QGWAYhEnccRA4f4I3jHO-C_r3LrM14T_2qY8U_5ZHpg8rO3L8v7pv7DdUpSHGPRbzBPRoOgAqgYqkJHTPJgc2E2DdmOt3wn4YDTkTfjmebnLpDlSxzxwEOuMjC9SUU"/>
+<div class="absolute top-2 right-2 px-2 py-1 bg-surface/90 backdrop-blur rounded text-caption font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">check_circle</span> Finished
+                                </div>
+</div>
+<h4 class="font-label-lg text-label-lg text-on-surface mb-2">Urban Infrastructure Monitoring</h4>
+<p class="font-caption text-caption text-on-surface-variant flex-grow mb-4">A complete guide to interpreting structural integrity sensor data across the metropolitan area.</p>
+<div class="pt-4 border-t border-outline-variant">
+<div class="flex items-center justify-between mb-2">
+<span class="font-label-md text-label-md text-secondary font-bold course-progress-text">Completed</span>
+<span class="material-symbols-outlined text-secondary">verified</span>
+</div>
+<div class="w-full h-1.5 bg-secondary-container rounded-full">
+<div class="h-full bg-secondary rounded-full course-progress-bar" style="width: 100%;"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Right Column: Stats & Social -->
+<aside class="col-span-1 lg:col-span-4 space-y-gutter">
+<!-- Learning Stats -->
+<div class="bg-surface-container-lowest rounded-xl p-stack-lg card-shadow">
+<h3 class="font-label-lg text-label-lg text-primary uppercase tracking-widest mb-6">Learning Stats</h3>
+<div class="space-y-6">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">timer</span>
+</div>
+<div>
+<p class="text-caption text-on-surface-variant">Time Learning</p>
+<p class="font-label-lg text-label-lg">42.5 Hours</p>
+</div>
+</div>
+<span class="text-secondary text-caption font-bold">+12%</span>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-secondary/10 flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined">auto_stories</span>
+</div>
+<div>
+<p class="text-caption text-on-surface-variant">Courses Finished</p>
+<p class="font-label-lg text-label-lg">18 Modules</p>
+</div>
+</div>
+<span class="text-secondary text-caption font-bold">+2</span>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-error/10 flex items-center justify-center text-error">
+<span class="material-symbols-outlined">military_tech</span>
+</div>
+<div>
+<p class="text-caption text-on-surface-variant">Avg. Score</p>
+<p class="font-label-lg text-label-lg">94% Accuracy</p>
+</div>
+</div>
+<span class="text-on-surface-variant text-caption">Steady</span>
+</div>
+</div>
+<button class="w-full mt-8 py-2 border border-outline text-label-md font-label-md rounded hover:bg-surface-container-low transition-colors">
+                        View Detailed Analytics
+                    </button>
+</div>
+<!-- Unlocked Badges -->
+<div class="bg-surface-container-lowest rounded-xl p-stack-lg card-shadow">
+<div class="flex items-center justify-between mb-6">
+<h3 class="font-label-lg text-label-lg text-primary uppercase tracking-widest">Unlocked Badges</h3>
+<span class="text-caption font-bold text-primary">View All</span>
+</div>
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+<div class="aspect-square bg-tertiary-fixed rounded-lg flex items-center justify-center group cursor-pointer relative" title="Rapid Responder">
+<span class="material-symbols-outlined text-on-tertiary-fixed group-hover:scale-110 transition-transform" style="font-variation-settings: 'FILL' 1;">bolt</span>
+</div>
+<div class="aspect-square bg-secondary-fixed rounded-lg flex items-center justify-center group cursor-pointer" title="Civic Leader">
+<span class="material-symbols-outlined text-on-secondary-fixed group-hover:scale-110 transition-transform" style="font-variation-settings: 'FILL' 1;">award_star</span>
+</div>
+<div class="aspect-square bg-primary-fixed rounded-lg flex items-center justify-center group cursor-pointer" title="Data Guardian">
+<span class="material-symbols-outlined text-on-primary-fixed group-hover:scale-110 transition-transform" style="font-variation-settings: 'FILL' 1;">encrypted</span>
+</div>
+<div class="aspect-square bg-outline-variant/20 border-2 border-dashed border-outline-variant rounded-lg flex items-center justify-center group cursor-pointer opacity-50">
+<span class="material-symbols-outlined text-outline">lock</span>
+</div>
+</div>
+<p class="mt-4 text-caption text-on-surface-variant italic">Next badge: 'Crisis Strategist' (2400 XP to go)</p>
+</div>
+<!-- Top Trainees Leaderboard -->
+<div class="bg-surface-container-lowest rounded-xl p-stack-lg card-shadow overflow-hidden">
+<h3 class="font-label-lg text-label-lg text-primary uppercase tracking-widest mb-6">Top Trainees</h3>
+<div class="space-y-4">
+<!-- Rank 1 -->
+<div class="flex items-center justify-between p-2 rounded-lg bg-surface-container-low">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-secondary-fixed flex items-center justify-center font-bold text-on-secondary-fixed text-caption">1</div>
+<div>
+<p class="font-label-md text-label-md">Sarah Jenkins</p>
+<p class="text-[10px] text-on-surface-variant uppercase tracking-tighter">Emergency Division</p>
+</div>
+</div>
+<span class="font-bold text-primary text-label-md">14,200 XP</span>
+</div>
+<!-- Rank 2 -->
+<div class="flex items-center justify-between p-2 rounded-lg hover:bg-surface-container-low transition-colors">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-surface-container-high flex items-center justify-center font-bold text-on-surface text-caption">2</div>
+<div>
+<p class="font-label-md text-label-md">Markus Chen</p>
+<p class="text-[10px] text-on-surface-variant uppercase tracking-tighter">Data Integrity</p>
+</div>
+</div>
+<span class="font-bold text-on-surface-variant text-label-md">13,850 XP</span>
+</div>
+<!-- Rank 3 -->
+<div class="flex items-center justify-between p-2 rounded-lg hover:bg-surface-container-low transition-colors">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-surface-container-high flex items-center justify-center font-bold text-on-surface text-caption">3</div>
+<div>
+<p class="font-label-md text-label-md">Aisha Varma</p>
+<p class="text-[10px] text-on-surface-variant uppercase tracking-tighter">Public Outreach</p>
+</div>
+</div>
+<span class="font-bold text-on-surface-variant text-label-md">12,100 XP</span>
+</div>
+<!-- Current User Position -->
+<div class="border-t border-outline-variant pt-4 mt-2">
+<div class="flex items-center justify-between p-2 rounded-lg bg-primary/5 border border-primary/20">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center font-bold text-on-primary text-caption">12</div>
+<div>
+<p class="font-label-md text-label-md">You</p>
+<p class="text-[10px] text-primary/70 uppercase tracking-tighter">Strategic Planning</p>
+</div>
+</div>
+<span class="font-bold text-primary text-label-md">8,420 XP</span>
+</div>
+</div>
+</div>
+</div>
+</aside>
+</div>
+<!-- Footer-like section for academy CTA -->
+<footer class="mt-section-gap mb-section-gap px-margin-desktop w-full max-w-container-max-width mx-auto">
+<div class="bg-tertiary-container rounded-xl p-stack-lg text-center relative overflow-hidden group">
+<div class="absolute inset-0 bg-gradient-to-r from-primary/10 to-transparent"></div>
+<h2 class="relative z-10 font-headline-md text-headline-md text-on-tertiary-container mb-4">Looking for something specific?</h2>
+<p class="relative z-10 font-body-md text-body-md text-on-tertiary-container/70 mb-8 max-w-2xl mx-auto">Access our full library of certified professional safety courses or request a custom training module for your specific department.</p>
+<div class="relative z-10 flex flex-wrap justify-center gap-4">
+<button class="bg-primary text-on-primary px-8 py-3 rounded-lg font-label-lg text-label-lg hover:shadow-lg transition-all">Browse Full Catalog</button>
+<button class="border border-on-tertiary-container text-on-tertiary-container px-8 py-3 rounded-lg font-label-lg text-label-lg hover:bg-on-tertiary-container/5 transition-all">Contact Academy Advisor</button>
+</div>
+</div>
+</footer>
+</main>
+<!-- Micro-interaction script -->
+<script>
+        document.querySelectorAll('.card-shadow').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-4px)';
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0)';
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            if (!window.CyvoraAPI || !window.CyvoraAPI.learning || !window.CyvoraAPI.learning.courses) return;
+            window.CyvoraAPI.learning.courses().then(function (response) {
+                var items = (response && response.items) || [];
+                var cards = Array.from(document.querySelectorAll('.course-card'));
+                cards.forEach(function (card, index) {
+                    var course = items[index] || items[0] || null;
+                    if (!course) return;
+                    var title = card.querySelector('h4');
+                    var summary = card.querySelector('p');
+                    var progressText = card.querySelector('.course-progress-text');
+                    var progressBar = card.querySelector('.course-progress-bar');
+                    if (title) title.textContent = course.title || title.textContent;
+                    if (summary) summary.textContent = course.description || summary.textContent;
+                    if (progressText) {
+                        var pct = course.progressPct || 0;
+                        progressText.textContent = pct >= 100 ? 'Completed' : (pct > 0 ? pct + '% Complete' : 'Not Started');
+                        progressText.className = progressText.className.replace(/text-primary|text-secondary|text-on-surface-variant/g, '');
+                        if (pct >= 100) {
+                            progressText.classList.add('text-secondary', 'font-bold');
+                        } else if (pct > 0) {
+                            progressText.classList.add('text-primary');
+                        } else {
+                            progressText.classList.add('text-on-surface-variant');
+                        }
+                    }
+                    if (progressBar) {
+                        progressBar.style.width = ((course.progressPct || 0) + '%');
+                        progressBar.className = progressBar.className.replace(/bg-primary|bg-secondary/g, '');
+                        progressBar.classList.add(course.progressPct >= 100 ? 'bg-secondary' : 'bg-primary');
+                    }
+                });
+            }).catch(function () {});
+        });
+    </script>
+<script defer="" src="../assets/js/site.js"></script>
+</body></html>
