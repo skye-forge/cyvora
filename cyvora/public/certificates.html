@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Certificates | VARNIS</title>
+<link rel="icon" type="image/jpeg" href="../assets/img/varnis-logo.jpeg">
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700;900&amp;family=Work+Sans:wght@500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="../assets/css/tailwind-output.css"/>
+<link rel="stylesheet" href="../assets/css/site.css"/>
+<script src="../assets/js/config.js"></script>
+<script src="../assets/js/storage.js"></script>
+<script src="../assets/js/mock-data.js"></script>
+<script src="../assets/js/api.js"></script>
+<script src="../assets/js/templates.js"></script>
+    <script src="../assets/js/validation.js"></script>
+    <script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/app.js"></script>
+<script src="../assets/js/auth-guard.js"></script>
+</head>
+
+<body class="bg-background text-on-background font-body-md antialiased">
+<aside class="bg-primary dark:bg-primary-container text-on-primary dark:text-on-primary-container font-label-md text-label-md h-screen w-64 fixed left-0 top-0 flex flex-col h-full py-unit z-50" id="sidebar">
+<div class="px-6 py-8 mb-4">
+<h1 class="text-headline-md font-headline-md font-bold text-on-primary">VARNIS</h1>
+<p class="text-on-primary/60 text-label-md">Civic Safety Portal</p>
+</div>
+<nav class="flex-1 flex flex-col gap-1 px-2 overflow-y-auto">
+<a class="text-on-primary/70 flex items-center gap-4 px-4 py-3 duration-200 ease-in-out hover:bg-on-primary/10 transition-colors" href="index.html">
+<span class="material-symbols-outlined">home</span>
+<span>Home</span>
+</a>
+<a class="text-on-primary/70 flex items-center gap-4 px-4 py-3 duration-200 ease-in-out hover:bg-on-primary/10 transition-colors" href="my-reports.html">
+<span class="material-symbols-outlined">assessment</span>
+<span>Reports</span>
+</a>
+<a class="text-on-primary/70 flex items-center gap-4 px-4 py-3 duration-200 ease-in-out hover:bg-on-primary/10 transition-colors" href="community.html">
+<span class="material-symbols-outlined">groups</span>
+<span>Community</span>
+</a>
+<a class="text-on-primary/70 flex items-center gap-4 px-4 py-3 duration-200 ease-in-out hover:bg-on-primary/10 transition-colors" href="learn.html">
+<span class="material-symbols-outlined">school</span>
+<span>Learn</span>
+</a>
+<a class="text-on-primary/70 flex items-center gap-4 px-4 py-3 duration-200 ease-in-out hover:bg-on-primary/10 transition-colors" href="leaderboard.html">
+<span class="material-symbols-outlined">emoji_events</span>
+<span>Leaderboard</span>
+</a>
+<a class="text-on-primary/70 flex items-center gap-4 px-4 py-3 duration-200 ease-in-out hover:bg-on-primary/10 transition-colors" href="monitor.html">
+<span class="material-symbols-outlined">public</span>
+<span>Monitor</span>
+</a>
+<a class="bg-surface-container-highest/10 text-on-primary border-l-4 border-secondary-fixed flex items-center gap-4 px-4 py-3 duration-200 ease-in-out hover:bg-on-primary/10 transition-colors" href="certificates.html">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">workspace_premium</span>
+<span>Certificates</span>
+</a>
+<a class="text-on-primary/70 flex items-center gap-4 px-4 py-3 duration-200 ease-in-out hover:bg-on-primary/10 transition-colors" href="profile.html">
+<span class="material-symbols-outlined">account_circle</span>
+<span>Profile</span>
+</a>
+</nav>
+<div class="mt-auto px-4 py-4 flex flex-col gap-4">
+<button type="button" class="w-full bg-error text-on-error py-3 rounded font-label-lg uppercase tracking-wider flex items-center justify-center gap-2" onclick="typeof showToast==='function'&&showToast('Emergency alert broadcast simulated','error')">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">campaign</span>
+Emergency Alert
+</button>
+<div class="flex flex-col gap-1">
+<a class="text-on-primary/70 flex items-center gap-4 px-4 py-2 hover:bg-on-primary/10 transition-colors" href="profile.html">
+<span class="material-symbols-outlined">settings</span>
+<span>Settings</span>
+</a>
+<a class="text-on-primary/70 flex items-center gap-4 px-4 py-2 hover:bg-on-primary/10 transition-colors" href="support.html">
+<span class="material-symbols-outlined">help</span>
+<span>Support</span>
+</a>
+<a class="text-on-primary/70 flex items-center gap-4 px-4 py-2 hover:bg-on-primary/10 transition-colors" href="login.html">
+<span class="material-symbols-outlined">logout</span>
+<span>Logout</span>
+</a>
+</div>
+</div>
+</aside>
+<!-- TopNavBar -->
+<header class="fixed top-0 right-0 w-[calc(100%-16rem)] max-lg:w-full h-16 bg-surface dark:bg-surface-dim text-primary border-b border-outline-variant flex items-center justify-between px-6 lg:px-12 ml-64 max-lg:ml-0 z-40">
+<div class="flex items-center gap-3 flex-1">
+<button type="button" id="menu-toggle" class="lg:hidden material-symbols-outlined p-2 rounded-full hover:bg-surface-container-low" aria-label="Open menu">menu</button>
+<div class="relative w-full max-w-md hidden sm:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[20px]">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-surface-container border border-outline-variant rounded-full text-label-md focus:outline-none focus:ring-2 focus:ring-primary/20" placeholder="Search safety database..." type="search"/>
+</div>
+</div>
+<div class="flex items-center gap-3 sm:gap-6">
+<button type="button" class="material-symbols-outlined p-2 rounded-full hover:bg-surface-container-low text-on-surface-variant" aria-label="Notifications">notifications</button>
+<a class="material-symbols-outlined p-2 rounded-full hover:bg-surface-container-low text-on-surface-variant inline-flex" href="profile.html" aria-label="Settings">settings</a>
+<a class="bg-primary text-on-primary px-4 sm:px-6 py-2 rounded-lg font-label-lg scale-98 active:scale-95 transition-transform inline-flex text-sm sm:text-base" href="report-incident.html">Report Incident</a>
+</div>
+</header>
+
+<main class="ml-64 max-lg:ml-0 mt-16 min-h-[calc(100vh-4rem)] p-6 lg:p-10 max-w-[1440px]">
+
+<div class="mb-8 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+  <div>
+    <h1 class="text-headline-lg font-bold text-on-surface">Digital Safety Certificates</h1>
+    <p class="text-on-surface-variant mt-1">QR-verifiable credentials · Bronze · Silver · Gold</p>
+  </div>
+  <a href="learn.html" class="inline-flex items-center gap-2 bg-primary text-on-primary px-5 py-2.5 rounded-lg font-label-lg text-sm">Continue learning</a>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+  <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6 relative overflow-hidden">
+    <div class="absolute top-0 right-0 w-24 h-24 bg-amber-700/10 rounded-bl-full"></div>
+    <p class="text-label-md text-amber-800 font-label-lg uppercase">Bronze</p>
+    <p class="text-body-md text-on-surface-variant mt-1">3 zones · 70% min</p>
+    <div class="mt-6 flex items-center justify-between">
+      <span class="text-secondary font-semibold flex items-center gap-1"><span class="material-symbols-outlined text-[20px]">check_circle</span> Earned</span>
+      <button type="button" class="text-primary font-label-lg text-sm hover:underline" onclick="document.getElementById('cert-preview').classList.remove('hidden')">View</button>
+    </div>
+  </div>
+  <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6 opacity-75">
+    <p class="text-label-md text-outline font-label-lg uppercase">Silver</p>
+    <p class="text-body-md text-on-surface-variant mt-1">6 zones · 75% min</p>
+    <div class="mt-6">
+      <div class="h-2 bg-surface-container rounded-full overflow-hidden mb-2"><div class="h-full bg-primary w-1/2"></div></div>
+      <p class="text-caption text-outline">3 / 6 zones complete</p>
+    </div>
+  </div>
+  <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6 opacity-60">
+    <p class="text-label-md text-outline font-label-lg uppercase">Gold</p>
+    <p class="text-body-md text-on-surface-variant mt-1">8 zones · 80% + 1 report</p>
+    <div class="mt-6">
+      <div class="h-2 bg-surface-container rounded-full overflow-hidden mb-2"><div class="h-full bg-primary w-[20%]"></div></div>
+      <p class="text-caption text-outline">Locked</p>
+    </div>
+  </div>
+</div>
+
+<div id="cert-preview" class="bg-surface-container-lowest border border-outline-variant rounded-lg p-8 max-w-xl mx-auto">
+  <div class="border-2 border-primary rounded-lg p-8 text-center relative">
+    <p class="text-caption uppercase tracking-widest text-primary font-label-lg">Republic of Cameroon · ANTIC</p>
+    <h2 class="text-headline-lg font-bold text-primary mt-4">Digital Safety Certificate</h2>
+    <p class="text-label-md text-on-surface-variant mt-1">Bronze Tier</p>
+    <div class="my-8">
+      <p class="text-body-md text-on-surface-variant">This certifies that</p>
+      <p class="text-headline-md font-bold text-on-surface mt-1" data-cert-holder>Citizen User</p>
+      <p class="text-body-md text-on-surface-variant mt-2">has demonstrated foundational cybersecurity awareness</p>
+    </div>
+    <div class="flex justify-center gap-8 text-label-md text-on-surface-variant">
+      <div><p class="text-caption">Issued</p><p class="font-semibold text-on-surface">14 Jul 2026</p></div>
+      <div><p class="text-caption">ID</p><p class="font-semibold text-on-surface">CYV-BR-2026-00482</p></div>
+      <div><p class="text-caption">Expires</p><p class="font-semibold text-on-surface">14 Jul 2028</p></div>
+    </div>
+    <div class="mt-8 flex flex-col items-center gap-2">
+      <div class="w-24 h-24 bg-surface-container border border-outline-variant rounded flex items-center justify-center">
+        <span class="material-symbols-outlined text-4xl text-outline">qr_code_2</span>
+      </div>
+      <a href="certificate-verify.html?id=CYV-BR-2026-00482" class="text-primary text-label-md font-label-lg hover:underline">Verify authenticity</a>
+    </div>
+  </div>
+  <div class="flex flex-wrap gap-3 justify-center mt-6">
+    <button type="button" class="px-5 py-2.5 bg-primary text-on-primary rounded-lg font-label-lg text-sm flex items-center gap-2">
+      <span class="material-symbols-outlined text-[18px]">download</span> Download PDF
+    </button>
+    <button type="button" class="px-5 py-2.5 border border-outline-variant rounded-lg font-label-lg text-sm flex items-center gap-2">
+      <span class="material-symbols-outlined text-[18px]">share</span> Share PNG
+    </button>
+  </div>
+</div>
+
+</main>
+
+<script defer src="../assets/js/site.js"></script>
+
+
+</body>
+</html>

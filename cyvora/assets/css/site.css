@@ -1,0 +1,718 @@
+/* ============================================================
+   Cyvora — shared motion & interaction layer
+   Loaded on every screen after the page's own Tailwind config.
+   ============================================================ */
+
+/* ---- Page load ------------------------------------------------ */
+html.cyv-preload body {
+  opacity: 0;
+}
+body.cyv-loaded {
+  animation: cyv-fade-body .5s ease both;
+}
+@keyframes cyv-fade-body {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Sidebar / topbar slide in on load */
+.cyv-nav-in {
+  animation: cyv-nav-in .5s cubic-bezier(.22,.61,.36,1) both;
+}
+@keyframes cyv-nav-in {
+  from { opacity: 0; transform: translateX(-16px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+.cyv-topbar-in {
+  animation: cyv-topbar-in .5s cubic-bezier(.22,.61,.36,1) both;
+  animation-delay: .05s;
+}
+@keyframes cyv-topbar-in {
+  from { opacity: 0; transform: translateY(-10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ---- Scroll reveal --------------------------------------------- */
+.reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity .6s cubic-bezier(.22,.61,.36,1), transform .6s cubic-bezier(.22,.61,.36,1);
+}
+.reveal.in-view {
+  opacity: 1;
+  transform: translateY(0);
+}
+/* stagger children automatically when parent has [data-stagger] */
+[data-stagger] > .reveal:nth-child(1) { transition-delay: .02s; }
+[data-stagger] > .reveal:nth-child(2) { transition-delay: .08s; }
+[data-stagger] > .reveal:nth-child(3) { transition-delay: .14s; }
+[data-stagger] > .reveal:nth-child(4) { transition-delay: .20s; }
+[data-stagger] > .reveal:nth-child(5) { transition-delay: .26s; }
+[data-stagger] > .reveal:nth-child(6) { transition-delay: .32s; }
+
+/* ---- Nav active indicator -------------------------------------- */
+.cyv-nav-link {
+  position: relative;
+  overflow: hidden;
+}
+.cyv-active-link {
+  background: rgba(255,255,255,.08);
+  border-left: 4px solid #7bfba8;
+  font-weight: 700;
+}
+.cyv-nav-link::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: currentColor;
+  opacity: 0;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform .25s ease, opacity .25s ease;
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* ---- Buttons: ripple + press ------------------------------------ */
+.cyv-ripple {
+  position: relative;
+  overflow: hidden;
+}
+.cyv-ripple-dot {
+  position: absolute;
+  border-radius: 9999px;
+  background: rgba(255,255,255,.55);
+  transform: scale(0);
+  animation: cyv-ripple .6s ease-out forwards;
+  pointer-events: none;
+}
+@keyframes cyv-ripple {
+  to { transform: scale(2.6); opacity: 0; }
+}
+
+/* ---- Counters ---------------------------------------------------- */
+[data-counter] { font-variant-numeric: tabular-nums; }
+
+/* ---- Toasts -------------------------------------------------------- */
+#cyv-toast-region {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  pointer-events: none;
+}
+.cyv-toast {
+  pointer-events: auto;
+  min-width: 260px;
+  max-width: 360px;
+  background: #ffffff;
+  border: 1px solid #D1D5DB;
+  border-left: 4px solid #1FAE64;
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(11,61,145,.18);
+  padding: 14px 16px;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-family: "Public Sans", sans-serif;
+  font-size: 14px;
+  color: #1a1c1e;
+  animation: cyv-toast-in .35s cubic-bezier(.22,.61,.36,1) both;
+}
+.cyv-toast.cyv-toast-error { border-left-color: #ba1a1a; }
+.cyv-toast.cyv-toast-info { border-left-color: #345baf; }
+.cyv-toast.cyv-toast-leaving {
+  animation: cyv-toast-out .3s ease forwards;
+}
+@keyframes cyv-toast-in {
+  from { opacity: 0; transform: translateX(30px) scale(.98); }
+  to   { opacity: 1; transform: translateX(0) scale(1); }
+}
+@keyframes cyv-toast-out {
+  to { opacity: 0; transform: translateX(30px) scale(.98); }
+}
+
+/* ---- Emergency alert pulse ---------------------------------------- */
+.cyv-pulse {
+  position: relative;
+}
+.cyv-pulse::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: 0 0 0 0 rgba(186,26,26,.55);
+  animation: cyv-pulse-ring 2.2s cubic-bezier(.4,0,.6,1) infinite;
+  pointer-events: none;
+}
+@keyframes cyv-pulse-ring {
+  0%   { box-shadow: 0 0 0 0 rgba(186,26,26,.5); }
+  70%  { box-shadow: 0 0 0 14px rgba(186,26,26,0); }
+  100% { box-shadow: 0 0 0 0 rgba(186,26,26,0); }
+}
+
+/* ---- Modal / overlay ------------------------------------------------ */
+.cyv-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(11,28,48,.45);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .25s ease;
+}
+.cyv-modal-backdrop.cyv-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+.cyv-modal-card {
+  background: #fff;
+  border-radius: 12px;
+  max-width: 420px;
+  width: calc(100% - 48px);
+  padding: 32px;
+  transform: translateY(16px) scale(.97);
+  opacity: 0;
+  transition: transform .3s cubic-bezier(.22,.61,.36,1), opacity .3s ease;
+  box-shadow: 0 30px 60px rgba(0,0,0,.25);
+}
+.cyv-modal-backdrop.cyv-open .cyv-modal-card {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+}
+
+/* ---- Progress bars ---------------------------------------------------- */
+.cyv-progress-fill {
+  transition: width 1s cubic-bezier(.22,.61,.36,1);
+}
+
+/* ---- Skeleton shimmer (loading state) ---------------------------------- */
+.cyv-skeleton {
+  background: linear-gradient(90deg, #eeeef0 25%, #e2e2e5 37%, #eeeef0 63%);
+  background-size: 400% 100%;
+  animation: cyv-shimmer 1.4s ease infinite;
+}
+@keyframes cyv-shimmer {
+  0% { background-position: 100% 50%; }
+  100% { background-position: 0 50%; }
+}
+
+/* ---- Mobile nav & global responsive layer ------------------------------- */
+.cyv-menu-btn {
+  display: none;
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 60;
+  background: #0B3D91;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  width: 44px;
+  height: 44px;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 16px rgba(11, 61, 145, .35);
+  cursor: pointer;
+  font-size: 24px;
+  line-height: 1;
+  -webkit-tap-highlight-color: transparent;
+  transition: background .2s ease, transform .15s ease;
+}
+.cyv-menu-btn:active { transform: scale(0.94); }
+.cyv-menu-btn:hover { background: #002869; }
+
+.cyv-nav-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(11, 28, 48, .5);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  z-index: 49;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .25s ease;
+}
+.cyv-nav-backdrop.cyv-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Tablet & below (sidebar becomes drawer) */
+@media (max-width: 1024px) {
+  html, body { overflow-x: hidden; max-width: 100vw; }
+
+  .cyv-menu-btn { display: inline-flex !important; }
+
+  /* Force every left sidebar into off-canvas drawer */
+  aside.cyv-sidebar,
+  aside.fixed.left-0,
+  aside[class*="w-64"],
+  aside[class*="w-[240px]"] {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    bottom: 0 !important;
+    width: min(85vw, 300px) !important;
+    max-width: 300px !important;
+    height: 100% !important;
+    height: 100dvh !important;
+    transform: translateX(-105%) !important;
+    transition: transform .35s cubic-bezier(.22, .61, .36, 1) !important;
+    box-shadow: 0 24px 60px rgba(11, 28, 48, .28) !important;
+    z-index: 55 !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
+  }
+  aside.cyv-sidebar.cyv-sidebar-open,
+  aside.cyv-sidebar-open {
+    transform: translateX(0) !important;
+  }
+
+  /* Header / topbar full width */
+  header,
+  header.fixed,
+  header.sticky {
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-left: 0 !important;
+    padding-left: 3.75rem !important; /* room for hamburger */
+    padding-right: 1rem !important;
+  }
+
+  /* Main content full width, no left margin */
+  main,
+  main.ml-64,
+  main.ml-\[240px\],
+  .ml-64,
+  .ml-\[240px\] {
+    margin-left: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+
+  footer,
+  footer.ml-64 {
+    margin-left: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+
+  /* Reduce large desktop paddings */
+  .p-margin-desktop,
+  .px-margin-desktop,
+  .py-margin-desktop,
+  .p-12 {
+    padding: 1.25rem !important;
+  }
+  .px-margin-desktop {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+  .p-gutter { padding: 1rem !important; }
+
+  /* Tables: always allow horizontal scroll */
+  .overflow-x-auto {
+    -webkit-overflow-scrolling: touch;
+    max-width: 100%;
+  }
+  table {
+    min-width: 560px; /* keep readable columns, scroll container handles rest */
+  }
+  table th, table td {
+    font-size: 0.8125rem;
+    padding-left: 0.75rem !important;
+    padding-right: 0.75rem !important;
+  }
+
+  /* Cards & grids tighten gaps */
+  .gap-section-gap { gap: 1.5rem !important; }
+  .gap-gutter { gap: 1rem !important; }
+  .gap-stack-lg { gap: 1rem !important; }
+
+  /* Bento / large cards */
+  .bento-card {
+    min-height: auto !important;
+  }
+
+  /* Forms full width */
+  input, select, textarea, button[type="submit"] {
+    max-width: 100%;
+  }
+
+  /* Filter bars & fixed-width form groups become full width */
+  .w-\[180px\],
+  .min-w-\[200px\] {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+}
+
+/* Phone (< 640px) refinements */
+@media (max-width: 640px) {
+  html { font-size: 15px; }
+
+  .cyv-menu-btn {
+    top: 10px;
+    left: 10px;
+    width: 42px;
+    height: 42px;
+  }
+
+  header {
+    height: 56px !important;
+    min-height: 56px !important;
+    padding-left: 3.5rem !important;
+  }
+
+  /* Compact header actions on phones */
+  header .max-w-md,
+  header input[type="search"],
+  header input[placeholder*="Search"],
+  header .relative.w-full.max-w-md,
+  header .max-w-xl {
+    display: none !important;
+  }
+  header a[href*="report-incident"],
+  header a.bg-primary {
+    padding-left: 0.65rem !important;
+    padding-right: 0.65rem !important;
+    font-size: 0.75rem !important;
+    white-space: nowrap;
+  }
+  /* Shorten long button text if present */
+  header a[href*="report-incident"] {
+    font-size: 0 !important;
+  }
+  header a[href*="report-incident"]::before {
+    content: "Report";
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+  header .gap-6 { gap: 0.5rem !important; }
+  header .gap-4 { gap: 0.35rem !important; }
+  header .space-x-4 > * + * { margin-left: 0.35rem !important; }
+
+  main {
+    padding-top: 0.75rem !important;
+    padding-bottom: 2rem !important;
+    margin-top: 56px !important; /* match shorter header when fixed */
+  }
+
+    /* Stack only non-responsive multi-column grids on phones.
+     Leave md:/lg:/xl: utilities alone so desktop design stays intact when resized. */
+  .grid-cols-2:not([class*="md:"]):not([class*="lg:"]):not([class*="xl:"]),
+  .grid-cols-3:not([class*="md:"]):not([class*="lg:"]):not([class*="xl:"]),
+  .grid-cols-4:not([class*="md:"]):not([class*="lg:"]):not([class*="xl:"]) {
+    grid-template-columns: 1fr !important;
+  }
+  /* Force common responsive grids to single column only on true phone widths */
+  .md\:grid-cols-2,
+  .md\:grid-cols-3,
+  .md\:grid-cols-4 {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Keep intentional 2-col only when marked */
+  .grid-cols-2.keep-mobile-cols {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  /* Text sizes */
+  .text-\[48px\], .text-display-lg, h1.text-4xl, h1.text-5xl {
+    font-size: 1.75rem !important;
+    line-height: 1.25 !important;
+  }
+  .text-\[32px\], .text-headline-lg, h2 {
+    font-size: 1.375rem !important;
+  }
+  .text-\[28px\] {
+    font-size: 1.25rem !important;
+  }
+
+  /* Hide less-critical desktop chrome on tiny screens */
+  .hide-on-mobile { display: none !important; }
+
+  /* Action buttons stack or shrink */
+  .flex.gap-4.items-center > a.bg-primary,
+  .flex.gap-6.items-center > a.bg-primary {
+    padding-left: 0.75rem !important;
+    padding-right: 0.75rem !important;
+    font-size: 0.8rem !important;
+  }
+
+  /* Modal full-ish width */
+  .cyv-modal-card {
+    max-width: calc(100% - 24px) !important;
+    padding: 1.25rem !important;
+    margin: 12px;
+  }
+
+  /* Toast region */
+  #cyv-toast-region {
+    left: 12px !important;
+    right: 12px !important;
+    top: 70px !important;
+  }
+  .cyv-toast {
+    min-width: 0 !important;
+    max-width: 100% !important;
+  }
+
+  /* Device preview / phone mockups in alerts page */
+  .w-\[280px\].h-\[560px\],
+  .rounded-\[48px\].border-\[8px\] {
+    width: 220px !important;
+    height: 440px !important;
+    border-width: 6px !important;
+  }
+  .p-10.flex.items-center.justify-center {
+    padding: 1.25rem !important;
+  }
+
+  /* Hide horizontal stepper connectors on phone (they break in flex-col) */
+  #line-1, #line-2, #line-3,
+  .flex-1.h-\[2px\] {
+    display: none !important;
+  }
+
+  /* Make step labels smaller / wrap nicely */
+  [id^="step-node-"] + span {
+    font-size: 0.7rem !important;
+    text-align: center;
+  }
+}
+
+/* Very small phones */
+@media (max-width: 380px) {
+  html { font-size: 14px; }
+  .cyv-menu-btn { width: 38px; height: 38px; font-size: 20px; }
+  header { padding-left: 3.25rem !important; }
+}
+
+/* Landscape phone */
+@media (max-height: 480px) and (orientation: landscape) {
+  aside.cyv-sidebar {
+    width: min(70vw, 260px) !important;
+  }
+  .cyv-menu-btn { top: 8px; left: 8px; width: 36px; height: 36px; }
+}
+
+/* Safe area for notched devices */
+@supports (padding: max(0px)) {
+  .cyv-menu-btn {
+    top: max(12px, env(safe-area-inset-top));
+    left: max(12px, env(safe-area-inset-left));
+  }
+  header {
+    padding-top: env(safe-area-inset-top);
+  }
+  main {
+    padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  }
+}
+
+/* ---- Enhanced UX Animations & Micro-interactions (more enjoyable feel) ---- */
+.bento-card, .card-shadow {
+  transition: transform .2s cubic-bezier(.22,.61,.36,1), 
+              box-shadow .2s cubic-bezier(.22,.61,.36,1),
+              border-color .2s ease;
+}
+.bento-card:hover, .card-shadow:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(0,0,0,.08);
+  border-color: rgba(11,61,145,.15);
+}
+
+button, .btn-primary, [type="submit"], .category-btn, .quiz-opt {
+  transition: transform .15s cubic-bezier(.22,.61,.36,1), 
+              background-color .15s ease, 
+              border-color .15s ease,
+              box-shadow .15s ease;
+}
+button:active, .btn-primary:active, [type="submit"]:active {
+  transform: scale(0.985);
+}
+
+input, textarea, select {
+  transition: border-color .2s ease, box-shadow .2s ease, background-color .2s ease;
+}
+input:focus, textarea:focus, select:focus {
+  border-color: #0b3d91;
+  box-shadow: 0 0 0 3px rgba(11,61,145,.1);
+}
+
+.nav-link, aside nav a {
+  transition: background-color .15s ease, 
+              color .15s ease, 
+              border-color .15s ease,
+              transform .1s ease;
+}
+aside nav a:hover {
+  transform: translateX(2px);
+}
+
+.cyv-active-link {
+  transition: all .2s cubic-bezier(.22,.61,.36,1);
+}
+
+/* Quiz option polish */
+.quiz-opt {
+  position: relative;
+  overflow: hidden;
+}
+.quiz-opt::after {
+  content: '';
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 0; height: 0;
+  background: rgba(31,174,100,.1);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width .4s ease, height .4s ease;
+}
+.quiz-opt:active::after {
+  width: 300px;
+  height: 300px;
+}
+
+/* Progress & counters smoother */
+[data-counter] {
+  transition: color .3s ease;
+}
+
+/* Toast micro animation (if using custom toast) */
+.toast {
+  animation: toast-pop .3s cubic-bezier(.22,.61,.36,1) both;
+}
+@keyframes toast-pop {
+  from { opacity: 0; transform: translateY(10px) scale(.95); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* ============================================================
+   LOADING STATES & SKELETONS
+   ============================================================ */
+
+/* Spinner */
+.cyv-spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #e2e8f0;
+  border-top-color: #0b3d91;
+  border-radius: 50%;
+  animation: cyv-spin 0.8s linear infinite;
+}
+
+@keyframes cyv-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Skeleton Loader */
+.skeleton {
+  background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite ease-in-out;
+  border-radius: 4px;
+}
+
+@keyframes skeleton-loading {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.skeleton-text {
+  height: 16px;
+  margin-bottom: 8px;
+}
+
+.skeleton-card {
+  height: 120px;
+  border-radius: 12px;
+}
+
+.skeleton-table-row {
+  height: 48px;
+  margin-bottom: 4px;
+  border-radius: 6px;
+}
+
+/* ============================================================
+   ACCESSIBILITY IMPROVEMENTS
+   ============================================================ */
+
+/* Skip to main content link */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 16px;
+  z-index: 9999;
+  background-color: #0b3d91;
+  color: #ffffff;
+  padding: 10px 18px;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 6px;
+  text-decoration: none;
+  transition: top 0.2s ease;
+}
+
+.skip-link:focus {
+  top: 12px;
+  outline: 3px solid #7bfba8;
+  outline-offset: 2px;
+}
+
+/* Enhanced visible focus styles for better keyboard navigation */
+:focus-visible {
+  outline: 3px solid #0b3d91;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[role="button"]:focus-visible {
+  outline: 3px solid #0b3d91;
+  outline-offset: 2px;
+}
+
+/* Improved color contrast for status indicators */
+.status-chip,
+.px-2.py-1.rounded-full {
+  font-weight: 600;
+}
+
+/* Better contrast for secondary text */
+.text-on-surface-variant {
+  color: #475569; /* Improved contrast */
+}
+
+/* ============================================================
+   Reduced motion
+   ============================================================ */
+
+/* ---- Reduced motion --------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .001ms !important;
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "name": "cyvora",
+  "version": "1.0.0",
+  "description": "Cyvora — civic cybersecurity portal (static frontend, Tailwind CLI build).",
+  "main": "index.js",
+  "scripts": {
+    "build:css": "tailwindcss -i ./assets/css/tailwind.css -o ./assets/css/tailwind-output.css --minify",
+    "watch:css": "tailwindcss -i ./assets/css/tailwind.css -o ./assets/css/tailwind-output.css --watch"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "autoprefixer": "^10.5.3",
+    "tailwindcss": "^3.4.19"
+  }
+}

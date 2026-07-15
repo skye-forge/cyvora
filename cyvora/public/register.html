@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Register | VARNIS</title>
+<link rel="icon" type="image/jpeg" href="../assets/img/varnis-logo.jpeg">
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700;900&amp;family=Work+Sans:wght@500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="../assets/css/tailwind-output.css"/>
+<link rel="stylesheet" href="../assets/css/site.css"/>
+    <script src="../assets/js/config.js"></script>
+    <script src="../assets/js/storage.js"></script>
+    <script src="../assets/js/mock-data.js"></script>
+    <script src="../assets/js/api.js"></script>
+    <script src="../assets/js/validation.js"></script>
+    <script src="../assets/js/i18n.js"></script>
+</head>
+<body class="bg-background text-on-background min-h-screen flex items-center justify-center p-4 antialiased">
+
+<div class="w-full max-w-md">
+  <div class="text-center mb-8">
+    <div class="inline-flex items-center justify-center w-16 h-16 rounded-xl bg-white border border-outline-variant mb-4 overflow-hidden"><img src="../assets/img/varnis-logo.jpeg" alt="VARNIS" class="w-full h-full object-contain p-1"></div>
+    <a href="landing.html" class="mb-2 inline-flex items-center gap-1 text-label-md text-on-surface-variant hover:text-primary"><span class="material-symbols-outlined text-[16px]">arrow_back</span> Home</a>
+    <h1 class="text-headline-lg font-bold text-primary" data-i18n="register.title">Create account</h1>
+    <p class="text-on-surface-variant text-label-md mt-1">Join Cameroon's digital safety community</p>
+  </div>
+  <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-8">
+    <form class="flex flex-col gap-4" id="register-form">
+      <div>
+        <label class="block font-label-lg text-on-surface-variant mb-2" data-i18n="register.name">Full name</label>
+        <input type="text" required class="w-full h-12 px-4 border border-outline-variant rounded-lg bg-surface focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary" placeholder="Jean Dupont"/>
+      </div>
+      <div>
+        <label class="block font-label-lg text-on-surface-variant mb-2" data-i18n="register.phone">Phone number</label>
+        <input type="tel" required class="w-full h-12 px-4 border border-outline-variant rounded-lg bg-surface focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary" placeholder="+237 6XX XXX XXX"/>
+      </div>
+      <div>
+        <label class="block font-label-lg text-on-surface-variant mb-2" data-i18n="register.email">Email (optional)</label>
+        <input type="email" class="w-full h-12 px-4 border border-outline-variant rounded-lg bg-surface focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary" placeholder="you@example.com"/>
+      </div>
+      <div>
+        <label class="block font-label-lg text-on-surface-variant mb-2" data-i18n="register.password">Password</label>
+        <input type="password" required minlength="8" class="w-full h-12 px-4 border border-outline-variant rounded-lg bg-surface focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary" placeholder="Min. 8 characters"/>
+      </div>
+      <label class="flex items-start gap-2 text-label-md text-on-surface-variant cursor-pointer">
+        <input type="checkbox" required class="mt-1 rounded border-outline-variant text-primary"/>
+        <span data-i18n="register.terms">I agree to the Terms of Governance and consent to data processing under CPDP regulations.</span>
+      </label>
+      <button type="submit" class="w-full h-12 bg-primary text-on-primary rounded-lg font-label-lg hover:opacity-90" data-i18n="register.button">Register &amp; verify</button>
+    </form>
+    <p class="text-center text-label-md text-on-surface-variant mt-6">
+      Already have an account? <a href="login.html" class="text-primary font-label-lg hover:underline">Sign in</a>
+    </p>
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var form = document.getElementById("register-form");
+  if (!form) return;
+
+  if (window.initInlineValidation) window.initInlineValidation(form);
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    var name = (form.querySelector("input[placeholder*='Jean']") || form.querySelector("input[type=text]")).value || "";
+    var phone = (form.querySelector("input[type=tel]") || {}).value || "";
+    var email = (form.querySelector("input[type=email]") || {}).value || "";
+    var password = (form.querySelector("input[type=password]") || {}).value || "";
+
+    var errors = [];
+
+    if (window.CyvoraValidation) {
+      var nameV = window.CyvoraValidation.validateTextField(name, "Full name", 2, 80);
+      if (!nameV.valid) errors.push(nameV.error);
+
+      var phoneV = window.CyvoraValidation.validatePhone(phone);
+      if (!phoneV.valid) errors.push(phoneV.error);
+
+      if (email) {
+        var emailV = window.CyvoraValidation.validateEmail(email);
+        if (!emailV.valid) errors.push(emailV.error);
+      }
+
+      if (password.length < 8) {
+        errors.push("Password must be at least 8 characters");
+      } else {
+        var mal = window.CyvoraValidation.detectMaliciousInput(password);
+        if (mal.isMalicious) errors.push("Password contains suspicious patterns.");
+      }
+    } else {
+      if (!name.trim() || !phone.trim() || password.length < 8) {
+        errors.push("Please fill required fields correctly (name, phone, password min 8 chars).");
+      }
+    }
+
+    if (errors.length > 0) {
+      if (window.CyvoraValidation && window.CyvoraValidation.showValidationErrors) {
+        window.CyvoraValidation.showValidationErrors(errors);
+      } else {
+        alert(errors.join("\n"));
+      }
+      return;
+    }
+
+    // If valid, proceed (in real would call register API)
+    // For demo, sanitize and "register"
+    if (window.CyvoraValidation) {
+      name = window.CyvoraValidation.sanitizeInput(name, 80);
+      phone = window.CyvoraValidation.sanitizeInput(phone, 20);
+    }
+
+    // Simulate success
+    alert("Registration successful! Proceeding to verification.");
+    location.href = "otp.html";
+  });
+})();
+</script>
+
+</body>
+</html>
