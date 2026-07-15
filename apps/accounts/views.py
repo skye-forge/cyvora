@@ -1,0 +1,91 @@
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.views import APIView
+from rest_framework_simplejwt.exceptions import TokenError
+from rest_framework_simplejwt.tokens import RefreshToken
+
+from api.responses import error_response, success_response
+from shared.mixins import ServiceExceptionHandlingMixin
+
+from . import services
+from .serializers import (
+    LoginSerializer,
+    RegisterSerializer,
+    UpdateProfileSerializer,
+    UserSerializer,
+)
+
+
+class RegisterView(ServiceExceptionHandlingMixin, APIView):
+    """POST /api/v1/auth/register/"""
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        serializer = RegisterSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        user = services.register_user(**serializer.validated_data)
+        tokens = services.issue_tokens(user)
+
+        return success_response(
+            data={
+                "access": tokens["access"],
+                "refresh": tokens["refresh"],
+                "user": UserSerializer(user).data,
+            },
+            message="Account created successfully.",
+            status=201,
+        )
+
+
+class LoginView(ServiceExceptionHandlingMixin, APIView):
+    """POST /api/v1/auth/login/"""
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        serializer = LoginSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        user = services.authenticate_user(**serializer.validated_data)
+        tokens = services.issue_tokens(user)
+
+        return success_response(
+            data={
+                "access": tokens["access"],
+                "refresh": tokens["refresh"],
+                "user": UserSerializer(user).data,
+            },
+            message="Login successful.",
+        )
+
+
+class RefreshTokenView(APIView):
+    """POST /api/v1/auth/refresh — body: {"refresh": "<token>"}"""
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        refresh_token = request.data.get("refresh")
+        if not refresh_token:
+            return error_response("Refresh token is required.", status=400)
+
+        try:
+            refresh = RefreshToken(refresh_token)
+            access = str(refresh.access_token)
+        except TokenError:
+            return error_response("Refresh token is invalid or expired.", status=401)
+
+        return success_response(data={"access": access}, message="Token refreshed.")
+
+
+class MeView(ServiceExceptionHandlingMixin, APIView):
+    """GET /api/v1/auth/me — PATCH /api/v1/auth/me"""
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        return success_response(data=UserSerializer(request.user).data)
+
+    def patch(self, request):
+        serializer = UpdateProfileSerializer(data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+
+        user = services.update_profile(user=request.user, validated_data=serializer.validated_data)
+        return success_response(data=UserSerializer(user).data, message="Profile updated.")

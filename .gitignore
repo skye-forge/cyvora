@@ -1,0 +1,55 @@
+__pycache__/
+*.py[cod]
+.env
+*.sqlite3
+staticfiles/
+media/
+.venv/
+venv/
+*.log
+.pytest_cache/
+.coverage
+db.sqlite3
+logs/*.log
+logs/*.log
+
+
+# --- System Files ---
+.DS_Store
+*.log
+
+# --- Flutter/Dart ---
+flutter-app/.dart_tool/
+flutter-app/.packages
+flutter-app/.pub-cache/
+flutter-app/build/
+
+# --- Node / Web-Admin ---
+web-admin/node_modules/
+web-admin/build/
+web-admin/.env
+
+# --- Python / ML-Service ---
+ml-service/__pycache__/
+ml-service/venv/
+ml-service/*.pyc
+ml-service/.env
+
+# --- DevOps / Infrastructure ---
+infrastructure/terraform/.terraform/
+infrastructure/terraform/*.tfstate
+flutter-app/README.md
+
+web-admin/README.md
+
+ml-service/README.md
+
+api-contracts/README.md
+
+infrastructure/docker-compose.yml (Leave this file blank for now)
+
+ui-design/.gitkeep (A .gitkeep is just a standard blank file used to hold empty folders)
+
+documentation/.gitkeep
+
+.github/workflows/.gitkeep
