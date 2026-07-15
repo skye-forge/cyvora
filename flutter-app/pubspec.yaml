@@ -1,0 +1,88 @@
+name: varnis
+description: "Varnis - civic and digital safety for Cameroon."
+publish_to: 'none'
+
+# Matches the version shown in the app (Settings / About / Profile footer:
+# v2.4.0 (Build 82)). package_info_plus reads this at runtime so the UI
+# never hardcodes it.
+version: 2.4.0+82
+
+environment:
+  sdk: ^3.11.1
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # Localization (EN / FR chosen at signup, changeable in Settings)
+  flutter_localizations:
+    sdk: flutter
+  intl: any # version pinned by flutter_localizations
+
+  cupertino_icons: ^1.0.8
+
+  # State management
+  provider: ^6.1.2
+
+  # API calls
+  dio: ^5.8.0+1
+
+  # JSON
+  json_annotation: ^4.8.1
+
+  # Local storage
+  shared_preferences: ^2.5.2
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+
+  # Animations
+  lottie: ^3.3.1
+
+  # --- Added for the functional phase ---
+
+  # Open Privacy Policy / Terms URLs, mailto:, and Google Maps directions
+  url_launcher: ^6.3.1
+
+  # Profile photo + report incident screenshots (camera & gallery)
+  image_picker: ^1.1.2
+
+  # Biometric login toggle in Settings (fingerprint / face)
+  local_auth: ^2.3.0
+
+  # App version + build number for Settings / About / Profile footer
+  package_info_plus: ^8.1.2
+
+  # User location for report submissions and Safe Zones distance sorting
+  geolocator: ^13.0.2
+
+  # Detect offline state so cached (Hive) data can be served gracefully
+  connectivity_plus: ^6.1.1
+
+  # Cache avatars, post images, lesson covers (avoids refetching)
+  cached_network_image: ^3.4.1
+
+  # "Rate the App" row on the About screen
+  in_app_review: ^2.0.10
+
+  # --- Phase 4: real-time alerts (uncomment when Firebase project is
+  # created; requires google-services.json / GoogleService-Info.plist,
+  # see chat notes) ---
+  # firebase_core: ^3.9.0
+  # firebase_messaging: ^15.1.6
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^6.0.0
+
+  # Code generation
+  build_runner: ^2.4.11
+  json_serializable: ^6.8.0
+  hive_generator: ^2.0.1
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/images/
