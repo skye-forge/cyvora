@@ -1,6 +1,6 @@
-# cyvora
+# varnis
 cyberspace protection
-CYVORA
+varnis
 │
 ├── backend
 ├── flutter-app
