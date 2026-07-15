@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Verify OTP | Cyvora</title>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700;900&amp;family=Work+Sans:wght@500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="../assets/css/tailwind-output.css"/>
+<link rel="stylesheet" href="../assets/css/site.css"/>
+    <script src="../assets/js/i18n.js"></script>
+</head>
+<body class="bg-background text-on-background min-h-screen flex items-center justify-center p-4 antialiased">
+
+<div class="w-full max-w-md">
+  <div class="text-center mb-8">
+    <div class="inline-flex items-center justify-center w-16 h-16 rounded-xl bg-primary text-on-primary mb-4">
+      <span class="material-symbols-outlined text-3xl">sms</span>
+    </div>
+    <h1 class="text-headline-md font-bold text-on-surface">Verify your number</h1>
+    <p class="text-on-surface-variant text-body-md mt-2">Enter the 6-digit code sent to your phone</p>
+  </div>
+  <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-8">
+    <form class="flex flex-col gap-6" onsubmit="event.preventDefault(); location.href='language.html';">
+      <div class="flex justify-center gap-2" id="otp-inputs">
+        <input maxlength="1" inputmode="numeric" class="w-12 h-14 text-center text-headline-md font-semibold border border-outline-variant rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20" />
+        <input maxlength="1" inputmode="numeric" class="w-12 h-14 text-center text-headline-md font-semibold border border-outline-variant rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20" />
+        <input maxlength="1" inputmode="numeric" class="w-12 h-14 text-center text-headline-md font-semibold border border-outline-variant rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20" />
+        <input maxlength="1" inputmode="numeric" class="w-12 h-14 text-center text-headline-md font-semibold border border-outline-variant rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20" />
+        <input maxlength="1" inputmode="numeric" class="w-12 h-14 text-center text-headline-md font-semibold border border-outline-variant rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20" />
+        <input maxlength="1" inputmode="numeric" class="w-12 h-14 text-center text-headline-md font-semibold border border-outline-variant rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20" />
+      </div>
+      <button type="submit" class="w-full h-12 bg-primary text-on-primary rounded-lg font-label-lg">Verify code</button>
+      <p class="text-center text-label-md text-on-surface-variant">Didn't receive it? <button type="button" class="text-primary font-label-lg">Resend in 0:45</button></p>
+    </form>
+  </div>
+</div>
+<script>
+document.querySelectorAll('#otp-inputs input').forEach((inp, i, arr) => {
+  inp.addEventListener('input', () => { if (inp.value && arr[i+1]) arr[i+1].focus(); });
+  inp.addEventListener('keydown', e => { if (e.key==='Backspace' && !inp.value && arr[i-1]) arr[i-1].focus(); });
+});
+</script>
+
+
+</body>
+</html>

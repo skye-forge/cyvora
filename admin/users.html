@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Cyvora Admin | User Management</title>
+<link rel="stylesheet" href="../assets/css/tailwind-output.css" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Manrope:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            background-color: #f8f9ff;
+            color: #0b1c30;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        /* Custom scrollbar for data-heavy UI */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+<script src="../assets/js/config.js"></script>
+<script src="../assets/js/mock-data.js"></script>
+<script src="../assets/js/api.js"></script>
+<script src="../assets/js/templates.js"></script>
+    <script src="../assets/js/validation.js"></script>
+    <script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/app.js"></script>
+<link rel="stylesheet" href="../assets/css/site.css"/>
+</head>
+<body class="min-h-screen flex">
+<!-- SideNavBar (Persistent) -->
+<aside class="fixed left-0 top-0 h-screen w-[240px] bg-primary flex flex-col py-6 border-r border-outline-variant z-50">
+<div class="px-6 mb-8">
+<h1 class="font-headline-md text-headline-md font-bold text-on-primary">Cyvora</h1>
+<p class="font-label-md text-label-md text-on-primary/60">Management Platform</p>
+</div>
+<nav class="flex-1 space-y-1">
+<!-- Active Tab: Overview -->
+<a class="flex items-center px-6 py-3 text-on-primary/70 font-medium hover:bg-white/5 hover:text-on-primary transition-colors" href="index.html">
+<span class="material-symbols-outlined mr-3">dashboard</span>
+<span class="font-label-md text-label-md">Overview</span>
+</a>
+<a class="flex items-center px-6 py-3 text-on-primary/70 font-medium hover:bg-white/5 hover:text-on-primary transition-colors" href="reports.html">
+<span class="material-symbols-outlined mr-3">assessment</span>
+<span class="font-label-md text-label-md">Reports</span>
+</a>
+<a class="flex items-center px-6 py-3 text-on-primary border-l-4 border-secondary-fixed bg-white/10 font-bold opacity-90 transition-all duration-200" href="users.html">
+<span class="material-symbols-outlined mr-3">group</span>
+<span class="font-label-md text-label-md">Users</span>
+</a>
+<a class="flex items-center px-6 py-3 text-on-primary/70 font-medium hover:bg-white/5 hover:text-on-primary transition-colors" href="learning.html">
+<span class="material-symbols-outlined mr-3">school</span>
+<span class="font-label-md text-label-md">Learning</span>
+</a>
+<a class="flex items-center px-6 py-3 text-on-primary/70 font-medium hover:bg-white/5 hover:text-on-primary transition-colors" href="community.html">
+<span class="material-symbols-outlined mr-3">forum</span>
+<span class="font-label-md text-label-md">Community</span>
+</a>
+<a class="flex items-center px-6 py-3 text-on-primary/70 font-medium hover:bg-white/5 hover:text-on-primary transition-colors" href="alerts.html">
+<span class="material-symbols-outlined mr-3">new_releases</span>
+<span class="font-label-md text-label-md">Updates</span>
+</a>
+<div class="pt-4 mt-4 border-t border-white/10">
+<a class="flex items-center px-6 py-3 text-on-primary/70 font-medium hover:bg-white/5 hover:text-on-primary transition-colors" href="settings.html">
+<span class="material-symbols-outlined mr-3">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+</div>
+</nav>
+<div class="px-6 mt-auto">
+<div class="flex items-center space-x-3 p-3 bg-white/5 rounded-lg">
+<img class="w-10 h-10 rounded-full border border-white/20" data-alt="A professional portrait of a senior system administrator in a high-tech office environment, soft cinematic lighting, clean composition, business attire, in a palette of deep blues and professional grays." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCG05utaKNbNsIna7PXLdaMnLZE9yQEztbWg6Fqj7IMVG5fnHRPhdf9-JWhFWpxIN7oDf4gP_HOBezOIKY0tybT0a1yMKp-mzAdeH2miGhei35HfnDEFTTft_We6ewJZKv0pyAixXsFq0-apu10e34M0ZC--BGjhqYVwAePSg_vuHzXsqADSVkFw_u0p-e7rdlCuOv3S4dqc14_yzAUo7FDpRZ4VYT2Fsmmf1FRWDDWuEYYa3zmgIgf"/>
+<div class="overflow-hidden">
+<p class="text-on-primary font-label-sm truncate">Cyvora Admin</p>
+<p class="text-on-primary/50 text-[10px] uppercase tracking-wider">Superuser</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 ml-[240px] min-h-screen flex flex-col">
+<!-- TopNavBar -->
+<header class="sticky top-0 right-0 h-[64px] w-full bg-surface border-b border-outline-variant flex justify-between items-center px-gutter z-40">
+<div class="flex items-center flex-1 max-w-xl">
+<div class="relative w-full group">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="w-full bg-surface-container-low border-none rounded-lg pl-10 pr-4 py-2 text-label-md focus:ring-2 focus:ring-primary/20 transition-all" placeholder="Search system records, users, or alerts..." type="text"/>
+</div>
+</div>
+<div class="flex items-center space-x-4">
+<button class="p-2 text-on-surface-variant hover:bg-surface-container-low rounded-lg transition-colors relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full border-2 border-surface"></span>
+</button>
+<button class="p-2 text-on-surface-variant hover:bg-surface-container-low rounded-lg transition-colors">
+<span class="material-symbols-outlined">apps</span>
+</button>
+<div class="h-8 w-[1px] bg-outline-variant mx-2"></div>
+<div class="flex items-center space-x-3 cursor-pointer hover:bg-surface-container-low p-1 pr-3 rounded-lg transition-colors">
+<img class="w-8 h-8 rounded-full" data-alt="A circular profile icon showing a sophisticated digital avatar representing a security operations lead, minimalist lines, navy and teal colors, professional and trustworthy feel." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCwBoymuQUB1TIefV8M5mG5qRhWUAv4g-IuvinVmBCTM6zlINYMeN6kHmj88m5Pb5Jn3uOxayczKst_RibhzrDh1yJbDauIX08BVeZzLOFGO8IwVEIMiVwmw7vhCH7St0SaDbO9IHdK-s8Wte5_hIZiWdl26xJrF6bDvbvSLo4F3qTdqXiNAM-LUB0RUabSIOlMxuLKPNKhHiWz2nFgvy5v851cf3BkBx5SUDCGLkamxKnZAwedt3JM"/>
+<span class="font-label-md text-on-surface font-semibold">Admin Panel</span>
+</div>
+</div>
+</header>
+<!-- Dashboard Canvas -->
+<div class="p-gutter space-y-stack_lg">
+<!-- Page Action Bar -->
+<div class="flex justify-between items-end mb-2">
+<div>
+<h2 class="font-headline-md text-headline-md text-on-surface mb-1">User Management</h2>
+<p class="font-body-md text-on-surface-variant">Review citizen accounts, manage roles, and moderate account status.</p>
+</div>
+<div class="flex items-center gap-3">
+<button class="flex items-center gap-2 px-4 py-2 border border-outline text-primary font-label-md rounded hover:bg-surface-container transition-all" id="export-users-btn">
+<span class="material-symbols-outlined text-[20px]">download</span>
+                    Export CSV
+                </button>
+<button class="flex items-center gap-2 px-4 py-2 bg-primary text-on-primary font-label-md rounded hover:opacity-90 transition-all shadow-sm" id="invite-user-btn">
+<span class="material-symbols-outlined text-[20px]">person_add</span>
+                    Invite User
+                </button>
+</div>
+</div>
+<!-- Filter Header -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6 flex flex-wrap items-center gap-6">
+<div class="flex-1 min-w-[200px]">
+<label class="block font-label-sm text-label-sm text-on-surface-variant uppercase mb-2">Search</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[18px]">search</span>
+<input class="w-full pl-10 pr-4 py-2 border border-outline-variant rounded focus:border-primary focus:ring-1 focus:ring-primary text-body-md outline-none" id="user-search-input" placeholder="Search name or email" type="text"/>
+</div>
+</div>
+<div class="w-[180px]">
+<label class="block font-label-sm text-label-sm text-on-surface-variant uppercase mb-2">Role</label>
+<select class="w-full px-3 py-2 border border-outline-variant rounded focus:border-primary text-body-md outline-none bg-white" id="user-role-filter">
+<option value="">All Roles</option>
+<option value="citizen">Citizen</option>
+<option value="moderator">Moderator</option>
+<option value="admin">Admin</option>
+</select>
+</div>
+<div class="w-[180px]">
+<label class="block font-label-sm text-label-sm text-on-surface-variant uppercase mb-2">Status</label>
+<select class="w-full px-3 py-2 border border-outline-variant rounded focus:border-primary text-body-md outline-none bg-white" id="user-status-filter">
+<option value="">All Status</option>
+<option value="active">Active</option>
+<option value="pending">Pending</option>
+<option value="suspended">Suspended</option>
+</select>
+</div>
+</div>
+<!-- Data Table Widget -->
+<div class="bg-white border border-outline-variant rounded-lg overflow-hidden flex flex-col">
+<div class="overflow-x-auto custom-scrollbar">
+<table class="w-full text-left border-collapse">
+<thead class="bg-surface-container-low border-b border-outline-variant">
+<tr>
+<th class="px-6 py-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Name</th>
+<th class="px-6 py-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Email</th>
+<th class="px-6 py-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">District</th>
+<th class="px-6 py-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Role</th>
+<th class="px-6 py-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Trust Score</th>
+<th class="px-6 py-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Status</th>
+<th class="px-6 py-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container" id="users-tbody">
+<tr><td class="px-6 py-8 text-center text-on-surface-variant font-body-md" colspan="7">Loading users…</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<script>
+  (function () {
+    var STATUS_STYLES = {
+      active: "bg-secondary-container text-on-secondary-container",
+      pending: "bg-tertiary-fixed text-on-tertiary-fixed-variant",
+      suspended: "bg-error-container text-on-error-container",
+    };
+    var allUsers = [];
+
+    function render(users) {
+      var tbody = document.getElementById("users-tbody");
+      if (!users.length) {
+        tbody.innerHTML = '<tr><td class="px-6 py-8 text-center text-on-surface-variant font-body-md" colspan="7">No users match these filters.</td></tr>';
+        return;
+      }
+      tbody.innerHTML = users.map(function (u) {
+        var statusClass = STATUS_STYLES[u.status] || STATUS_STYLES.active;
+        var nextStatus = u.status === "suspended" ? "active" : "suspended";
+        var actionLabel = u.status === "suspended" ? "Reinstate" : "Suspend";
+        return (
+          '<tr class="hover:bg-surface-container-lowest transition-colors group reveal" data-user-id="' + u.id + '">' +
+            '<td class="px-6 py-4 font-table-cell text-table-cell font-medium">' + u.name + '</td>' +
+            '<td class="px-6 py-4 font-table-cell text-table-cell text-on-surface-variant">' + u.email + '</td>' +
+            '<td class="px-6 py-4 font-table-cell text-table-cell">' + u.district + '</td>' +
+            '<td class="px-6 py-4">' +
+              '<select class="border border-outline-variant rounded px-2 py-1 text-table-cell font-table-cell bg-white role-select">' +
+                ["citizen", "moderator", "admin"].map(function (r) {
+                  return '<option value="' + r + '"' + (r === u.role ? " selected" : "") + '>' + r.charAt(0).toUpperCase() + r.slice(1) + '</option>';
+                }).join("") +
+              '</select>' +
+            '</td>' +
+            '<td class="px-6 py-4 font-table-cell text-table-cell font-semibold">' + u.trustScore.toFixed(1) + '</td>' +
+            '<td class="px-6 py-4"><span class="px-2 py-1 rounded text-[10px] font-bold uppercase ' + statusClass + '">' + u.status + '</span></td>' +
+            '<td class="px-6 py-4 text-right">' +
+              '<button class="px-4 py-1.5 border border-primary text-primary font-label-md rounded group-hover:bg-primary group-hover:text-on-primary transition-all status-toggle-btn" data-next-status="' + nextStatus + '">' + actionLabel + '</button>' +
+            '</td>' +
+          '</tr>'
+        );
+      }).join("");
+
+      if (window.initScrollRevealFor) window.initScrollRevealFor(tbody);
+
+      tbody.querySelectorAll(".status-toggle-btn").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          var row = btn.closest("tr");
+          var id = row.getAttribute("data-user-id");
+          var next = btn.getAttribute("data-next-status");
+          btn.disabled = true;
+          window.CyvoraAPI.users.updateStatus(id, next).then(function () {
+            window.showToast("User status updated to " + next + ".", "success");
+            loadUsers();
+          }).catch(function () {
+            window.showToast("Could not update user status.", "error");
+            btn.disabled = false;
+          });
+        });
+      });
+
+      tbody.querySelectorAll(".role-select").forEach(function (sel) {
+        sel.addEventListener("change", function () {
+          var row = sel.closest("tr");
+          var id = row.getAttribute("data-user-id");
+          window.CyvoraAPI.users.updateRole(id, sel.value).then(function () {
+            window.showToast("Role updated to " + sel.value + ".", "success");
+          }).catch(function () {
+            window.showToast("Could not update role.", "error");
+          });
+        });
+      });
+    }
+
+    function applyFilters() {
+      var q = (document.getElementById("user-search-input").value || "").toLowerCase();
+      var role = document.getElementById("user-role-filter").value;
+      var status = document.getElementById("user-status-filter").value;
+      var filtered = allUsers.filter(function (u) {
+        var matchesQ = !q || u.name.toLowerCase().indexOf(q) > -1 || u.email.toLowerCase().indexOf(q) > -1;
+        var matchesRole = !role || u.role === role;
+        var matchesStatus = !status || u.status === status;
+        return matchesQ && matchesRole && matchesStatus;
+      });
+      render(filtered);
+    }
+
+    function loadUsers() {
+      window.CyvoraAPI.users.list().then(function (res) {
+        allUsers = res.items;
+        applyFilters();
+      }).catch(function () {
+        document.getElementById("users-tbody").innerHTML =
+          '<tr><td class="px-6 py-8 text-center text-error font-body-md" colspan="7">Could not load users. Check your connection and try again.</td></tr>';
+      });
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+      loadUsers();
+      document.getElementById("user-search-input").addEventListener("input", applyFilters);
+      document.getElementById("user-role-filter").addEventListener("change", applyFilters);
+      document.getElementById("user-status-filter").addEventListener("change", applyFilters);
+      document.getElementById("export-users-btn").addEventListener("click", function () {
+        window.showToast("Preparing CSV export…", "info");
+      });
+      document.getElementById("invite-user-btn").addEventListener("click", function () {
+        window.showToast("Invite link copied. Share it with the new user.", "success");
+      });
+    });
+  })();
+</script>
+</main>
+<script src="../assets/js/site.js" defer></script>
+</body></html>

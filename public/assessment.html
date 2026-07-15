@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Assessment | Cyvora</title>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700;900&amp;family=Work+Sans:wght@500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="../assets/css/tailwind-output.css"/>
+<link rel="stylesheet" href="../assets/css/site.css"/>
+<script src="../assets/js/config.js"></script>
+<script src="../assets/js/mock-data.js"></script>
+<script src="../assets/js/api.js"></script>
+<script src="../assets/js/templates.js"></script>
+    <script src="../assets/js/validation.js"></script>
+    <script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/app.js"></script>
+</head>
+
+<body class="bg-background text-on-background font-body-md antialiased">
+<aside class="bg-primary dark:bg-primary-container text-on-primary dark:text-on-primary-container font-label-md text-label-md h-screen w-64 fixed left-0 top-0 flex flex-col h-full py-unit z-50" id="sidebar">
+<div class="px-6 py-8 mb-4">
+<h1 class="text-headline-md font-headline-md font-bold text-on-primary">Cyvora</h1>
+<p class="text-on-primary/60 text-label-md">Civic Safety Portal</p>
+</div>
+<nav class="flex-1 flex flex-col gap-1 px-2 overflow-y-auto">
+<a class="text-on-primary/70 flex items-center gap-4 px-4 py-3 duration-200 ease-in-out hover:bg-on-primary/10 transition-colors" href="index.html">
+<span class="material-symbols-outlined">home</span>
+<span>Home</span>
+</a>
+<a class="text-on-primary/70 flex items-center gap-4 px-4 py-3 duration-200 ease-in-out hover:bg-on-primary/10 transition-colors" href="my-reports.html">
+<span class="material-symbols-outlined">assessment</span>
+<span>Reports</span>
+</a>
+<a class="text-on-primary/70 flex items-center gap-4 px-4 py-3 duration-200 ease-in-out hover:bg-on-primary/10 transition-colors" href="community.html">
+<span class="material-symbols-outlined">groups</span>
+<span>Community</span>
+</a>
+<a class="text-on-primary/70 flex items-center gap-4 px-4 py-3 duration-200 ease-in-out hover:bg-on-primary/10 transition-colors" href="learn.html">
+<span class="material-symbols-outlined">school</span>
+<span>Learn</span>
+</a>
+<a class="text-on-primary/70 flex items-center gap-4 px-4 py-3 duration-200 ease-in-out hover:bg-on-primary/10 transition-colors" href="leaderboard.html">
+<span class="material-symbols-outlined">emoji_events</span>
+<span>Leaderboard</span>
+</a>
+<a class="text-on-primary/70 flex items-center gap-4 px-4 py-3 duration-200 ease-in-out hover:bg-on-primary/10 transition-colors" href="monitor.html">
+<span class="material-symbols-outlined">public</span>
+<span>Monitor</span>
+</a>
+<a class="text-on-primary/70 flex items-center gap-4 px-4 py-3 duration-200 ease-in-out hover:bg-on-primary/10 transition-colors" href="certificates.html">
+<span class="material-symbols-outlined">workspace_premium</span>
+<span>Certificates</span>
+</a>
+<a class="text-on-primary/70 flex items-center gap-4 px-4 py-3 duration-200 ease-in-out hover:bg-on-primary/10 transition-colors" href="profile.html">
+<span class="material-symbols-outlined">account_circle</span>
+<span>Profile</span>
+</a>
+</nav>
+<div class="mt-auto px-4 py-4 flex flex-col gap-4">
+<button type="button" class="w-full bg-error text-on-error py-3 rounded font-label-lg uppercase tracking-wider flex items-center justify-center gap-2" onclick="typeof showToast==='function'&&showToast('Emergency alert broadcast simulated','error')">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">campaign</span>
+Emergency Alert
+</button>
+<div class="flex flex-col gap-1">
+<a class="text-on-primary/70 flex items-center gap-4 px-4 py-2 hover:bg-on-primary/10 transition-colors" href="profile.html">
+<span class="material-symbols-outlined">settings</span>
+<span>Settings</span>
+</a>
+<a class="text-on-primary/70 flex items-center gap-4 px-4 py-2 hover:bg-on-primary/10 transition-colors" href="support.html">
+<span class="material-symbols-outlined">help</span>
+<span>Support</span>
+</a>
+<a class="text-on-primary/70 flex items-center gap-4 px-4 py-2 hover:bg-on-primary/10 transition-colors" href="login.html">
+<span class="material-symbols-outlined">logout</span>
+<span>Logout</span>
+</a>
+</div>
+</div>
+</aside>
+<!-- TopNavBar -->
+<header class="fixed top-0 right-0 w-[calc(100%-16rem)] max-lg:w-full h-16 bg-surface dark:bg-surface-dim text-primary border-b border-outline-variant flex items-center justify-between px-6 lg:px-12 ml-64 max-lg:ml-0 z-40">
+<div class="flex items-center gap-3 flex-1">
+<button type="button" id="menu-toggle" class="lg:hidden material-symbols-outlined p-2 rounded-full hover:bg-surface-container-low" aria-label="Open menu">menu</button>
+<div class="relative w-full max-w-md hidden sm:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[20px]">search</span>
+<input id="safety-search" class="w-full pl-10 pr-4 py-2 bg-surface-container border border-outline-variant rounded-full text-label-md focus:outline-none focus:ring-2 focus:ring-primary/20" placeholder="Search safety database..." type="search"/>
+</div>
+</div>
+<div class="flex items-center gap-3 sm:gap-6">
+<button type="button" class="material-symbols-outlined p-2 rounded-full hover:bg-surface-container-low text-on-surface-variant" aria-label="Notifications">notifications</button>
+<a class="material-symbols-outlined p-2 rounded-full hover:bg-surface-container-low text-on-surface-variant inline-flex" href="profile.html" aria-label="Settings">settings</a>
+<a class="bg-primary text-on-primary px-4 sm:px-6 py-2 rounded-lg font-label-lg scale-98 active:scale-95 transition-transform inline-flex text-sm sm:text-base" href="report-incident.html">Report Incident</a>
+</div>
+</header>
+
+<main class="ml-64 max-lg:ml-0 mt-16 min-h-[calc(100vh-4rem)] p-6 lg:p-10 max-w-[1440px]">
+
+<div class="max-w-2xl mx-auto">
+  <div class="mb-8">
+    <p class="text-label-md text-primary font-label-lg uppercase tracking-wider mb-2">Onboarding · Step 2 of 2</p>
+    <h1 class="text-headline-lg font-bold text-on-surface">Initial safety assessment</h1>
+    <p class="text-body-md text-on-surface-variant mt-2">Answer 5 questions so we can set your starting level (Novice → Patriote Digital).</p>
+    <div class="mt-4 h-2 bg-surface-container rounded-full overflow-hidden">
+      <div id="quiz-progress" class="h-full bg-secondary transition-all duration-300" style="width:20%"></div>
+    </div>
+    <p class="text-caption text-outline mt-2"><span id="q-num">1</span> of 5</p>
+  </div>
+  <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-8" id="quiz-card">
+    <h2 id="q-text" class="text-headline-md font-semibold text-on-surface mb-6">Which of the following is a common sign of a phishing email?</h2>
+    <div id="q-options" class="flex flex-col gap-3">
+      <button type="button" class="quiz-opt text-left px-5 py-4 border border-outline-variant rounded-lg hover:border-primary hover:bg-primary/5 transition" data-correct="1">Urgent request for password or MoMo PIN</button>
+      <button type="button" class="quiz-opt text-left px-5 py-4 border border-outline-variant rounded-lg hover:border-primary hover:bg-primary/5 transition">Email from a colleague you know</button>
+      <button type="button" class="quiz-opt text-left px-5 py-4 border border-outline-variant rounded-lg hover:border-primary hover:bg-primary/5 transition">Official ANTIC newsletter</button>
+      <button type="button" class="quiz-opt text-left px-5 py-4 border border-outline-variant rounded-lg hover:border-primary hover:bg-primary/5 transition">Bank statement PDF you requested</button>
+    </div>
+    <div class="mt-6 flex items-center justify-between">
+      <div class="flex items-center gap-2 text-label-md text-on-surface-variant">
+        <span class="material-symbols-outlined text-error">favorite</span>
+        <span>Lives: <strong id="lives">5</strong></span>
+      </div>
+      <button type="button" id="next-q" class="hidden bg-primary text-on-primary px-6 py-3 rounded-lg font-label-lg">Next question</button>
+    </div>
+  </div>
+  <div id="quiz-done" class="hidden bg-surface-container-lowest border border-outline-variant rounded-lg p-8 text-center">
+    <span class="material-symbols-outlined text-6xl text-secondary mb-4" style="font-variation-settings:'FILL' 1">military_tech</span>
+    <h2 class="text-headline-md font-bold">You're a <span id="start-level">Novice</span></h2>
+    <p class="text-on-surface-variant mt-2 mb-6">We've set your starting path. Earn XP to climb to Patriote Digital.</p>
+    <a href="index.html" class="inline-flex bg-primary text-on-primary px-8 py-3 rounded-lg font-label-lg">Enter Cyvora</a>
+  </div>
+</div>
+
+</main>
+
+<script defer src="../assets/js/site.js"></script>
+
+
+<script>
+const questions = [
+  {q:"Which of the following is a common sign of a phishing email?", opts:["Urgent request for password or MoMo PIN","Email from a colleague you know","Official ANTIC newsletter","Bank statement PDF you requested"], c:0},
+  {q:"What should you do if you receive a suspicious MoMo payment request?", opts:["Send the code immediately","Call the number back","Ignore and report on Cyvora","Share it on social media"], c:2},
+  {q:"AI-generated deepfake videos can be used to…", opts:["Improve network speed","Impersonate officials for scams","Charge your phone","Update Windows"], c:1},
+  {q:"A strong password should include…", opts:["Your birthday only","Same as MoMo PIN","Long unique phrase + symbols","The word password"], c:2},
+  {q:"After completing 3 learning zones at 70%+, you earn which certificate tier?", opts:["Bronze","Silver","Gold","Platinum"], c:0}
+];
+let qi=0, lives=5, score=0;
+const qText=document.getElementById('q-text'), optsEl=document.getElementById('q-options');
+const progress=document.getElementById('quiz-progress'), qNum=document.getElementById('q-num');
+const nextBtn=document.getElementById('next-q'), livesEl=document.getElementById('lives');
+
+function render(){
+  const item=questions[qi];
+  qText.textContent=item.q;
+  qNum.textContent=qi+1;
+  progress.style.width=((qi+1)/5*100)+'%';
+  nextBtn.classList.add('hidden');
+  optsEl.innerHTML=item.opts.map((o,i)=>`<button type="button" class="quiz-opt text-left px-5 py-4 border border-outline-variant rounded-lg hover:border-primary hover:bg-primary/5 transition w-full" data-i="${i}">${o}</button>`).join('');
+  optsEl.querySelectorAll('.quiz-opt').forEach(btn=>{
+    btn.onclick=()=>{
+      const correct=parseInt(btn.dataset.i)===item.c;
+      optsEl.querySelectorAll('.quiz-opt').forEach(b=>{b.disabled=true; if(parseInt(b.dataset.i)===item.c) b.classList.add('border-secondary','bg-secondary/10');});
+      if(correct){ score++; btn.classList.add('border-secondary','bg-secondary/10'); }
+      else { lives--; livesEl.textContent=lives; btn.classList.add('border-error','bg-error/10'); }
+      nextBtn.classList.remove('hidden');
+    };
+  });
+}
+nextBtn.onclick=()=>{
+  qi++;
+  if(qi>=questions.length || lives<=0){
+    document.getElementById('quiz-card').classList.add('hidden');
+    document.getElementById('quiz-done').classList.remove('hidden');
+    const pct=score/questions.length;
+    document.getElementById('start-level').textContent = pct>=0.8?'Apprenti': pct>=0.5?'Novice':'Novice';
+  } else render();
+};
+render();
+
+// Enhance search input with input validation & security layer
+var searchInput = document.getElementById('safety-search');
+if (searchInput && window.CyvoraValidation) {
+  searchInput.addEventListener('input', function () {
+    var val = searchInput.value;
+    if (val.length > 3) {
+      var mal = window.CyvoraValidation.detectMaliciousInput(val);
+      if (mal.isMalicious) {
+        if (typeof window.showToast === 'function') {
+          window.showToast('Search blocked: possible ' + mal.type + ' attempt detected.', 'error');
+        }
+        searchInput.value = window.CyvoraValidation.sanitizeInput(val, 100);
+        searchInput.classList.add('border-error', 'ring-error/30');
+        setTimeout(function () {
+          searchInput.classList.remove('border-error', 'ring-error/30');
+        }, 1200);
+      } else {
+        // optional: live sanitize for safety
+        var clean = window.CyvoraValidation.sanitizeInput(val, 120);
+        if (clean !== val) searchInput.value = clean;
+      }
+    }
+  });
+
+  // Optional: on enter, simulate safe search (demo)
+  searchInput.addEventListener('keypress', function (e) {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      var clean = window.CyvoraValidation.sanitizeInput(searchInput.value, 120);
+      if (typeof window.showToast === 'function') {
+        window.showToast('Searching safety database for: ' + clean, 'info');
+      }
+      searchInput.value = '';
+    }
+  });
+}
+</script>
+
+</body>
+</html>

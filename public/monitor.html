@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>National Monitor | Cyvora</title>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700;900&amp;family=Work+Sans:wght@500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="../assets/css/tailwind-output.css"/>
+<link rel="stylesheet" href="../assets/css/site.css"/>
+<script src="../assets/js/config.js"></script>
+<script src="../assets/js/mock-data.js"></script>
+<script src="../assets/js/api.js"></script>
+<script src="../assets/js/templates.js"></script>
+    <script src="../assets/js/validation.js"></script>
+    <script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/app.js"></script>
+</head>
+
+<body class="bg-background text-on-background font-body-md antialiased">
+<aside class="bg-primary dark:bg-primary-container text-on-primary dark:text-on-primary-container font-label-md text-label-md h-screen w-64 fixed left-0 top-0 flex flex-col h-full py-unit z-50" id="sidebar">
+<div class="px-6 py-8 mb-4">
+<h1 class="text-headline-md font-headline-md font-bold text-on-primary">Cyvora</h1>
+<p class="text-on-primary/60 text-label-md">Civic Safety Portal</p>
+</div>
+<nav class="flex-1 flex flex-col gap-1 px-2 overflow-y-auto">
+<a class="text-on-primary/70 flex items-center gap-4 px-4 py-3 duration-200 ease-in-out hover:bg-on-primary/10 transition-colors" href="index.html">
+<span class="material-symbols-outlined">home</span>
+<span>Home</span>
+</a>
+<a class="text-on-primary/70 flex items-center gap-4 px-4 py-3 duration-200 ease-in-out hover:bg-on-primary/10 transition-colors" href="my-reports.html">
+<span class="material-symbols-outlined">assessment</span>
+<span>Reports</span>
+</a>
+<a class="text-on-primary/70 flex items-center gap-4 px-4 py-3 duration-200 ease-in-out hover:bg-on-primary/10 transition-colors" href="community.html">
+<span class="material-symbols-outlined">groups</span>
+<span>Community</span>
+</a>
+<a class="text-on-primary/70 flex items-center gap-4 px-4 py-3 duration-200 ease-in-out hover:bg-on-primary/10 transition-colors" href="learn.html">
+<span class="material-symbols-outlined">school</span>
+<span>Learn</span>
+</a>
+<a class="text-on-primary/70 flex items-center gap-4 px-4 py-3 duration-200 ease-in-out hover:bg-on-primary/10 transition-colors" href="leaderboard.html">
+<span class="material-symbols-outlined">emoji_events</span>
+<span>Leaderboard</span>
+</a>
+<a class="bg-surface-container-highest/10 text-on-primary border-l-4 border-secondary-fixed flex items-center gap-4 px-4 py-3 duration-200 ease-in-out hover:bg-on-primary/10 transition-colors" href="monitor.html">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">public</span>
+<span>Monitor</span>
+</a>
+<a class="text-on-primary/70 flex items-center gap-4 px-4 py-3 duration-200 ease-in-out hover:bg-on-primary/10 transition-colors" href="certificates.html">
+<span class="material-symbols-outlined">workspace_premium</span>
+<span>Certificates</span>
+</a>
+<a class="text-on-primary/70 flex items-center gap-4 px-4 py-3 duration-200 ease-in-out hover:bg-on-primary/10 transition-colors" href="profile.html">
+<span class="material-symbols-outlined">account_circle</span>
+<span>Profile</span>
+</a>
+</nav>
+<div class="mt-auto px-4 py-4 flex flex-col gap-4">
+<button type="button" class="w-full bg-error text-on-error py-3 rounded font-label-lg uppercase tracking-wider flex items-center justify-center gap-2" onclick="typeof showToast==='function'&&showToast('Emergency alert broadcast simulated','error')">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">campaign</span>
+Emergency Alert
+</button>
+<div class="flex flex-col gap-1">
+<a class="text-on-primary/70 flex items-center gap-4 px-4 py-2 hover:bg-on-primary/10 transition-colors" href="profile.html">
+<span class="material-symbols-outlined">settings</span>
+<span>Settings</span>
+</a>
+<a class="text-on-primary/70 flex items-center gap-4 px-4 py-2 hover:bg-on-primary/10 transition-colors" href="support.html">
+<span class="material-symbols-outlined">help</span>
+<span>Support</span>
+</a>
+<a class="text-on-primary/70 flex items-center gap-4 px-4 py-2 hover:bg-on-primary/10 transition-colors" href="login.html">
+<span class="material-symbols-outlined">logout</span>
+<span>Logout</span>
+</a>
+</div>
+</div>
+</aside>
+<!-- TopNavBar -->
+<header class="fixed top-0 right-0 w-[calc(100%-16rem)] max-lg:w-full h-16 bg-surface dark:bg-surface-dim text-primary border-b border-outline-variant flex items-center justify-between px-6 lg:px-12 ml-64 max-lg:ml-0 z-40">
+<div class="flex items-center gap-3 flex-1">
+<button type="button" id="menu-toggle" class="lg:hidden material-symbols-outlined p-2 rounded-full hover:bg-surface-container-low" aria-label="Open menu">menu</button>
+<div class="relative w-full max-w-md hidden sm:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[20px]">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-surface-container border border-outline-variant rounded-full text-label-md focus:outline-none focus:ring-2 focus:ring-primary/20" placeholder="Search safety database..." type="search"/>
+</div>
+</div>
+<div class="flex items-center gap-3 sm:gap-6">
+<button type="button" class="material-symbols-outlined p-2 rounded-full hover:bg-surface-container-low text-on-surface-variant" aria-label="Notifications">notifications</button>
+<a class="material-symbols-outlined p-2 rounded-full hover:bg-surface-container-low text-on-surface-variant inline-flex" href="profile.html" aria-label="Settings">settings</a>
+<a class="bg-primary text-on-primary px-4 sm:px-6 py-2 rounded-lg font-label-lg scale-98 active:scale-95 transition-transform inline-flex text-sm sm:text-base" href="report-incident.html">Report Incident</a>
+</div>
+</header>
+
+<main class="ml-64 max-lg:ml-0 mt-16 min-h-[calc(100vh-4rem)] p-6 lg:p-10 max-w-[1440px]">
+
+<div class="mb-8 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4">
+  <div>
+    <div class="flex items-center gap-2 mb-1">
+      <span class="inline-flex items-center gap-1 text-caption font-label-md px-2 py-0.5 rounded bg-error/10 text-error"><span class="w-1.5 h-1.5 rounded-full bg-error animate-pulse"></span> LIVE</span>
+      <span class="text-caption text-outline">Updated just now</span>
+    </div>
+    <h1 class="text-headline-lg font-bold text-on-surface">National Threat Monitor</h1>
+    <p class="text-on-surface-variant">Cameroon cybercrime intelligence · Public dashboard</p>
+  </div>
+  <div class="flex gap-2">
+    <button class="px-4 py-2 rounded-lg border border-outline-variant text-label-md font-label-lg bg-surface">This month</button>
+    <button class="px-4 py-2 rounded-lg border border-outline-variant text-label-md font-label-lg bg-surface">Export PDF</button>
+  </div>
+</div>
+<div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+  <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-5">
+    <p class="text-label-md text-on-surface-variant">Monthly reports</p>
+    <p class="text-headline-lg font-bold text-primary mt-1" data-stat="reports">1,284</p>
+    <p class="text-caption text-secondary mt-1">↑ 12% vs last month</p>
+  </div>
+  <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-5">
+    <p class="text-label-md text-on-surface-variant">Est. financial loss</p>
+    <p class="text-headline-lg font-bold text-on-surface mt-1">482M <span class="text-label-md font-normal">FCFA</span></p>
+    <p class="text-caption text-error mt-1">↑ 8% vs last month</p>
+  </div>
+  <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-5">
+    <p class="text-label-md text-on-surface-variant">Most targeted region</p>
+    <p class="text-headline-md font-bold text-on-surface mt-1">Littoral</p>
+    <p class="text-caption text-outline mt-1">312 incidents</p>
+  </div>
+  <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-5">
+    <p class="text-label-md text-on-surface-variant">Trending threat</p>
+    <p class="text-headline-md font-bold text-on-surface mt-1">MoMo Fraud</p>
+    <p class="text-caption text-primary mt-1">28% of reports</p>
+  </div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-5 gap-6 mb-8">
+  <div class="lg:col-span-3 bg-surface-container-lowest border border-outline-variant rounded-lg p-6">
+    <h2 class="font-semibold text-headline-md mb-4">Incident density · 10 regions</h2>
+    <div class="grid grid-cols-2 sm:grid-cols-5 gap-3" id="heatmap">
+      <!-- SVG-style heat cells -->
+    </div>
+    <p class="text-caption text-outline mt-4">Heat map: darker = higher incident density (mock data)</p>
+  </div>
+  <div class="lg:col-span-2 bg-surface-container-lowest border border-outline-variant rounded-lg p-6">
+    <h2 class="font-semibold text-headline-md mb-4">By category</h2>
+    <ul class="space-y-3" id="cat-bars">
+    </ul>
+  </div>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg overflow-hidden">
+  <div class="px-6 py-4 border-b border-outline-variant flex items-center justify-between">
+    <h2 class="font-semibold">Live feed · Recent anonymised reports</h2>
+    <span class="text-caption text-outline">Last 10</span>
+  </div>
+  <div class="divide-y divide-outline-variant" id="live-feed">
+  </div>
+</div>
+
+</main>
+
+<script defer src="../assets/js/site.js"></script>
+
+
+<script>
+const regions = [
+  {n:'Adamawa',v:42},{n:'Centre',v:198},{n:'East',v:55},{n:'Far North',v:87},
+  {n:'Littoral',v:312},{n:'North',v:64},{n:'Northwest',v:91},{n:'South',v:48},
+  {n:'Southwest',v:120},{n:'West',v:167}
+];
+const maxV = Math.max(...regions.map(r=>r.v));
+const heat = document.getElementById('heatmap');
+heat.innerHTML = regions.map(r=>{
+  const intensity = r.v/maxV;
+  const bg = `rgba(11,61,145,${0.15+intensity*0.75})`;
+  const color = intensity>0.5?'#fff':'#1a1c1e';
+  return `<div class="rounded-lg p-3 text-center" style="background:${bg};color:${color}">
+    <p class="text-caption font-label-md opacity-90">${r.n}</p>
+    <p class="text-lg font-bold">${r.v}</p>
+  </div>`;
+}).join('');
+
+const cats = [
+  {n:'Mobile Money Fraud',p:28},{n:'Phishing',p:22},{n:'AI-Generated Scam',p:15},
+  {n:'Identity Theft',p:12},{n:'Hacking',p:9},{n:'Other',p:14}
+];
+document.getElementById('cat-bars').innerHTML = cats.map(c=>`
+  <li>
+    <div class="flex justify-between text-label-md mb-1"><span>${c.n}</span><span class="font-semibold">${c.p}%</span></div>
+    <div class="h-2 bg-surface-container rounded-full overflow-hidden"><div class="h-full bg-primary rounded-full" style="width:${c.p*3}%"></div></div>
+  </li>`).join('');
+
+const feed = [
+  {t:'2 min ago',c:'MoMo Fraud',r:'Littoral',d:'Suspicious USSD prompt requesting PIN…'},
+  {t:'18 min ago',c:'Phishing',r:'Centre',d:'Fake bank email with attachment…'},
+  {t:'41 min ago',c:'AI Scam',r:'West',d:'Deepfake video of local official…'},
+  {t:'1 hr ago',c:'Identity Theft',r:'Southwest',d:'SIM swap attempt reported…'},
+  {t:'2 hr ago',c:'Hacking',r:'Littoral',d:'Unauthorized access to SME email…'},
+];
+document.getElementById('live-feed').innerHTML = feed.map(f=>`
+  <div class="px-6 py-4 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6">
+    <span class="text-caption text-outline w-20 shrink-0">${f.t}</span>
+    <span class="text-caption px-2 py-0.5 rounded bg-primary/10 text-primary font-label-md shrink-0">${f.c}</span>
+    <span class="text-caption text-on-surface-variant shrink-0">${f.r}</span>
+    <span class="text-body-md text-on-surface truncate">${f.d}</span>
+  </div>`).join('');
+</script>
+
+</body>
+</html>

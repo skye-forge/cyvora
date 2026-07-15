@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Cyvora | Profile &amp; Settings</title>
+<link rel="stylesheet" href="../assets/css/tailwind-output.css" />
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700&amp;family=Work+Sans:wght@500;600&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@100..900&amp;family=Work+Sans:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<style>
+                        "on-secondary-container": "#00723d",
+                        "secondary": "#006d3b",
+                        "on-error-container": "#93000a",
+                        "surface-container-high": "#e8e8ea",
+                        "secondary-fixed": "#7bfba8",
+                        "tertiary-fixed": "#dde3ec",
+                        "surface": "#f9f9fc",
+                        "inverse-primary": "#b1c5ff",
+                        "on-primary-fixed-variant": "#144296",
+                        "error": "#ba1a1a",
+                        "tertiary-fixed-dim": "#c1c7d0",
+                        "error-container": "#ffdad6",
+                        "on-background": "#1a1c1e",
+                        "on-tertiary-fixed": "#161c23",
+                        "primary-fixed": "#dae2ff",
+                        "on-tertiary": "#ffffff",
+                        "on-surface": "#1a1c1e",
+                        "secondary-fixed-dim": "#5dde8e",
+                        "surface-bright": "#f9f9fc",
+                        "surface-container-low": "#f3f3f6",
+                        "outline-variant": "#c4c6d3",
+                        "surface-variant": "#e2e2e5",
+                        "surface-container": "#eeeef0",
+                        "inverse-surface": "#2f3133",
+                        "on-secondary-fixed": "#00210e",
+                        "surface-dim": "#dadadc",
+                        "on-primary-fixed": "#001947",
+                        "inverse-on-surface": "#f0f0f3",
+                        "on-primary": "#ffffff",
+                        "outline": "#747783",
+                        "on-error": "#ffffff",
+                        "surface-container-highest": "#e2e2e5",
+                        "primary-container": "#0b3d91",
+                        "on-surface-variant": "#434652",
+                        "on-tertiary-container": "#a9afb8",
+                        "on-secondary": "#ffffff",
+                        "secondary-container": "#78f8a6",
+                        "tertiary": "#262d33",
+                        "primary-fixed-dim": "#b1c5ff",
+                        "primary": "#002869",
+                        "background": "#f9f9fc",
+                        "on-primary-container": "#8dadff",
+                        "surface-container-lowest": "#ffffff",
+                        "tertiary-container": "#3c434a",
+                        "on-secondary-fixed-variant": "#00522b",
+                        "on-tertiary-fixed-variant": "#41474f"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "unit": "8px",
+                        "stack-sm": "8px",
+                        "gutter": "24px",
+                        "stack-md": "16px",
+                        "section-gap": "64px",
+                        "margin-desktop": "48px",
+                        "container-max-width": "1440px",
+                        "stack-lg": "32px"
+                    },
+                    "fontFamily": {
+                        "label-lg": ["Work Sans"],
+                        "label-md": ["Work Sans"],
+                        "headline-lg": ["Public Sans"],
+                        "body-lg": ["Public Sans"],
+                        "display-lg": ["Public Sans"],
+                        "body-md": ["Public Sans"],
+                        "headline-md": ["Public Sans"],
+                        "caption": ["Public Sans"]
+                    },
+                    "fontSize": {
+                        "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.02em", "fontWeight": "600"}],
+                        "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.04em", "fontWeight": "500"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "caption": ["12px", {"lineHeight": "16px", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .active-tab-indicator {
+            position: absolute;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background-color: #7bfba8;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+        }
+        body {
+            background-color: #f9f9fc;
+            color: #1a1c1e;
+        }
+    </style>
+<script src="../assets/js/config.js"></script>
+<script src="../assets/js/mock-data.js"></script>
+<script src="../assets/js/api.js"></script>
+<script src="../assets/js/templates.js"></script>
+    <script src="../assets/js/validation.js"></script>
+    <script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/app.js"></script>
+<link rel="stylesheet" href="../assets/css/site.css"/>
+</head>
+<body class="font-body-md overflow-x-hidden">
+<!-- Side Navigation Shell -->
+<aside class="bg-primary dark:bg-primary-container text-on-primary dark:text-on-primary-container font-label-md text-label-md h-screen w-64 fixed left-0 top-0 flex flex-col py-unit z-50">
+<div class="px-6 py-8">
+<h1 class="text-headline-md font-headline-md font-bold text-on-primary">Cyvora</h1>
+<p class="text-label-md opacity-70">Civic Safety Portal</p>
+</div>
+<nav class="flex-1 space-y-1 px-4 mt-8">
+<a class="text-on-primary/70 flex items-center gap-4 px-4 py-3 duration-200 ease-in-out hover:bg-on-primary/10 transition-colors" href="index.html">
+<span class="material-symbols-outlined">home</span>
+<span>Home</span>
+</a>
+<a class="text-on-primary/70 flex items-center gap-4 px-4 py-3 duration-200 ease-in-out hover:bg-on-primary/10 transition-colors" href="my-reports.html">
+<span class="material-symbols-outlined">assessment</span>
+<span>Reports</span>
+</a>
+<a class="text-on-primary/70 flex items-center gap-4 px-4 py-3 duration-200 ease-in-out hover:bg-on-primary/10 transition-colors" href="community.html">
+<span class="material-symbols-outlined">groups</span>
+<span>Community</span>
+</a>
+<a class="text-on-primary/70 flex items-center gap-4 px-4 py-3 duration-200 ease-in-out hover:bg-on-primary/10 transition-colors" href="learn.html">
+<span class="material-symbols-outlined">school</span>
+<span>Learn</span>
+</a>
+<a class="text-on-primary/70 flex items-center gap-4 px-4 py-3 duration-200 ease-in-out hover:bg-on-primary/10 transition-colors" href="leaderboard.html">
+<span class="material-symbols-outlined">emoji_events</span>
+<span>Leaderboard</span>
+</a>
+<a class="text-on-primary/70 flex items-center gap-4 px-4 py-3 duration-200 ease-in-out hover:bg-on-primary/10 transition-colors" href="monitor.html">
+<span class="material-symbols-outlined">public</span>
+<span>Monitor</span>
+</a>
+<a class="text-on-primary/70 flex items-center gap-4 px-4 py-3 duration-200 ease-in-out hover:bg-on-primary/10 transition-colors" href="certificates.html">
+<span class="material-symbols-outlined">workspace_premium</span>
+<span>Certificates</span>
+</a>
+
+<a class="bg-surface-container-highest/10 text-on-primary border-l-4 border-secondary-fixed flex items-center gap-4 px-4 py-3 duration-200 ease-in-out hover:bg-on-primary/10 transition-colors" href="profile.html">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">account_circle</span>
+<span>Profile</span>
+</a>
+</nav>
+<div class="px-4 py-6 border-t border-on-primary/10">
+<button class="w-full py-3 bg-secondary text-on-secondary rounded-lg font-label-lg hover:brightness-110 transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined" data-icon="emergency_share">emergency_share</span>
+                Emergency Alert
+            </button>
+<div class="mt-4 space-y-1">
+<a class="flex items-center gap-4 px-4 py-2 text-on-primary/70 hover:bg-on-primary/10 transition-colors rounded-lg" href="login.html">
+<span class="material-symbols-outlined text-[20px]" data-icon="settings">settings</span>
+                    Settings
+                </a>
+<a class="flex items-center gap-4 px-4 py-2 text-on-primary/70 hover:bg-on-primary/10 transition-colors rounded-lg" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="help">help</span>
+                    Support
+                </a>
+</div>
+</div>
+</aside>
+<!-- Top App Bar -->
+<header class="fixed top-0 right-0 w-[calc(100%-16rem)] h-16 bg-surface dark:bg-surface-dim border-b border-outline-variant flex items-center justify-between px-margin-desktop z-40">
+<div class="flex items-center gap-stack-md w-1/3">
+<div class="relative w-full">
+<span class="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-on-surface-variant" data-icon="search">search</span>
+<input class="w-full bg-surface-container-low border-none rounded-full pl-10 pr-4 py-2 text-label-md focus:ring-2 focus:ring-primary/20" placeholder="Search safety resources..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-stack-lg">
+<div class="flex items-center gap-4 border-r border-outline-variant pr-stack-lg">
+<button class="p-2 hover:bg-surface-container-low transition-colors rounded-full relative">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="absolute top-1.5 right-1.5 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<button class="p-2 hover:bg-surface-container-low transition-colors rounded-full">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+</div>
+<a class="bg-primary text-on-primary px-6 py-2 rounded-lg font-label-lg hover:brightness-110 active:scale-95 transition-all inline-flex" href="report-incident.html">Report Incident</a>
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-surface-container-highest overflow-hidden border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A professional portrait of a municipal safety official in a clean, high-key studio setting. The official is wearing a formal dark blue blazer, reflecting authority and professional stability. The background is a soft, neutral grey that emphasizes the subject's calm and trustworthy expression. High-end lighting creates subtle shadows and a professional, modern corporate aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDrHIMOfIkbEnKbXF0T5vujIYsaSw0yII6sA6KN304exGg3hJkVcWlui6Jt240AukYgqfveJCqgEJB2NA99oKhLg83wU1P10EL6Cg5KiSZRB-cdUG5G-jY1cHQ3Asvs_61c5RAyh2f2y0CQaz31lj_lX72kdwAXupzEjTejcpYMWJZtIGsRIhFpe5Vfx7TlEzse92PBHGJJK4VAcuj8vRu8La6d8mi2mVfDhIL3YvJGdEnnLOaV3Obj"/>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="ml-64 mt-16 p-margin-desktop max-w-container-max-width mx-auto">
+<!-- Profile Hero Section -->
+<section class="mb-section-gap">
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-stack-lg flex flex-col md:flex-row items-center gap-8 relative overflow-hidden">
+<!-- Abstract Atmospheric Background Element -->
+<div class="absolute top-0 right-0 w-64 h-64 bg-primary-container/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl pointer-events-none"></div>
+<div class="relative group">
+<div class="w-32 h-32 rounded-full overflow-hidden border-4 border-surface ring-2 ring-primary">
+<img class="w-full h-full object-cover" data-alt="A close-up professional profile picture of a diverse male citizen with a friendly and reliable demeanor. He is posed against a minimalist, bright interior background with soft, natural morning light filtering through. The overall image quality is sharp and high-definition, embodying the values of civic transparency and digital identity security within a modern administrative platform." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDqLUZyX2HHsUyOiDqtOGDuvkDZXfpx4ASv-7BFYjgMmRgCHmrbkRtZlJH_5z9rShIdzipvhJKGlvhgEiZVr-TbhCGZ6zDo29di0z_sCzpZV1fKQ7K6mg40eBh62V4vZv8gJJOz1inEJvvTIeVXpPrkUbaGx7tr8vXLhXQb-pYV65Z2IezNGQVg5I6x29UIGg1oR-DvEdtsghuFqn3GSoE8860yd2YBgF4_AH6ZBE7d-tks4_2e6HX8"/>
+</div>
+<button class="absolute bottom-0 right-0 bg-surface-container-lowest border border-outline-variant p-2 rounded-full shadow-sm hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined text-[18px]" data-icon="edit">edit</span>
+</button>
+</div>
+<div class="flex-1">
+<div class="flex items-center gap-3 mb-1">
+<h2 class="font-headline-lg text-headline-lg">Marcus Henderson</h2>
+<div class="flex items-center gap-1.5 px-3 py-1 bg-secondary/10 border border-secondary/20 rounded-full">
+<span class="material-symbols-outlined text-secondary text-[16px]" data-icon="verified" style="font-variation-settings: 'FILL' 1;">verified</span>
+<span class="text-secondary font-label-lg uppercase tracking-wider text-[10px]">Verified Citizen</span>
+</div>
+</div>
+<p class="text-on-surface-variant font-body-md mb-4">Metropolis Citizen ID: #CY-8829-0102 • Joined January 2024</p>
+<div class="flex gap-4">
+<div class="px-4 py-2 bg-surface-container rounded-lg border border-outline-variant">
+<p class="text-caption text-on-surface-variant uppercase tracking-tighter">Safety Trust Score</p>
+<p class="text-headline-md font-bold text-primary">982 <span class="text-label-md font-normal opacity-60">/ 1000</span></p>
+</div>
+<div class="px-4 py-2 bg-surface-container rounded-lg border border-outline-variant">
+<p class="text-caption text-on-surface-variant uppercase tracking-tighter">Reports Filed</p>
+<p class="text-headline-md font-bold text-primary">14</p>
+</div>
+</div>
+</div>
+<div class="flex flex-col gap-3">
+<button class="bg-primary text-on-primary px-8 py-3 rounded-lg font-label-lg hover:brightness-110 shadow-sm transition-all">
+                        Update Credentials
+                    </button>
+<button class="bg-surface-container-lowest border border-outline-variant text-on-surface px-8 py-3 rounded-lg font-label-lg hover:bg-surface-container-low transition-all">
+                        View Digital ID
+                    </button>
+</div>
+</div>
+</section>
+<!-- Settings Split Layout -->
+<section class="grid grid-cols-12 gap-gutter items-start">
+<!-- Settings Categories (Left) -->
+<div class="col-span-12 md:col-span-4 lg:col-span-3 space-y-stack-sm sticky top-24">
+<h3 class="text-label-lg text-on-surface-variant px-4 mb-4 uppercase tracking-widest">Account Settings</h3>
+<button class="tab-button w-full flex items-center justify-between px-4 py-4 rounded-lg bg-primary-container text-on-primary transition-all group relative overflow-hidden" data-tab="general" onclick="switchTab('general')">
+<div class="flex items-center gap-4 relative z-10">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-label-lg">General Settings</span>
+</div>
+<span class="material-symbols-outlined relative z-10" data-icon="chevron_right">chevron_right</span>
+<div class="active-tab-indicator"></div>
+</button>
+<button class="tab-button w-full flex items-center justify-between px-4 py-4 rounded-lg hover:bg-surface-container-high text-on-surface-variant transition-all group" data-tab="security" onclick="switchTab('security')">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined" data-icon="security">security</span>
+<span class="font-label-lg">Security</span>
+</div>
+<span class="material-symbols-outlined opacity-0 group-hover:opacity-100 transition-opacity" data-icon="chevron_right">chevron_right</span>
+</button>
+<button class="tab-button w-full flex items-center justify-between px-4 py-4 rounded-lg hover:bg-surface-container-high text-on-surface-variant transition-all group" data-tab="notifications" onclick="switchTab('notifications')">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="font-label-lg">Notifications</span>
+</div>
+<span class="material-symbols-outlined opacity-0 group-hover:opacity-100 transition-opacity" data-icon="chevron_right">chevron_right</span>
+</button>
+<button class="tab-button w-full flex items-center justify-between px-4 py-4 rounded-lg hover:bg-surface-container-high text-on-surface-variant transition-all group" data-tab="language" onclick="switchTab('language')">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined" data-icon="language">language</span>
+<span class="font-label-lg">Language</span>
+</div>
+<span class="material-symbols-outlined opacity-0 group-hover:opacity-100 transition-opacity" data-icon="chevron_right">chevron_right</span>
+</button>
+<div class="pt-8 px-4">
+<button class="flex items-center gap-4 text-error font-label-lg hover:opacity-80 transition-opacity">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+                        Sign Out
+                    </button>
+</div>
+</div>
+<!-- Settings Content (Right) -->
+<div class="col-span-12 md:col-span-8 lg:col-span-9">
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-stack-lg min-h-[600px] shadow-sm transition-all duration-300" id="settings-canvas">
+<!-- Default Content: General Settings -->
+<div id="content-general">
+<div class="flex justify-between items-end mb-stack-lg border-b border-outline-variant pb-stack-md">
+<div>
+<h4 class="text-headline-md font-bold text-primary mb-1">General Settings</h4>
+<p class="text-on-surface-variant font-body-md">Manage your basic account identity and public information.</p>
+</div>
+<button class="text-primary font-label-lg border border-primary px-4 py-2 rounded-lg hover:bg-primary/5">Discard Changes</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-stack-lg">
+<div class="space-y-stack-sm">
+<label class="block text-label-lg text-on-surface-variant">Full Name</label>
+<input id="profile-name" name="name" class="w-full h-12 border border-outline-variant rounded-lg px-4 focus:ring-primary focus:border-primary" type="text" value="Marcus Henderson"/>
+</div>
+<div class="space-y-stack-sm">
+<label class="block text-label-lg text-on-surface-variant">Email Address</label>
+<input id="profile-email" name="email" class="w-full h-12 border border-outline-variant rounded-lg px-4 focus:ring-primary focus:border-primary" type="email" value="m.henderson@metropolis.gov"/>
+</div>
+<div class="space-y-stack-sm">
+<label class="block text-label-lg text-on-surface-variant">Phone Number</label>
+<input id="profile-phone" name="phone" class="w-full h-12 border border-outline-variant rounded-lg px-4 focus:ring-primary focus:border-primary" type="tel" value="+1 (555) 012-3456"/>
+</div>
+<div class="space-y-stack-sm">
+<label class="block text-label-lg text-on-surface-variant">Residential District</label>
+<select id="profile-district" name="district" class="w-full h-12 border border-outline-variant rounded-lg px-4 focus:ring-primary focus:border-primary">
+<option>Central Metro</option>
+<option>East Riverside</option>
+<option>Harbor Hills</option>
+<option>Tech Corridor</option>
+</select>
+</div>
+</div>
+<div class="mt-section-gap p-stack-lg bg-tertiary-fixed/30 rounded-lg border border-outline-variant">
+<div class="flex items-start gap-4">
+<span class="material-symbols-outlined text-primary text-[32px]" data-icon="verified_user">verified_user</span>
+<div>
+<h5 class="text-label-lg font-bold text-primary mb-1">Identity Verification</h5>
+<p class="text-body-md text-on-surface-variant mb-4">Your account is verified by the National Safety Database. This grants you priority incident reporting and access to confidential safety analytics.</p>
+<button class="bg-surface-container-lowest border border-outline-variant px-4 py-2 rounded-lg text-label-lg hover:bg-surface-container-high transition-colors">Manage Credentials</button>
+</div>
+</div>
+</div>
+<div class="mt-stack-lg flex justify-end">
+<button class="bg-primary text-on-primary px-10 py-3 rounded-lg font-label-lg hover:brightness-110 shadow-md">Save Changes</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Interactive Layer for dynamic content -->
+<script>
+        const contentTemplates = {
+            general: `
+                <div class="animate-in fade-in duration-300">
+                    <div class="flex justify-between items-end mb-stack-lg border-b border-outline-variant pb-stack-md">
+                        <div>
+                            <h4 class="text-headline-md font-bold text-primary mb-1">General Settings</h4>
+                            <p class="text-on-surface-variant font-body-md">Manage your basic account identity and public information.</p>
+                        </div>
+                        <button class="text-primary font-label-lg border border-primary px-4 py-2 rounded-lg hover:bg-primary/5">Discard Changes</button>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-stack-lg">
+                        <div class="space-y-stack-sm">
+                            <label class="block text-label-lg text-on-surface-variant">Full Name</label>
+                            <input type="text" value="Marcus Henderson" class="w-full h-12 border border-outline-variant rounded-lg px-4 focus:ring-primary focus:border-primary">
+                        </div>
+                        <div class="space-y-stack-sm">
+                            <label class="block text-label-lg text-on-surface-variant">Email Address</label>
+                            <input type="email" value="m.henderson@metropolis.gov" class="w-full h-12 border border-outline-variant rounded-lg px-4 focus:ring-primary focus:border-primary">
+                        </div>
+                        <div class="space-y-stack-sm">
+                            <label class="block text-label-lg text-on-surface-variant">Phone Number</label>
+                            <input type="tel" value="+1 (555) 012-3456" class="w-full h-12 border border-outline-variant rounded-lg px-4 focus:ring-primary focus:border-primary">
+                        </div>
+                        <div class="space-y-stack-sm">
+                            <label class="block text-label-lg text-on-surface-variant">Residential District</label>
+                            <select class="w-full h-12 border border-outline-variant rounded-lg px-4 focus:ring-primary focus:border-primary">
+                                <option>Central Metro</option>
+                                <option>East Riverside</option>
+                                <option>Harbor Hills</option>
+                                <option>Tech Corridor</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mt-stack-lg flex justify-end">
+                        <button class="bg-primary text-on-primary px-10 py-3 rounded-lg font-label-lg hover:brightness-110 shadow-md">Save Changes</button>
+                    </div>
+                </div>
+            `,
+            security: `
+                <div class="animate-in fade-in duration-300">
+                    <div class="flex justify-between items-end mb-stack-lg border-b border-outline-variant pb-stack-md">
+                        <div>
+                            <h4 class="text-headline-md font-bold text-primary mb-1">Security & Authentication</h4>
+                            <p class="text-on-surface-variant font-body-md">Protect your account with high-level encryption and access controls.</p>
+                        </div>
+                    </div>
+                    <div class="space-y-6">
+                        <div class="flex items-center justify-between p-4 border border-outline-variant rounded-lg">
+                            <div class="flex items-center gap-4">
+                                <span class="material-symbols-outlined text-primary" data-icon="lock_reset">lock_reset</span>
+                                <div>
+                                    <p class="font-label-lg text-on-surface">Change Password</p>
+                                    <p class="text-caption text-on-surface-variant">Last updated 4 months ago</p>
+                                </div>
+                            </div>
+                            <button class="text-primary font-label-lg hover:underline">Update</button>
+                        </div>
+                        <div class="flex items-center justify-between p-4 border border-outline-variant rounded-lg bg-secondary/5">
+                            <div class="flex items-center gap-4">
+                                <span class="material-symbols-outlined text-secondary" data-icon="vibration">vibration</span>
+                                <div>
+                                    <p class="font-label-lg text-on-surface">Two-Factor Authentication (2FA)</p>
+                                    <p class="text-caption text-secondary">Active • Via SMS & Authenticator App</p>
+                                </div>
+                            </div>
+                            <button class="bg-secondary text-white px-4 py-1.5 rounded text-label-md">Manage</button>
+                        </div>
+                        <div class="p-6 border border-outline-variant rounded-lg">
+                            <h5 class="text-label-lg font-bold mb-4">Active Sessions</h5>
+                            <div class="space-y-4">
+                                <div class="flex justify-between items-center text-body-md">
+                                    <div class="flex items-center gap-3">
+                                        <span class="material-symbols-outlined opacity-60" data-icon="laptop">laptop</span>
+                                        <span>MacBook Pro • Metropolis, USA</span>
+                                    </div>
+                                    <span class="text-caption text-secondary font-bold">Current</span>
+                                </div>
+                                <div class="flex justify-between items-center text-body-md">
+                                    <div class="flex items-center gap-3">
+                                        <span class="material-symbols-outlined opacity-60" data-icon="smartphone">smartphone</span>
+                                        <span>iPhone 15 • Metropolis, USA</span>
+                                    </div>
+                                    <button class="text-error text-caption">Terminate</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `,
+            notifications: `
+                <div class="animate-in fade-in duration-300">
+                    <div class="flex justify-between items-end mb-stack-lg border-b border-outline-variant pb-stack-md">
+                        <div>
+                            <h4 class="text-headline-md font-bold text-primary mb-1">Notification Preferences</h4>
+                            <p class="text-on-surface-variant font-body-md">Define how you receive safety alerts and platform updates.</p>
+                        </div>
+                    </div>
+                    <div class="space-y-stack-lg">
+                        <div class="flex items-center justify-between border-b border-outline-variant pb-4">
+                            <div>
+                                <p class="font-label-lg text-on-surface">Immediate Emergency Alerts</p>
+                                <p class="text-body-md text-on-surface-variant">Critical life-safety alerts for your immediate area.</p>
+                            </div>
+                            <div class="w-12 h-6 bg-secondary rounded-full relative cursor-pointer">
+                                <div class="absolute right-1 top-1 w-4 h-4 bg-white rounded-full"></div>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between border-b border-outline-variant pb-4">
+                            <div>
+                                <p class="font-label-lg text-on-surface">Community Safety Reports</p>
+                                <p class="text-body-md text-on-surface-variant">Daily digest of local incident reports and safety tips.</p>
+                            </div>
+                            <div class="w-12 h-6 bg-outline-variant rounded-full relative cursor-pointer">
+                                <div class="absolute left-1 top-1 w-4 h-4 bg-white rounded-full"></div>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="font-label-lg text-on-surface">Email Notifications</p>
+                                <p class="text-body-md text-on-surface-variant">Newsletters and policy update announcements.</p>
+                            </div>
+                            <div class="w-12 h-6 bg-secondary rounded-full relative cursor-pointer">
+                                <div class="absolute right-1 top-1 w-4 h-4 bg-white rounded-full"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-stack-lg bg-surface-container-low p-4 rounded-lg">
+                        <p class="text-caption text-on-surface-variant"><span class="font-bold">Note:</span> SMS charges may apply for emergency alerts depending on your carrier.</p>
+                    </div>
+                </div>
+            `,
+            language: `
+                <div class="animate-in fade-in duration-300">
+                    <div class="flex justify-between items-end mb-stack-lg border-b border-outline-variant pb-stack-md">
+                        <div>
+                            <h4 class="text-headline-md font-bold text-primary mb-1">Language & Region</h4>
+                            <p class="text-on-surface-variant font-body-md">Set your preferred interface language and regional data standards.</p>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 gap-stack-lg">
+                        <div class="space-y-stack-sm">
+                            <label class="block text-label-lg text-on-surface-variant">Interface Language</label>
+                            <select class="w-full h-12 border border-outline-variant rounded-lg px-4 focus:ring-primary focus:border-primary">
+                                <option selected>English (US)</option>
+                                <option>Español (ES)</option>
+                                <option>Français (FR)</option>
+                                <option>Deutsch (DE)</option>
+                                <option>日本語 (JP)</option>
+                            </select>
+                        </div>
+                        <div class="space-y-stack-sm">
+                            <label class="block text-label-lg text-on-surface-variant">Date Format</label>
+                            <div class="flex gap-4">
+                                <label class="flex items-center gap-2 px-4 py-2 border border-primary rounded-lg bg-primary/5 cursor-pointer">
+                                    <input type="radio" name="date" checked class="text-primary focus:ring-primary">
+                                    <span class="text-label-lg">MM/DD/YYYY</span>
+                                </label>
+                                <label class="flex items-center gap-2 px-4 py-2 border border-outline-variant rounded-lg hover:bg-surface-container-high cursor-pointer">
+                                    <input type="radio" name="date" class="text-primary focus:ring-primary">
+                                    <span class="text-label-lg">DD/MM/YYYY</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="space-y-stack-sm">
+                            <label class="block text-label-lg text-on-surface-variant">Measurement Units</label>
+                            <select class="w-full h-12 border border-outline-variant rounded-lg px-4 focus:ring-primary focus:border-primary">
+                                <option selected>Imperial (Miles, Fahrenheit)</option>
+                                <option>Metric (Kilometers, Celsius)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            `
+        };
+
+        function switchTab(tabId) {
+            // Update Canvas
+            const canvas = document.getElementById('settings-canvas');
+            canvas.style.opacity = '0';
+            
+            setTimeout(() => {
+                canvas.innerHTML = contentTemplates[tabId];
+                canvas.style.opacity = '1';
+            }, 150);
+
+            // Update Nav Buttons
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                const isTarget = btn.getAttribute('data-tab') === tabId;
+                
+                if (isTarget) {
+                    btn.classList.add('bg-primary-container', 'text-on-primary');
+                    btn.classList.remove('hover:bg-surface-container-high', 'text-on-surface-variant');
+                    
+                    // Add indicator if not present
+                    if (!btn.querySelector('.active-tab-indicator')) {
+                        const indicator = document.createElement('div');
+                        indicator.className = 'active-tab-indicator';
+                        btn.appendChild(indicator);
+                    }
+                    
+                    const chevron = btn.querySelector('.material-symbols-outlined:last-child');
+                    if (chevron) chevron.classList.remove('opacity-0');
+                } else {
+                    btn.classList.remove('bg-primary-container', 'text-on-primary');
+                    btn.classList.add('hover:bg-surface-container-high', 'text-on-surface-variant');
+                    
+                    const indicator = btn.querySelector('.active-tab-indicator');
+                    if (indicator) indicator.remove();
+                    
+                    const chevron = btn.querySelector('.material-symbols-outlined:last-child');
+                    if (chevron) chevron.classList.add('opacity-0');
+                }
+            });
+        }
+    </script>
+<script>
+        // Wire "Save Changes" (works for the default panel and any panel
+        // swapped in via contentTemplates) to CyvoraAPI.users.updateProfile.
+        document.addEventListener('click', function (e) {
+            var btn = e.target.closest('button');
+            if (!btn || btn.textContent.trim() !== 'Save Changes') return;
+            var canvas = document.getElementById('settings-canvas');
+            var inputs = canvas.querySelectorAll('input[type="text"], input[type="email"], input[type="tel"], select');
+            var payload = {};
+            inputs.forEach(function (el, i) {
+                var fieldName = el.getAttribute('name') || el.id || ('field_' + i);
+                payload[fieldName] = el.value;
+            });
+            btn.disabled = true;
+            var originalText = btn.textContent;
+            btn.textContent = 'Saving…';
+            window.CyvoraAPI.users.updateProfile(payload).then(function () {
+                window.showToast('Changes saved.', 'success');
+            }).catch(function () {
+                window.showToast('Could not save changes. Try again.', 'error');
+            }).finally(function () {
+                btn.disabled = false;
+                btn.textContent = originalText;
+            });
+        });
+    </script>
+<script defer="" src="../assets/js/site.js"></script>
+</body></html>

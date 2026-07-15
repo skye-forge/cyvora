@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Cyvora | Reports Management</title>
+<link rel="stylesheet" href="../assets/css/tailwind-output.css" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Manrope:wght@600;700;800&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;family=Manrope:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+<style>
+                      "surface-tint": "#345baf",
+                      "on-tertiary": "#ffffff",
+                      "inverse-surface": "#213145",
+                      "on-primary-container": "#8dadff",
+                      "on-primary-fixed-variant": "#144296",
+                      "surface-container-highest": "#d3e4fe",
+                      "tertiary-fixed": "#ffddb6",
+                      "on-secondary-container": "#00723d",
+                      "outline-variant": "#c4c6d3",
+                      "tertiary-fixed-dim": "#ffb95b",
+                      "background": "#f8f9ff",
+                      "on-secondary": "#ffffff",
+                      "secondary-fixed": "#7bfba8",
+                      "on-surface": "#0b1c30",
+                      "surface-dim": "#cbdbf5",
+                      "primary-container": "#0b3d91",
+                      "secondary": "#006d3b",
+                      "tertiary-container": "#5e3a00",
+                      "primary-fixed": "#dae2ff",
+                      "on-secondary-fixed": "#00210e",
+                      "secondary-container": "#78f8a6",
+                      "secondary-fixed-dim": "#5dde8e",
+                      "surface-container": "#e5eeff",
+                      "error-container": "#ffdad6",
+                      "on-background": "#0b1c30",
+                      "surface-container-low": "#eff4ff",
+                      "on-primary-fixed": "#001947",
+                      "on-surface-variant": "#434652",
+                      "on-error-container": "#93000a",
+                      "primary-fixed-dim": "#b1c5ff",
+                      "on-tertiary-fixed": "#2a1800",
+                      "surface-container-high": "#dce9ff",
+                      "inverse-primary": "#b1c5ff",
+                      "surface-bright": "#f8f9ff",
+                      "outline": "#747783",
+                      "on-secondary-fixed-variant": "#00522b",
+                      "surface-container-lowest": "#ffffff",
+                      "inverse-on-surface": "#eaf1ff",
+                      "on-primary": "#ffffff",
+                      "primary": "#002869",
+                      "surface-variant": "#d3e4fe",
+                      "on-error": "#ffffff",
+                      "surface": "#f8f9ff",
+                      "on-tertiary-container": "#e99f34",
+                      "tertiary": "#402600",
+                      "error": "#ba1a1a"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "gutter": "40px",
+                      "stack_md": "16px",
+                      "widget_padding": "24px",
+                      "stack_sm": "8px",
+                      "header_height": "64px",
+                      "sidebar_width": "240px",
+                      "stack_lg": "24px"
+              },
+              "fontFamily": {
+                      "table-cell": ["Inter"],
+                      "label-md": ["Inter"],
+                      "display-lg": ["Manrope"],
+                      "headline-sm": ["Manrope"],
+                      "body-md": ["Inter"],
+                      "headline-md": ["Manrope"],
+                      "body-lg": ["Inter"],
+                      "label-sm": ["Inter"],
+                      "data-point": ["Manrope"]
+              },
+              "fontSize": {
+                      "table-cell": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                      "label-md": ["14px", {"lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                      "display-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "headline-sm": ["18px", {"lineHeight": "24px", "fontWeight": "600"}],
+                      "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                      "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                      "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "600"}],
+                      "data-point": ["20px", {"lineHeight": "28px", "fontWeight": "700"}]
+              }
+            },
+          },
+        }
+    </script>
+<script src="../assets/js/config.js"></script>
+<script src="../assets/js/mock-data.js"></script>
+<script src="../assets/js/api.js"></script>
+<script src="../assets/js/templates.js"></script>
+    <script src="../assets/js/validation.js"></script>
+    <script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/app.js"></script>
+<link rel="stylesheet" href="../assets/css/site.css"/>
+</head>
+<body class="bg-background text-on-surface font-body-md selection:bg-primary-fixed selection:text-on-primary-fixed">
+<!-- Sidebar Navigation -->
+<aside class="fixed left-0 top-0 h-screen w-[240px] bg-primary flex flex-col py-6 border-r border-outline-variant z-50">
+<div class="px-6 mb-8 flex flex-col gap-1">
+<h1 class="font-headline-md text-headline-md font-bold text-on-primary">Cyvora</h1>
+<p class="font-label-md text-label-md text-on-primary/70">Management Platform</p>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center px-6 py-3 text-on-primary/70 font-medium hover:bg-white/5 hover:text-on-primary transition-colors" href="index.html">
+<span class="material-symbols-outlined mr-3">dashboard</span>
+<span class="font-label-md text-label-md">Overview</span>
+</a>
+<a class="flex items-center px-6 py-3 text-on-primary border-l-4 border-secondary-fixed bg-white/10 font-bold transition-all duration-200" href="reports.html">
+<span class="material-symbols-outlined mr-3">assessment</span>
+<span class="font-label-md text-label-md">Reports</span>
+</a>
+<a class="flex items-center px-6 py-3 text-on-primary/70 font-medium hover:bg-white/5 hover:text-on-primary transition-colors" href="users.html">
+<span class="material-symbols-outlined mr-3">group</span>
+<span class="font-label-md text-label-md">Users</span>
+</a>
+<a class="flex items-center px-6 py-3 text-on-primary/70 font-medium hover:bg-white/5 hover:text-on-primary transition-colors" href="learning.html">
+<span class="material-symbols-outlined mr-3">school</span>
+<span class="font-label-md text-label-md">Learning</span>
+</a>
+<a class="flex items-center px-6 py-3 text-on-primary/70 font-medium hover:bg-white/5 hover:text-on-primary transition-colors" href="community.html">
+<span class="material-symbols-outlined mr-3">forum</span>
+<span class="font-label-md text-label-md">Community</span>
+</a>
+<a class="flex items-center px-6 py-3 text-on-primary/70 font-medium hover:bg-white/5 hover:text-on-primary transition-colors" href="alerts.html">
+<span class="material-symbols-outlined mr-3">new_releases</span>
+<span class="font-label-md text-label-md">Updates</span>
+</a>
+<div class="pt-4 mt-4 border-t border-white/10">
+<a class="flex items-center px-6 py-3 text-on-primary/70 font-medium hover:bg-white/5 hover:text-on-primary transition-colors" href="settings.html">
+<span class="material-symbols-outlined mr-3">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+</div>
+</nav>
+</aside>
+<!-- Header Navigation -->
+<header class="sticky top-0 right-0 h-[64px] w-full flex justify-between items-center px-gutter bg-surface border-b border-outline-variant ml-[240px] max-w-[calc(100%-240px)] z-40">
+<div class="flex items-center w-full max-w-xl">
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-surface-container border border-outline-variant rounded-lg focus:outline-none focus:border-primary text-body-md" placeholder="Search resources..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 hover:bg-surface-container-low rounded-lg transition-colors text-primary relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<button class="p-2 hover:bg-surface-container-low rounded-lg transition-colors text-primary">
+<span class="material-symbols-outlined">apps</span>
+</button>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant ml-2">
+<img class="w-full h-full object-cover" data-alt="A professional headshot of a corporate administrator, looking directly at the camera with a confident and trustworthy expression. The individual is wearing a dark, tailored suit over a crisp white shirt, set against a blurred, modern office background with neutral blue and grey tones. The lighting is bright and high-key, conveying a sense of authority and reliability." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCrsv8LQL9pbFeLFYyZRbkr5OzbU3XvnvPi-sn6c8UwRagh098LXt-IVGIaX26XBc31lUQg8-NxM3_wAh7GAhdYMGSprrrqIAiAkAv3tq1wylfSq4hR1_YnyxrIsFGQ7c0BfLUjabCrV8gGCyrQaUqYPB2zMfrc3sxFOvgUf0y_mcA4KGwcLoaTa1MQfi91gSPCO-wnWWnuqiNTRKAhDgqCRuPhj4BtkdcfDOW88xIdqZK3msMh6lpK"/>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="ml-[240px] p-gutter min-h-[calc(100vh-64px)]">
+<!-- Page Action Bar -->
+<div class="flex justify-between items-end mb-8">
+<div>
+<h2 class="font-headline-md text-headline-md text-on-surface mb-1">Reports Management</h2>
+<p class="font-body-md text-on-surface-variant">Review, track, and export comprehensive administrative reports across all regions.</p>
+</div>
+<div class="flex items-center gap-3">
+<button class="flex items-center gap-2 px-4 py-2 border border-outline text-primary font-label-md rounded hover:bg-surface-container transition-all">
+<span class="material-symbols-outlined text-[20px]">layers</span>
+                    Bulk Actions
+                </button>
+<button class="flex items-center gap-2 px-4 py-2 bg-primary text-on-primary font-label-md rounded hover:opacity-90 transition-all shadow-sm">
+<span class="material-symbols-outlined text-[20px]">download</span>
+                    Export CSV
+                </button>
+</div>
+</div>
+<!-- Filter Header -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6 mb-8 flex flex-wrap items-center gap-6">
+<div class="flex-1 min-w-[200px]">
+<label class="block font-label-sm text-label-sm text-on-surface-variant uppercase mb-2">Search by ID</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[18px]">fingerprint</span>
+<input class="w-full pl-10 pr-4 py-2 border border-outline-variant rounded focus:border-primary focus:ring-1 focus:ring-primary text-body-md outline-none" placeholder="e.g. REP-2024-001" type="text"/>
+</div>
+</div>
+<div class="w-[180px]">
+<label class="block font-label-sm text-label-sm text-on-surface-variant uppercase mb-2">Category</label>
+<select class="w-full px-3 py-2 border border-outline-variant rounded focus:border-primary text-body-md outline-none bg-white">
+<option>All Categories</option>
+<option>Security</option>
+<option>Maintenance</option>
+<option>Compliance</option>
+<option>Personnel</option>
+</select>
+</div>
+<div class="w-[180px]">
+<label class="block font-label-sm text-label-sm text-on-surface-variant uppercase mb-2">Status</label>
+<select class="w-full px-3 py-2 border border-outline-variant rounded focus:border-primary text-body-md outline-none bg-white">
+<option>All Status</option>
+<option>Pending</option>
+<option>In Review</option>
+<option>Resolved</option>
+<option>Rejected</option>
+</select>
+</div>
+<div class="w-[180px]">
+<label class="block font-label-sm text-label-sm text-on-surface-variant uppercase mb-2">Region</label>
+<select class="w-full px-3 py-2 border border-outline-variant rounded focus:border-primary text-body-md outline-none bg-white">
+<option>All Regions</option>
+<option>Yaoundé</option>
+<option>Douala</option>
+<option>Garoua</option>
+<option>Bamenda</option>
+<option>Bafoussam</option>
+</select>
+</div>
+<div class="self-end pb-1">
+<button class="px-6 py-2 bg-secondary-container text-on-secondary-container font-label-md rounded hover:opacity-90 transition-all">Apply Filters</button>
+</div>
+</div>
+<!-- Data Table Widget -->
+<div class="bg-white border border-outline-variant rounded-lg overflow-hidden flex flex-col">
+<div class="overflow-x-auto custom-scrollbar">
+<table class="w-full text-left border-collapse">
+<thead class="bg-surface-container-low border-b border-outline-variant">
+<tr>
+<th class="px-6 py-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">ID</th>
+<th class="px-6 py-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Subject</th>
+<th class="px-6 py-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Category</th>
+<th class="px-6 py-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">User</th>
+<th class="px-6 py-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Location</th>
+<th class="px-6 py-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Severity</th>
+<th class="px-6 py-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Status</th>
+<th class="px-6 py-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container" id="admin-reports-tbody">
+<tr><td class="px-6 py-8 text-center text-on-surface-variant font-body-md" colspan="8">Loading reports…</td></tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination -->
+<div class="px-6 py-4 border-t border-outline-variant bg-surface-container-lowest flex items-center justify-between">
+<div class="font-label-md text-on-surface-variant">
+                    Showing <span class="font-bold text-on-surface">1</span> to <span class="font-bold text-on-surface">10</span> of <span class="font-bold text-on-surface">1,248</span> reports
+                </div>
+<div class="flex items-center gap-1">
+<button class="p-2 border border-outline-variant rounded hover:bg-surface-container disabled:opacity-30 disabled:cursor-not-allowed" disabled="">
+<span class="material-symbols-outlined text-[20px]">chevron_left</span>
+</button>
+<button class="w-10 h-10 flex items-center justify-center rounded bg-primary text-on-primary font-label-md">1</button>
+<button class="w-10 h-10 flex items-center justify-center rounded border border-outline-variant hover:bg-surface-container font-label-md">2</button>
+<button class="w-10 h-10 flex items-center justify-center rounded border border-outline-variant hover:bg-surface-container font-label-md">3</button>
+<span class="px-2 text-outline">...</span>
+<button class="w-10 h-10 flex items-center justify-center rounded border border-outline-variant hover:bg-surface-container font-label-md">125</button>
+<button class="p-2 border border-outline-variant rounded hover:bg-surface-container">
+<span class="material-symbols-outlined text-[20px]">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<!-- System Atmospheric Details -->
+<div class="mt-gutter grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="bg-primary/5 rounded-lg p-6 border border-primary/10 flex items-start gap-4">
+<div class="w-12 h-12 bg-primary/10 rounded flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">analytics</span>
+</div>
+<div>
+<h4 class="font-headline-sm text-headline-sm mb-1">Resolution Rate</h4>
+<p class="text-[28px] font-bold text-primary">94.2%</p>
+<p class="text-label-sm text-secondary font-semibold">+2.1% from last week</p>
+</div>
+</div>
+<div class="bg-primary/5 rounded-lg p-6 border border-primary/10 flex items-start gap-4">
+<div class="w-12 h-12 bg-primary/10 rounded flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">timer</span>
+</div>
+<div>
+<h4 class="font-headline-sm text-headline-sm mb-1">Avg. Response Time</h4>
+<p class="text-[28px] font-bold text-primary">14m 20s</p>
+<p class="text-label-sm text-on-tertiary-fixed-variant font-semibold">Stability: High</p>
+</div>
+</div>
+<div class="bg-primary/5 rounded-lg p-6 border border-primary/10 flex items-start gap-4 relative overflow-hidden">
+<div class="w-12 h-12 bg-primary/10 rounded flex items-center justify-center text-primary z-10">
+<span class="material-symbols-outlined">gpp_maybe</span>
+</div>
+<div class="z-10">
+<h4 class="font-headline-sm text-headline-sm mb-1">Alert Level</h4>
+<p class="text-[28px] font-bold text-error">Moderate</p>
+<p class="text-label-sm text-on-surface-variant">Active monitoring in Yaoundé</p>
+</div>
+</div>
+</div>
+</main>
+<script>
+        // Micro-interactions for table rows
+        document.querySelectorAll('tbody tr').forEach(row => {
+            row.addEventListener('click', () => {
+                // Future: open detail view
+                console.log('Row clicked');
+            });
+        });
+
+        // Simple filter logic simulation
+        const filterButton = document.querySelector('button.bg-secondary-container');
+        filterButton.addEventListener('click', () => {
+            filterButton.innerHTML = '<span class="flex items-center gap-2"><svg class="animate-spin h-4 w-4 text-on-secondary-container" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Updating...</span>';
+            setTimeout(() => {
+                filterButton.innerText = 'Apply Filters';
+            }, 800);
+        });
+    </script>
+<script>
+        (function () {
+            var SEVERITY_STYLES = {
+                critical: "bg-error-container text-on-error-container",
+                high: "bg-error-container text-on-error-container",
+                medium: "bg-tertiary-fixed text-on-tertiary-fixed-variant",
+                low: "bg-secondary-container text-on-secondary-container",
+            };
+            var STATUS_META = {
+                pending: { label: "Pending", dot: "bg-error animate-pulse" },
+                in_review: { label: "In Review", dot: "bg-surface-tint" },
+                approved: { label: "Resolved", dot: "bg-secondary" },
+                rejected: { label: "Rejected", dot: "bg-outline" },
+            };
+            var NEXT_STATUS = { pending: "in_review", in_review: "approved", approved: "approved", rejected: "rejected" };
+
+            function render(reports) {
+                var tbody = document.getElementById("admin-reports-tbody");
+                if (!reports.length) {
+                    tbody.innerHTML = '<tr><td class="px-6 py-8 text-center text-on-surface-variant font-body-md" colspan="8">No reports match these filters.</td></tr>';
+                    return;
+                }
+                tbody.innerHTML = reports.map(function (r) {
+                    var sevClass = SEVERITY_STYLES[r.severity] || SEVERITY_STYLES.medium;
+                    var statusMeta = STATUS_META[r.status] || STATUS_META.pending;
+                    var isFinal = r.status === "approved" || r.status === "rejected";
+                    return (
+                        '<tr class="hover:bg-surface-container-lowest transition-colors group reveal" data-report-id="' + r.id + '">' +
+                            '<td class="px-6 py-4 font-table-cell text-table-cell font-medium">' + r.trackingId + '</td>' +
+                            '<td class="px-6 py-4 font-table-cell text-table-cell">' + r.title + '</td>' +
+                            '<td class="px-6 py-4 font-table-cell text-table-cell">' + r.category + '</td>' +
+                            '<td class="px-6 py-4 font-table-cell text-table-cell">' + r.reporterName + '</td>' +
+                            '<td class="px-6 py-4 font-table-cell text-table-cell">' + r.district + '</td>' +
+                            '<td class="px-6 py-4"><span class="px-2 py-1 rounded text-[10px] font-bold uppercase ' + sevClass + '">' + r.severity + '</span></td>' +
+                            '<td class="px-6 py-4"><span class="flex items-center gap-1.5 text-table-cell font-medium text-on-surface"><span class="w-2 h-2 rounded-full ' + statusMeta.dot + '"></span>' + statusMeta.label + '</span></td>' +
+                            '<td class="px-6 py-4 text-right">' +
+                                '<button class="px-4 py-1.5 border border-primary text-primary font-label-md rounded group-hover:bg-primary group-hover:text-on-primary transition-all review-btn" ' +
+                                (isFinal ? "disabled" : "") + '>' + (isFinal ? "Reviewed" : "Review") + '</button>' +
+                            '</td>' +
+                        '</tr>'
+                    );
+                }).join("");
+
+                tbody.querySelectorAll(".review-btn").forEach(function (btn) {
+                    btn.addEventListener("click", function () {
+                        var row = btn.closest("tr");
+                        var id = row.getAttribute("data-report-id");
+                        var report = allReports.find(function (r) { return r.id === id; });
+                        var next = NEXT_STATUS[report.status] || "in_review";
+                        btn.disabled = true;
+                        window.CyvoraAPI.reports.updateStatus(id, next).then(function () {
+                            window.showToast("Report moved to " + next.replace("_", " ") + ".", "success");
+                            loadReports();
+                        }).catch(function () {
+                            window.showToast("Could not update this report.", "error");
+                            btn.disabled = false;
+                        });
+                    });
+                });
+            }
+
+            var allReports = [];
+            function loadReports() {
+                window.CyvoraAPI.reports.list().then(function (res) {
+                    allReports = res.items;
+                    render(allReports);
+                }).catch(function () {
+                    document.getElementById("admin-reports-tbody").innerHTML =
+                        '<tr><td class="px-6 py-8 text-center text-error font-body-md" colspan="8">Could not load reports.</td></tr>';
+                });
+            }
+            document.addEventListener("DOMContentLoaded", loadReports);
+        })();
+    </script>
+<script src="../assets/js/site.js" defer></script>
+</body></html>
