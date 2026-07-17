@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Notifications | VARNIS</title>
+<link rel="icon" type="image/jpeg" href="../assets/img/varnis-logo.jpeg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700;900&family=Work+Sans:wght@500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/tailwind-output.css">
+<link rel="stylesheet" href="../assets/css/site.css">
+</head>
+<body class="cyv-shell">
+<div class="cyv-rail-scrim fixed inset-0 z-30 hidden bg-black/40 lg:hidden" id="cyv-rail-scrim"></div>
+<aside class="cyv-rail" id="cyv-rail">
+      <div class="cyv-brand">
+        <div class="grid h-9 w-9 place-items-center overflow-hidden rounded-md bg-white">
+          <img src="../assets/img/varnis-logo.jpeg" alt="VARNIS" class="h-full w-full object-contain p-0.5">
+        </div>
+        <div class="leading-tight">
+          <p class="text-body-lg font-bold">VARNIS</p>
+          <p class="text-label-md text-on-primary/60">Civic Safety Portal</p>
+        </div>
+      </div>
+      <nav class="cyv-nav">
+        <a href="index.html" class="cyv-nav-item"><span class="material-symbols-outlined">home</span><span data-i18n="nav.home">Home</span></a>
+        <a href="my-reports.html" class="cyv-nav-item"><span class="material-symbols-outlined">description</span><span data-i18n="nav.reports">Reports</span></a>
+        <a href="community.html" class="cyv-nav-item"><span class="material-symbols-outlined">groups</span><span data-i18n="nav.community">Community</span></a>
+        <a href="learn.html" class="cyv-nav-item"><span class="material-symbols-outlined">school</span><span data-i18n="nav.learn">Learn</span></a>
+        <a href="assistant.html" class="cyv-nav-item"><span class="material-symbols-outlined">smart_toy</span><span data-i18n="nav.assistant">Ask AI</span></a>
+        <a href="profile.html" class="cyv-nav-item"><span class="material-symbols-outlined">account_circle</span><span data-i18n="nav.profile">Profile</span></a>
+      </nav>
+      <div class="cyv-rail-foot">
+        <a href="report-incident.html" class="cyv-emergency">
+          <span class="material-symbols-outlined text-[20px]">emergency</span> <span data-i18n="nav.emergency">Emergency Alert</span>
+        </a>
+        <a href="settings.html" class="cyv-nav-item"><span class="material-symbols-outlined">settings</span><span data-i18n="nav.settings">Settings</span></a>
+        <a href="support.html" class="cyv-nav-item"><span class="material-symbols-outlined">help</span><span data-i18n="nav.support">Support</span></a>
+      </div>
+    </aside>
+<div class="cyv-main">
+      <header class="cyv-topbar">
+        <button class="cyv-iconbtn lg:hidden" id="cyv-rail-toggle" aria-label="Open menu">
+          <span class="material-symbols-outlined">menu</span>
+        </button>
+        <label class="cyv-search">
+          <span class="material-symbols-outlined text-[20px]">search</span>
+          <input type="search" placeholder="Search reports, IDs, or locations…" data-i18n-placeholder="top.search" aria-label="Search">
+        </label>
+        <button type="button" class="cyv-iconbtn" data-lang-toggle aria-label="Switch language" title="English / Français"><span class="material-symbols-outlined">language</span><span class="absolute -bottom-0.5 right-0 text-[9px] font-bold text-primary" data-lang-label>EN</span></button>
+        <a href="notifications.html" class="cyv-iconbtn bg-primary/10 text-primary" aria-label="Notifications" aria-current="page">
+          <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1;">notifications</span>
+        </a>
+        <a href="settings.html" class="cyv-iconbtn max-sm:hidden" aria-label="Settings"><span class="material-symbols-outlined">settings</span></a>
+        <a href="report-incident.html" class="btn btn-primary btn-sm max-sm:hidden" data-i18n="top.report_incident">Report Incident</a>
+        <a href="profile.html" class="grid h-10 w-10 place-items-center overflow-hidden rounded-full bg-primary/10 text-primary" aria-label="Profile">
+          <span class="material-symbols-outlined">person</span>
+        </a>
+      </header>
+      <main class="cyv-canvas" data-page="notifications">
+        <div class="mb-6 flex flex-wrap items-start justify-between gap-4 animate-fade-up">
+          <div>
+            <h1 class="text-display-lg text-primary" data-i18n="notif.title">Notifications</h1>
+            <p class="page-sub max-w-xl">
+              <span data-notif-summary data-i18n="notif.loading">Checking for updates…</span>
+            </p>
+          </div>
+          <button type="button" class="btn btn-outline btn-sm" data-mark-all-read disabled>
+            <span class="material-symbols-outlined text-[20px]">done_all</span>
+            <span data-i18n="notif.mark_all">Mark all as read</span>
+          </button>
+        </div>
+
+        <!-- Filter chips: All / Unread / by type -->
+        <div class="mb-6 flex flex-wrap items-center gap-2 animate-fade-up" data-notif-filters role="tablist" aria-label="Filter notifications">
+          <button type="button" class="chip chip-review cursor-pointer transition hover:brightness-95" data-filter="all" aria-pressed="true"><span data-i18n="notif.filter_all">All</span> <span data-count="all" class="opacity-70"></span></button>
+          <button type="button" class="chip chip-pending cursor-pointer transition hover:brightness-95" data-filter="unread" aria-pressed="false"><span data-i18n="notif.filter_unread">Unread</span> <span data-count="unread" class="opacity-70"></span></button>
+          <span class="mx-1 hidden h-5 w-px bg-outline-variant sm:block" aria-hidden="true"></span>
+          <button type="button" class="chip chip-pending cursor-pointer transition hover:brightness-95" data-filter="alert" aria-pressed="false"><span class="material-symbols-outlined text-[16px]">campaign</span> <span data-i18n="notif.filter_alerts">Alerts</span></button>
+          <button type="button" class="chip chip-pending cursor-pointer transition hover:brightness-95" data-filter="report" aria-pressed="false"><span class="material-symbols-outlined text-[16px]">description</span> <span data-i18n="notif.filter_reports">Reports</span></button>
+          <button type="button" class="chip chip-pending cursor-pointer transition hover:brightness-95" data-filter="learning" aria-pressed="false"><span class="material-symbols-outlined text-[16px]">school</span> <span data-i18n="notif.filter_learning">Learning</span></button>
+          <button type="button" class="chip chip-pending cursor-pointer transition hover:brightness-95" data-filter="community" aria-pressed="false"><span class="material-symbols-outlined text-[16px]">groups</span> <span data-i18n="notif.filter_community">Community</span></button>
+        </div>
+
+        <!-- Notification list -->
+        <div class="mx-auto flex w-full max-w-3xl flex-col gap-3" data-notifications-list>
+          <!-- Loading skeletons (replaced by app.js) -->
+          <div class="card flex items-center gap-4"><div class="cyv-skeleton h-11 w-11 shrink-0 rounded-full"></div><div class="flex-1"><div class="cyv-skeleton mb-2 h-4 w-1/3 rounded"></div><div class="cyv-skeleton h-3 w-2/3 rounded"></div></div></div>
+          <div class="card flex items-center gap-4"><div class="cyv-skeleton h-11 w-11 shrink-0 rounded-full"></div><div class="flex-1"><div class="cyv-skeleton mb-2 h-4 w-1/2 rounded"></div><div class="cyv-skeleton h-3 w-3/4 rounded"></div></div></div>
+          <div class="card flex items-center gap-4"><div class="cyv-skeleton h-11 w-11 shrink-0 rounded-full"></div><div class="flex-1"><div class="cyv-skeleton mb-2 h-4 w-2/5 rounded"></div><div class="cyv-skeleton h-3 w-1/2 rounded"></div></div></div>
+        </div>
+
+        <!-- Empty state (hidden until needed) -->
+        <div class="mx-auto hidden w-full max-w-3xl" data-notif-empty>
+          <div class="card card-lg flex flex-col items-center gap-3 py-14 text-center">
+            <span class="grid h-14 w-14 place-items-center rounded-full bg-secondary/10 text-secondary">
+              <span class="material-symbols-outlined text-[28px]">notifications_off</span>
+            </span>
+            <h3 class="text-headline-md text-on-surface" data-i18n="notif.empty_title">You're all caught up</h3>
+            <p class="max-w-sm text-body-md text-on-surface-variant" data-i18n="notif.empty_body">Alerts, report updates, learning reminders and community news will appear here as they happen.</p>
+            <a href="index.html" class="btn-ghost mt-2 text-label-lg" data-i18n="notif.empty_cta">Back to home</a>
+          </div>
+        </div>
+      </main>
+</div>
+<script src="../assets/js/auth-guard.js"></script>
+<script src="../assets/js/config.js"></script>
+<script src="../assets/js/storage.js"></script>
+<script src="../assets/js/mock-data.js"></script>
+<script src="../assets/js/api.js"></script>
+<script src="../assets/js/templates.js"></script>
+<script src="../assets/js/validation.js"></script>
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/app.js"></script>
+<script defer src="../assets/js/site.js"></script>
+</body>
+</html>
