@@ -65,12 +65,12 @@ def check_zone_completion_badge(user, zone_title: str) -> None:
 
 def check_all_zones_complete(user) -> None:
     """Award 'Master Learner' if all published zones are completed."""
-    from apps.learning.models import Zone, Lesson
+    from apps.learning.models import Zone
     from apps.learning.selectors import get_zone_completion
+    from shared.enums.learning import PublicationStatus
 
-    zones = Zone.objects.filter(status="published")
+    zones = Zone.objects.filter(status=PublicationStatus.PUBLISHED)
     if not zones:
         return
-    all_complete = all(get_zone_completion(user, z) == 100.0 for z in zones)
-    if all_complete:
+    if all(get_zone_completion(user, z) == 100.0 for z in zones):
         check_and_award_badge(user, "Master Learner")

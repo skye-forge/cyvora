@@ -1,7 +1,7 @@
 from django.db import transaction
 from django.utils import timezone
 
-from shared.exceptions.base import InvalidStateTransitionError
+from shared.exceptions import InvalidStateTransitionError
 from shared.mixins.audit_loggable import log_audit_action
 from apps.incidents.models import Incident
 

@@ -1,6 +1,10 @@
 class ServiceError(Exception):
-    """Base exception raised from the service layer.
-    Views catch this and translate it into a standard error_response."""
+    """
+    Base exception raised from the service layer. Views/mixins catch
+    this and translate it into the standard error_response envelope.
+    This is the ONLY exception hierarchy in the codebase — do not add
+    a second one (see shared/exceptions/base.py removal note).
+    """
 
     default_message = "Something went wrong."
     status_code = 400
@@ -31,10 +35,16 @@ class AuthenticationFailedError(ServiceError):
     status_code = 401
 
 
+class InvalidStateTransitionError(ServiceError):
+    default_message = "This action is not valid for the current state."
+    status_code = 409
+
+
 __all__ = [
     "ServiceError",
     "NotFoundError",
     "PermissionDeniedError",
     "ValidationFailedError",
     "AuthenticationFailedError",
+    "InvalidStateTransitionError",
 ]

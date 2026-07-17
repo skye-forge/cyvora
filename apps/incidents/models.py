@@ -142,3 +142,16 @@ class ModerationLog(models.Model):
         return (
             f"{self.incident.report_reference}: {self.from_status} → {self.to_status}"
         )
+
+
+# ml service fields
+ai_category = models.CharField(max_length=100, blank=True, null=True)
+
+
+ai_severity = models.CharField(max_length=20, blank=True, null=True)
+
+
+ai_risk_score = models.IntegerField(blank=True, null=True)
+
+
+ai_summary = models.TextField(blank=True, null=True)

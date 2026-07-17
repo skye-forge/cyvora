@@ -4,10 +4,6 @@ a certificate after payment success."""
 from django.utils import timezone
 
 from apps.certificates.models import Certificate
-from shared.exceptions import ValidationFailedError
-from shared.utils.codes import generate_unique_code
-
-from .eligibility import is_eligible_for
 from .generator import issue_certificate
 
 

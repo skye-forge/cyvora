@@ -1,6 +1,5 @@
 import io
 
-import qrcode
 from django.conf import settings
 from django.core.files.base import ContentFile
 from django.utils import timezone
@@ -9,7 +8,7 @@ from reportlab.pdfgen import canvas
 
 from apps.certificates.models import CERTIFICATE_VALIDITY_DAYS, Certificate
 from shared.exceptions import ValidationFailedError
-from shared.helpers import generate_unique_code
+from shared.utils import generate_unique_code, generate_qr_png_bytes
 
 from .eligibility import is_eligible_for
 
@@ -43,13 +42,9 @@ def _attach_qr_code(certificate: Certificate) -> None:
     verify_url = (
         f"{settings.PUBLIC_BASE_URL}/api/v1/certificates/verify/{certificate.cert_code}"
     )
-    img = qrcode.make(verify_url)
-    buffer = io.BytesIO()
-    img.save(buffer, format="PNG")
+    qr_bytes = generate_qr_png_bytes(url=verify_url)
     certificate.qr_file.save(
-        f"{certificate.cert_code}.png",
-        ContentFile(buffer.getvalue()),
-        save=False,
+        f"{certificate.cert_code}.png", ContentFile(qr_bytes), save=False
     )
 
 
@@ -58,10 +53,10 @@ def _attach_pdf(certificate: Certificate) -> None:
     page = canvas.Canvas(buffer, pagesize=landscape(A4))
     width, height = landscape(A4)
 
-    page.setFillColorRGB(0.024, 0.106, 0.2)  # Navy Blue #061B33
+    page.setFillColorRGB(0.024, 0.106, 0.2)
     page.rect(0, 0, width, height, fill=True, stroke=False)
 
-    page.setFillColorRGB(0.831, 0.627, 0.09)  # Gold #D4A017
+    page.setFillColorRGB(0.831, 0.627, 0.09)
     page.setFont("Helvetica-Bold", 28)
     page.drawCentredString(width / 2, height - 120, "VARNIS")
 
@@ -81,14 +76,14 @@ def _attach_pdf(certificate: Certificate) -> None:
 
     page.setFont("Helvetica", 10)
     page.drawCentredString(width / 2, 60, f"Certificate ID: {certificate.cert_code}")
-    verify_line = f"Verify at: {settings.PUBLIC_BASE_URL}/certificates/verify/{certificate.cert_code}"
-    page.drawCentredString(width / 2, 44, verify_line)
+    page.drawCentredString(
+        width / 2,
+        44,
+        f"Verify at: {settings.PUBLIC_BASE_URL}/certificates/verify/{certificate.cert_code}",
+    )
 
     page.showPage()
     page.save()
-
     certificate.pdf_file.save(
-        f"{certificate.cert_code}.pdf",
-        ContentFile(buffer.getvalue()),
-        save=False,
+        f"{certificate.cert_code}.pdf", ContentFile(buffer.getvalue()), save=False
     )

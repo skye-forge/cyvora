@@ -26,7 +26,6 @@ urlpatterns = [
     path("legal/", include("apps.legal_resources.urls")),
     # Payments webhooks (machine-to-machine, not citizen-facing)
     path("payments/", include("apps.payments.urls")),
-    path("institutions/", include("apps.institutions.urls")),
 ]
 
 if settings.DEBUG:

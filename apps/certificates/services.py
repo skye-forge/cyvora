@@ -1,6 +1,6 @@
 from django.utils import timezone
 
-from shared.exceptions.base import NotFoundError
+from shared.exceptions import NotFoundError
 from shared.mixins.audit_loggable import log_audit_action
 from shared.utils.reference_codes import generate_unique_reference_code
 from shared.enums.certification import PaymentPurpose

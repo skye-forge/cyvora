@@ -1,5 +1,19 @@
-"""Custom permission classes for the VARNIS platform.
+from .roles import (
+    IsModerator,
+    IsLegalEditor,
+    IsInstitutionAdmin,
+    IsSuperAdmin,
+    IsNationalPublisher,
+    HasRole,
+)
+from .ownership import IsOwnerOrReadOnly
 
-Empty until Sprint 2+ when we extract reusable permissions
-(e.g. IsModerator, IsInstitutionAdmin, IsVerifiedUser) here.
-"""
+__all__ = [
+    "HasRole",
+    "IsModerator",
+    "IsLegalEditor",
+    "IsInstitutionAdmin",
+    "IsSuperAdmin",
+    "IsNationalPublisher",
+    "IsOwnerOrReadOnly",
+]

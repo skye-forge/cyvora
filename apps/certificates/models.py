@@ -17,13 +17,12 @@ def certificate_qr_path(instance, filename):
 
 class CertificatePricing(models.Model):
     """
-    FR-CERT-06: pricing must be transparent and admin-configurable.
-    Pricing is per tier (bronze/silver/gold), not per course.
+    FR-CERT-06: admin-configurable pricing per certificate tier
+    (Bronze/Silver/Gold) — NOT per course. This system's eligibility
+    model is Zone-completion + tier-based, not course-track-based.
     """
 
-    tier = models.CharField(
-        max_length=10, choices=CertificateTier.CHOICES, unique=True
-    )
+    tier = models.CharField(max_length=10, choices=CertificateTier.CHOICES, unique=True)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     currency = models.CharField(max_length=3, default="XAF")
     is_active = models.BooleanField(default=True)
@@ -33,7 +32,7 @@ class CertificatePricing(models.Model):
         db_table = "certificate_pricing"
 
     def __str__(self):
-        return f"{self.tier} — {self.amount} {self.currency}"
+        return f"{self.get_tier_display()} — {self.amount} {self.currency}"
 
 
 class Certificate(models.Model):

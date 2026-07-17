@@ -16,7 +16,7 @@ class PaymentStatus(str, Enum):
 
 class PaymentPurpose(str, Enum):
     CERTIFICATION = "certification"
-    INSTITUTION_LICENSE = "institution_license", 
+    INSTITUTION_LICENSE = "institution_license"
 
 
 def django_choices(enum_cls) -> list[tuple[str, str]]:

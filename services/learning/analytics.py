@@ -8,6 +8,7 @@ from django.db.models import Count, Q, Avg, Sum
 
 from apps.learning.models import Zone, LearningModule, Lesson, LessonProgress, XPTransaction
 from apps.accounts.models import User
+from shared.enums.learning import PublicationStatus
 
 
 # ──────────────────────────────────────────────
@@ -38,7 +39,7 @@ def get_overall_completion_rate() -> dict:
 
 def get_user_completion_summary(user) -> dict:
     """Full completion summary for a single user."""
-    zones = Zone.objects.filter(status="published")
+    zones = Zone.objects.filter(status=PublicationStatus.PUBLISHED).order_by("display_order")
     zone_data = []
     total_lessons = 0
     total_completed = 0
@@ -129,15 +130,16 @@ def get_zone_analytics(zone_id) -> dict:
 # Leaderboard analytics (admin dashboard)
 # ──────────────────────────────────────────────
 
-def get_leaderboard_stats() -> dict:
-    """Admin dashboard overview stats for leaderboard."""
-    from apps.learning.selectors import get_top_learners
 
-    top = get_top_learners(limit=10)
+def get_leaderboard_stats() -> dict:
+    """Admin dashboard overview stats — delegates to apps.leaderboard,
+    which owns ranking logic (learning no longer duplicates it)."""
+    from apps.leaderboard.selectors import get_national_leaderboard
+
+    top = get_national_leaderboard(limit=10)
     return {
         "top_learners": [
-            {"name": u.name, "xp_points": u.xp_points, "level": u.level}
-            for u in top
+            {"name": u.name, "xp_points": u.xp_points, "level": u.level} for u in top
         ],
         "total_learners": User.objects.filter(is_active=True, xp_points__gt=0).count(),
     }

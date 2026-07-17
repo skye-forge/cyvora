@@ -1,7 +1,7 @@
 from django.utils import timezone
 
 from shared.mixins.audit_loggable import log_audit_action
-from shared.exceptions.base import InvalidStateTransitionError
+from shared.exceptions import InvalidStateTransitionError
 from .models import NationalUpdate
 
 

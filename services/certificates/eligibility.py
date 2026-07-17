@@ -15,6 +15,7 @@ Current rules (tunable):
 from apps.incidents.models import Incident
 from apps.learning.models import Zone, LessonProgress
 from shared.constants import CertificateTier
+from shared.enums.learning import PublicationStatus
 
 
 def _completed_progress(user):
@@ -35,7 +36,7 @@ def is_eligible_for(user, tier: str) -> bool:
 
     if tier == CertificateTier.GOLD:
         active_zone_ids = set(
-            Zone.objects.filter(status="published").values_list("id", flat=True)
+            Zone.objects.filter(status=PublicationStatus.PUBLISHED).values_list("id", flat=True)
         )
         completed_zone_ids = {p.lesson.module.zone_id for p in progress}
         zones_covered = bool(active_zone_ids) and active_zone_ids.issubset(completed_zone_ids)

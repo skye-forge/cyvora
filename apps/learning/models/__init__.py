@@ -6,6 +6,7 @@ from .xp import XPTransaction
 from .badge import Badge, UserBadge
 from .streak import Streak
 from .daily_tip import DailyTip
+from .course import Course
 
 __all__ = [
     "Zone",
@@ -18,4 +19,5 @@ __all__ = [
     "UserBadge",
     "Streak",
     "DailyTip",
+    "Course",
 ]

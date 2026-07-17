@@ -43,7 +43,6 @@ def confirm_payment(*, transaction_ref: str, success: bool) -> Payment:
         payment.mark_success()
 
         if tier:
-            from services.certificates.generator import issue_certificate
             from services.certificates.services import issue_certificate_for_payment
             issue_certificate_for_payment(user=payment.user, tier=tier, payment=payment)
 

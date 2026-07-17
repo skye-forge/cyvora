@@ -53,3 +53,4 @@ ui-design/.gitkeep (A .gitkeep is just a standard blank file used to hold empty 
 documentation/.gitkeep
 
 .github/workflows/.gitkeep
+.env.local

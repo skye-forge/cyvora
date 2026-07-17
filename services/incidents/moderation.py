@@ -2,7 +2,7 @@
 auto-generating a Community Alert on approval."""
 
 from apps.incidents.models import Incident, ModerationLog
-from shared.exceptions import ValidationFailedError
+from shared.exceptions import InvalidStateTransitionError
 
 VALID_TRANSITIONS = {
     Incident.STATUS_PENDING: {
@@ -19,13 +19,13 @@ VALID_TRANSITIONS = {
 def moderate_incident(
     *,
     moderator,
-    incident: Incident,
-    new_status: str,
-    reason: str = "",
+    incident,
+    new_status,
+    reason= "",
     alert_content: str = None,
-) -> Incident:
+):
     if new_status not in VALID_TRANSITIONS.get(incident.status, set()):
-        raise ValidationFailedError(
+        raise InvalidStateTransitionError(
             f"Cannot transition from '{incident.status}' to '{new_status}'."
         )
 

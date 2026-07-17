@@ -16,7 +16,7 @@ environ.Env.read_env(str(BASE_DIR / ".env"))
 SECRET_KEY = env("SECRET_KEY", default="insecure-dev-key")
 DEBUG = env.bool("DEBUG", default=False)
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["localhost", "127.0.0.1"])
-
+STATIC_ROOT = BASE_DIR / "staticfiles"
 # ---------------------------------------------------------------------------
 # Applications
 # ---------------------------------------------------------------------------
@@ -52,7 +52,8 @@ LOCAL_APPS = [
     "apps.institutions",
     "apps.payments",
     "apps.legal_resources",
-    #            "apps.leaderboard", "apps.reports",
+    "apps.quizzes",
+    "apps.leaderboard",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -211,6 +212,7 @@ RESEND_API_KEY = env("RESEND_API_KEY", default="")
 RESEND_FROM_EMAIL = env("RESEND_FROM_EMAIL", default="no-reply@varnis.cm")
 RESEND_WEBHOOK_SECRET = env("RESEND_WEBHOOK_SECRET", default="")
 
+GEMINI_API_KEY = env("GEMINI_API_KEY", default="")
 AI_SERVICE_URL = env("AI_SERVICE_URL", default="")
 AI_SERVICE_TIMEOUT = env.int("AI_SERVICE_TIMEOUT", default=10)
 

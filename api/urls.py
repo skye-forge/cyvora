@@ -17,10 +17,12 @@ def api_root(request):
     return Response({
         "auth": "/api/v1/auth/",
         "learning": "/api/v1/learning/",
+        "quizzes": "/api/v1/quizzes/",
         "incidents": "/api/v1/incidents/",
         "certificates": "/api/v1/certificates/",
         "community": "/api/v1/community/",
         "dashboard": "/api/v1/dashboard/",
+        "leaderboard": "/api/v1/leaderboard/",
         "national_updates": "/api/v1/national-update/",
         "webhooks": "/api/v1/webhooks/",
         "health": "/api/v1/health",
@@ -40,5 +42,6 @@ urlpatterns = [
     path("dashboard/", include("apps.dashboard.urls")),
     path("community/", include("apps.community.urls")),
     path("national-update/", include("apps.national_update.urls")),
+    path("quizzes/", include("apps.quizzes.urls")),
     path("health", health_check, name="health-check"),
 ]

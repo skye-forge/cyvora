@@ -1,7 +1,7 @@
 from django.db import transaction
 from django.db.models import F
 
-from shared.exceptions.base import AppException, NotFoundError
+# from shared.exceptions import AppException, NotFoundError
 from shared.mixins.audit_loggable import log_audit_action
 from shared.constants.community import CommunityPostType, ModerationStatus
 

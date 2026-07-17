@@ -1,12 +1,21 @@
 """
 Auto-classification via the NLP microservice (Rayan's FastAPI service —
-see the team project document, section 3.1: NLP MICROSERVICE).
-Not wired in yet — integrations/ai/client.py doesn't exist until Sprint 3.
-
-def classify_incident(incident) -> dict:
-    from integrations.ai.client import AIServiceClient
-    result = AIServiceClient.classify(text=incident.description)
-    incident.severity = result["severity"]
-    incident.save(update_fields=["severity"])
-    return result
+team project document, section 3.1: NLP MICROSERVICE). Not wired in
+until integrations/ai/client.py exists (Sprint 3).
 """
+
+from shared.exceptions import ServiceError
+
+
+def classify_incident(incident):
+    """
+    Sprint 3: replace this stub with the real call:
+        from integrations.ai.client import AIServiceClient
+        result = AIServiceClient.classify(text=incident.description)
+        incident.severity = result["severity"]
+        incident.save(update_fields=["severity"])
+        return result
+    """
+    raise ServiceError(
+        "Incident auto-classification is not yet available.", status_code=501
+    )

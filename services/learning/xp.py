@@ -1,24 +1,21 @@
+
 """XP award logic, centralized here so every XP-granting action
-(lesson completion, quiz attempts, daily challenges, etc.) goes
-through one place instead of being scattered across apps."""
+(lesson completion, streak, badges, etc.) goes through one place.
+Point values come from shared.constants.GamificationConstants — the
+SRS Appendix 7.2 numbers — not redefined here."""
 
 from apps.learning.models import XPTransaction
-
-LESSON_COMPLETION_XP = 50
-QUIZ_PASS_XP = 30
-STREAK_BONUS_XP = 10
-DAILY_CHALLENGE_XP = 20
-BADGE_BONUS_XP = 0  # Defined on the badge itself
+from shared.constants import GamificationConstants
 
 
-def award_xp(user, amount: int, transaction_type: str = "lesson_complete", description: str = "") -> None:
-    """Award XP to a user and log the transaction."""
+def award_xp(
+    user, amount: int, transaction_type: str = "lesson_complete", description: str = ""
+) -> None:
     if amount == 0:
         return
 
     user.award_xp(amount)
 
-    # Log the transaction
     XPTransaction.objects.create(
         user=user,
         amount=amount,
@@ -30,7 +27,7 @@ def award_xp(user, amount: int, transaction_type: str = "lesson_complete", descr
 def award_lesson_completion_xp(user) -> None:
     award_xp(
         user,
-        LESSON_COMPLETION_XP,
+        GamificationConstants.POINTS_LESSON_COMPLETED,
         transaction_type="lesson_complete",
         description="Lesson completed",
     )
@@ -39,7 +36,7 @@ def award_lesson_completion_xp(user) -> None:
 def award_quiz_pass_xp(user) -> None:
     award_xp(
         user,
-        QUIZ_PASS_XP,
+        GamificationConstants.POINTS_QUIZ_PASSED,
         transaction_type="quiz_pass",
         description="Quiz passed",
     )
@@ -48,18 +45,19 @@ def award_quiz_pass_xp(user) -> None:
 def award_streak_bonus_xp(user, streak_days: int) -> None:
     award_xp(
         user,
-        STREAK_BONUS_XP,
+        GamificationConstants.POINTS_STREAK_DAY,
         transaction_type="streak_bonus",
         description=f"{streak_days}-day streak bonus",
     )
 
 
-def award_daily_challenge_xp(user) -> None:
+def award_incident_approved_xp(user) -> None:
+    """Appendix 7.2: verified incident report approved: +25 points. Not previously wired anywhere."""
     award_xp(
         user,
-        DAILY_CHALLENGE_XP,
-        transaction_type="daily_challenge",
-        description="Daily challenge completed",
+        GamificationConstants.POINTS_INCIDENT_REPORT_APPROVED,
+        transaction_type="incident_approved",
+        description="Incident report approved",
     )
 
 
