@@ -176,4 +176,4 @@ Client-side validation is a first line of defense only — **mirror all of it se
 
 ---
 
-Skye8 — VARNIS v2.1.0 (frontend-only)
+VARNIS v2.1.0 (frontend-only)
