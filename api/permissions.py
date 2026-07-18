@@ -41,3 +41,55 @@ class IsOwnerOrAdmin(BasePermission):
             return True
         owner_id = getattr(obj, "user_id", None)
         return owner_id == request.user.id
+
+
+#
+# Role-based permissions referenced across payments/, kyc/, and tracking/.
+# Assumes your User model has a `role` field (or a `groups` relation) —
+# adjust ROLE_FIELD / the checks below to match your actual accounts app.
+# Import as: from api.permissions import IsFinanceOrAdmin, IsKYCReviewerOrAdmin, ...
+
+class RoleBasedPermission(BasePermission):
+    """
+    Base class — subclasses set `allowed_roles`. Checks request.user.role
+    if present, falling back to Django's is_staff/is_superuser so this
+    still works before a custom roles system exists.
+    """
+
+    allowed_roles = ()
+
+    def has_permission(self, request, view):
+        user = request.user
+        if not (user and user.is_authenticated):
+            return False
+        if user.is_superuser:
+            return True
+        role = getattr(user, "role", None)
+        if role is not None:
+            return role in self.allowed_roles
+        # Fallback while a dedicated roles system isn't wired up yet:
+        return user.is_staff
+
+
+class IsFinanceOrAdmin(RoleBasedPermission):
+    """Payment configuration + submission review (payments/)."""
+
+    allowed_roles = ("FINANCE", "ADMIN")
+
+
+class IsKYCReviewerOrAdmin(RoleBasedPermission):
+    """KYC submission review (kyc/)."""
+
+    allowed_roles = ("KYC_REVIEWER", "ADMIN")
+
+
+class IsOwnershipReviewerOrAdmin(RoleBasedPermission):
+    """Ownership-verification scoring on a tracking request (tracking/)."""
+
+    allowed_roles = ("OWNERSHIP_REVIEWER", "ADMIN")
+
+
+class IsCaseOfficerOrAdmin(RoleBasedPermission):
+    """Authority assignment + investigation status updates (tracking/)."""
+
+    allowed_roles = ("CASE_OFFICER", "ADMIN")

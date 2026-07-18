@@ -23,6 +23,8 @@ def api_root(request):
         "community": "/api/v1/community/",
         "dashboard": "/api/v1/dashboard/",
         "leaderboard": "/api/v1/leaderboard/",
+        "kyc": "/api/v1/kyc/",
+        "tracking": "/api/v1/tracking/",
         "national_updates": "/api/v1/national-update/",
         "webhooks": "/api/v1/webhooks/",
         "health": "/api/v1/health",

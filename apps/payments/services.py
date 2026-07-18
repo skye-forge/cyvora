@@ -1,78 +1,188 @@
-from decimal import Decimal
+"""
 
-from shared.exceptions.base import AppException, NotFoundError
-from shared.mixins.audit_loggable import log_audit_action
-from integrations.payments import gateway
+Views should never touch model state transitions directly — everything
+that moves a PaymentSubmission from one status to another goes through
+here so it stays auditable and so the "unlock" hook has exactly one
+place to live. When a real payment gateway is wired in later, its
+webhook handler should call approve_submission() too, not duplicate
+this logic.
+"""
 
-from .models import Payment
+from django.utils import timezone
+from django.db import transaction
 
-
-def initiate_payment(
-    *, user, purpose: str, amount: Decimal, provider: str, metadata: dict | None = None
-) -> dict:
-    payment = Payment.objects.create(
-        user=user,
-        purpose=purpose,
-        amount=amount,
-        provider=provider,
-        metadata=metadata or {},
-    )
-
-    gateway_response = gateway.initiate(payment=payment)
-    payment.provider_reference = gateway_response.get("provider_reference", "")
-    payment.save(update_fields=["provider_reference", "updated_at"])
-
-    log_audit_action(
-        user, "payment.initiated", payment, {"purpose": purpose, "amount": str(amount)}
-    )
-
-    return {
-        "transaction_ref": payment.transaction_ref,
-        "status": payment.status,
-        **{k: v for k, v in gateway_response.items() if k != "provider_reference"},
-    }
+from .models import PaymentSubmission, PaymentSubmissionStatus, PaymentPurpose
 
 
-def handle_webhook(
-    *, provider: str, payload: dict, raw_body: bytes, signature: str
-) -> Payment:
+class PaymentSubmissionError(Exception):
+    pass
+
+
+def submit_proof(*, submission: PaymentSubmission) -> PaymentSubmission:
+    """Move PENDING -> SUBMITTED once proof has been attached."""
+    if submission.status != PaymentSubmissionStatus.PENDING:
+        raise PaymentSubmissionError(
+            f"Cannot submit proof from status {submission.status}."
+        )
+    if not submission.proof_file:
+        raise PaymentSubmissionError("Proof file is required before submission.")
+
+    submission.status = PaymentSubmissionStatus.SUBMITTED
+    submission.save(update_fields=["status", "updated_at"])
+    _mark_related_payment_submitted(submission)
+    _notify(submission, "payment_submitted")
+    return submission
+
+
+def mark_under_review(
+    *, submission: PaymentSubmission, admin_user
+) -> PaymentSubmission:
+    if submission.status != PaymentSubmissionStatus.SUBMITTED:
+        raise PaymentSubmissionError(f"Cannot review from status {submission.status}.")
+    submission.status = PaymentSubmissionStatus.UNDER_REVIEW
+    submission.reviewed_by = admin_user
+    submission.save(update_fields=["status", "reviewed_by", "updated_at"])
+    return submission
+
+
+@transaction.atomic
+def approve_submission(
+    *, submission: PaymentSubmission, admin_user
+) -> PaymentSubmission:
     """
-    Verifies the webhook signature using your existing webhook_security
-    helper, then updates the matching Payment and fires mark_success/
-    mark_failed — which in turn fires payment_succeeded for certificates
-    to pick up.
-
-    Adjust the verify_webhook_signature import/call to match your actual
-    shared/webhook_security.py signature — this assumes a
-    (raw_body, signature, provider) -> bool contract.
+    Single trigger point for unlocking whatever this payment was for.
+    Extend _unlock_related_object() as new purposes are added.
     """
-    from shared.webhook_security import verify_webhook_signature
-
-    if not verify_webhook_signature(
-        raw_body=raw_body, signature=signature, provider=provider
+    if submission.status not in (
+        PaymentSubmissionStatus.SUBMITTED,
+        PaymentSubmissionStatus.UNDER_REVIEW,
     ):
-        raise AppException("Invalid webhook signature.", code="invalid_signature")
+        raise PaymentSubmissionError(f"Cannot approve from status {submission.status}.")
 
-    parsed = gateway.parse_webhook(provider=provider, payload=payload)
-    provider_reference = parsed["provider_reference"]
+    submission.status = PaymentSubmissionStatus.VERIFIED
+    submission.reviewed_by = admin_user
+    submission.reviewed_at = timezone.now()
+    submission.save(
+        update_fields=["status", "reviewed_by", "reviewed_at", "updated_at"]
+    )
 
-    try:
-        payment = Payment.objects.get(
-            provider_reference=provider_reference, provider=provider
+    _unlock_related_object(submission)
+    _notify(submission, "payment_verified")
+    return submission
+
+
+def reject_submission(
+    *, submission: PaymentSubmission, admin_user, reason: str
+) -> PaymentSubmission:
+    if submission.status not in (
+        PaymentSubmissionStatus.SUBMITTED,
+        PaymentSubmissionStatus.UNDER_REVIEW,
+    ):
+        raise PaymentSubmissionError(f"Cannot reject from status {submission.status}.")
+    if not reason:
+        raise PaymentSubmissionError("A rejection reason is required.")
+
+    submission.status = PaymentSubmissionStatus.REJECTED
+    submission.reviewed_by = admin_user
+    submission.reviewed_at = timezone.now()
+    submission.rejection_reason = reason
+    submission.save(
+        update_fields=[
+            "status",
+            "reviewed_by",
+            "reviewed_at",
+            "rejection_reason",
+            "updated_at",
+        ]
+    )
+    _notify(submission, "payment_rejected")
+    return submission
+
+
+def request_new_proof(
+    *, submission: PaymentSubmission, admin_user, message: str
+) -> PaymentSubmission:
+    if submission.status not in (
+        PaymentSubmissionStatus.SUBMITTED,
+        PaymentSubmissionStatus.UNDER_REVIEW,
+    ):
+        raise PaymentSubmissionError(
+            f"Cannot request proof from status {submission.status}."
         )
-    except Payment.DoesNotExist:
-        raise NotFoundError(
-            f"No payment found for provider_reference={provider_reference}"
+
+    submission.status = PaymentSubmissionStatus.PROOF_REQUESTED
+    submission.reviewed_by = admin_user
+    submission.proof_request_message = message
+    submission.save(
+        update_fields=[
+            "status",
+            "reviewed_by",
+            "proof_request_message",
+            "updated_at",
+        ]
+    )
+    _notify(submission, "payment_proof_requested")
+    return submission
+
+
+def resubmit_proof(
+    *, submission: PaymentSubmission, new_proof_file
+) -> PaymentSubmission:
+    """User re-uploads after a PROOF_REQUESTED, without losing history."""
+    if submission.status != PaymentSubmissionStatus.PROOF_REQUESTED:
+        raise PaymentSubmissionError(
+            f"Cannot resubmit from status {submission.status}."
         )
 
-    if payment.status != "pending":
-        return payment  # already processed — webhook retried, no-op
+    submission.proof_file = new_proof_file
+    submission.status = PaymentSubmissionStatus.SUBMITTED
+    submission.save(update_fields=["proof_file", "status", "updated_at"])
+    _notify(submission, "payment_submitted")
+    return submission
 
-    if parsed["status"] == "success":
-        payment.mark_success(provider_reference=provider_reference)
-        log_audit_action(None, "payment.succeeded", payment, {"provider": provider})
-    else:
-        payment.mark_failed()
-        log_audit_action(None, "payment.failed", payment, {"provider": provider})
 
-    return payment
+def _mark_related_payment_submitted(submission: PaymentSubmission) -> None:
+    """
+    Mirror of _unlock_related_object() but for the SUBMITTED transition
+    rather than VERIFIED — keeps TrackingRequest.status in sync with
+    PaymentSubmission.status without tracking/ having to poll payments/.
+    """
+    if submission.purpose == PaymentPurpose.TRACKING_FEE:
+        from apps.tracking.services import mark_tracking_payment_submitted
+
+        mark_tracking_payment_submitted(tracking_id=submission.related_object_id)
+    # INSTITUTION_LICENSE and other purposes don't need a SUBMITTED-stage hook yet.
+
+
+def _unlock_related_object(submission: PaymentSubmission) -> None:
+    """
+    Dispatch to whatever the payment was for. Kept as a simple mapping so
+    adding a new purpose (e.g. certification, later) is a one-line addition
+    here rather than a change to the state machine itself.
+    """
+    if submission.purpose == PaymentPurpose.TRACKING_FEE:
+        from apps.tracking.services import mark_tracking_payment_approved
+
+        mark_tracking_payment_approved(tracking_id=submission.related_object_id)
+
+    elif submission.purpose == PaymentPurpose.INSTITUTION_LICENSE:
+        from apps.institutions.services import activate_institution_license
+
+        activate_institution_license(institution_id=submission.related_object_id)
+
+    # NOTE: certification purpose intentionally not handled — feature is
+    # silenced for this build. Add an elif branch here when re-enabled.
+
+
+def _notify(submission: PaymentSubmission, event: str) -> None:
+    from notifications.services import notify_user
+
+    notify_user(
+        user=submission.user,
+        event=event,
+        context={
+            "submission_id": str(submission.id),
+            "purpose": submission.get_purpose_display(),
+            "status": submission.status,
+        },
+    )

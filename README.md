@@ -34,11 +34,11 @@ docker compose exec web python manage.py migrate
 docker compose exec web python manage.py createsuperuser
 ```
 
-- API: http://localhost:8000/api/v1/
-- Swagger UI: http://localhost:8000/api/docs/
-- Admin: http://localhost:8000/admin/
-
-Bare metal:
+```
+https://varnis.up.railway.app/api/v1/   for all version 1 api      
+https://varnis.up.railway.app/api/docs/    the  api doc page      
+https://varnis.up.railway.app/admin/    admin dashboard
+```
 
 ```bash
 python3 -m venv venv && source venv/bin/activate

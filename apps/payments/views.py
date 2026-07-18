@@ -1,103 +1,245 @@
-import logging
-
-from django.conf import settings
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework import generics, permissions, status
+from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from api.responses import error_response, success_response
-from services.payments.checkout import initiate_certificate_checkout
-from services.payments.confirmation import confirm_payment
-from services.payments import selectors
-from shared.mixins import ServiceExceptionHandlingMixin
-from shared.webhook_security import compute_hmac_sha256, constant_time_equals
-
+from .models import PaymentConfiguration, PaymentSubmission, PaymentSubmissionStatus
 from .serializers import (
-    ConfirmPaymentSerializer,
-    InitiateCheckoutSerializer,
-    PaymentSerializer,
+    PaymentConfigurationPublicSerializer,
+    PaymentConfigurationAdminSerializer,
+    PaymentSubmissionCreateSerializer,
+    PaymentSubmissionSerializer,
+    PaymentSubmissionAdminSerializer,
+    RejectSubmissionSerializer,
+    RequestProofSerializer,
+    ResubmitProofSerializer,
 )
+from .services import (
+    PaymentSubmissionError,
+    mark_under_review,
+    approve_submission,
+    reject_submission,
+    request_new_proof,
+    resubmit_proof,
+)
+from api.responses import (
+    api_response,
+)  # {"success", "message", "data", "meta"} envelope
+from api.permissions import IsFinanceOrAdmin
 
-logger = logging.getLogger("payments")
+# ── Citizen-facing ────────────────────────────────────────────────────────
 
 
-class InitiateCheckoutView(ServiceExceptionHandlingMixin, APIView):
-    """POST /api/v1/payments/checkout — body: {"tier": "gold", "provider": "momo"}
-    FR-CERT-02: payment step before releasing a certificate."""
+class ActivePaymentConfigurationView(APIView):
+    """GET /payments/config/active/?method=MTN"""
 
-    permission_classes = [IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
 
-    def post(self, request):
-        serializer = InitiateCheckoutSerializer(data=request.data)
+    def get(self, request):
+        method = request.query_params.get("method")
+        if not method:
+            return api_response(
+                success=False,
+                message="Query param 'method' is required.",
+                status_code=status.HTTP_400_BAD_REQUEST,
+            )
+
+        config = PaymentConfiguration.objects.filter(
+            payment_method=method, is_active=True
+        ).first()
+
+        if not config:
+            return api_response(
+                success=False,
+                message=f"No active payment configuration for method '{method}'.",
+                status_code=status.HTTP_404_NOT_FOUND,
+            )
+
+        data = PaymentConfigurationPublicSerializer(config).data
+        return api_response(
+            success=True, message="Active payment configuration.", data=data
+        )
+
+
+class PaymentSubmissionCreateView(generics.CreateAPIView):
+    """POST /payments/submissions/  — user pays, uploads proof, in one call."""
+
+    serializer_class = PaymentSubmissionCreateSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        submission = serializer.save()
+        out = PaymentSubmissionSerializer(submission).data
+        return api_response(
+            success=True,
+            message="Payment submitted for review.",
+            data=out,
+            status_code=status.HTTP_201_CREATED,
+        )
+
+
+class MyPaymentSubmissionsView(generics.ListAPIView):
+    """GET /payments/submissions/mine/"""
+
+    serializer_class = PaymentSubmissionSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return PaymentSubmission.objects.filter(user=self.request.user)
+
+
+class PaymentSubmissionDetailView(generics.RetrieveAPIView):
+    """GET /payments/submissions/{id}/"""
+
+    serializer_class = PaymentSubmissionSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    lookup_field = "id"
+
+    def get_queryset(self):
+        return PaymentSubmission.objects.filter(user=self.request.user)
+
+
+class ResubmitProofView(APIView):
+    """POST /payments/submissions/{id}/resubmit/ — after PROOF_REQUESTED."""
+
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, id):
+        submission = PaymentSubmission.objects.filter(id=id, user=request.user).first()
+        if not submission:
+            return api_response(
+                success=False,
+                message="Not found.",
+                status_code=status.HTTP_404_NOT_FOUND,
+            )
+
+        serializer = ResubmitProofSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        payment = initiate_certificate_checkout(
-            user=request.user, **serializer.validated_data
-        )
-        return success_response(
-            data=PaymentSerializer(payment).data,
-            message="Complete payment at the provided checkout_url to receive your certificate.",
-            status=201,
-        )
-
-
-class PaymentStatusView(ServiceExceptionHandlingMixin, APIView):
-    """GET /api/v1/payments/{id} — polling fallback for clients that
-    don't want to wait on a push notification for payment confirmation."""
-
-    permission_classes = [IsAuthenticated]
-
-    def get(self, request, payment_id):
-        payment = selectors.get_payment_for_user(payment_id, request.user)
-        return success_response(data=PaymentSerializer(payment).data)
-
-
-class PaymentWebhookView(ServiceExceptionHandlingMixin, APIView):
-    """
-    POST /api/v1/payments/webhook/{provider}
-    Header: X-Webhook-Signature: hex(HMAC-SHA256(secret, raw_body))
-
-    Machine-to-machine callback from the payment provider. Verified with
-    a provider-specific shared secret (PAYMENT_WEBHOOK_SECRETS in
-    settings) — the exact header name and digest scheme are provider-
-    dependent in reality (MTN, Orange, and card processors each define
-    their own), so this is the generic shape until real credentials
-    dictate the actual one per provider. What must NOT change later:
-    verify-before-parse, constant-time comparison, and reject-if-
-    unconfigured-outside-DEBUG — those are the parts that make this
-    safe regardless of which provider is behind it.
-    """
-
-    authentication_classes = []
-    permission_classes = [AllowAny]
-
-    def post(self, request, provider):
-        if not self._has_valid_signature(request, provider):
-            logger.warning(
-                "Rejected payment webhook with invalid signature | provider=%s",
-                provider,
+        try:
+            submission = resubmit_proof(
+                submission=submission,
+                new_proof_file=serializer.validated_data["proof_file"],
             )
-            return error_response("Invalid webhook signature.", status=400)
+        except PaymentSubmissionError as e:
+            return api_response(
+                success=False, message=str(e), status_code=status.HTTP_400_BAD_REQUEST
+            )
 
-        serializer = ConfirmPaymentSerializer(data=request.data)
+        return api_response(
+            success=True,
+            message="Proof resubmitted.",
+            data=PaymentSubmissionSerializer(submission).data,
+        )
+
+
+# ── Admin / finance-facing ──────────────────────────────────────────────
+
+
+class AdminPaymentConfigurationViewSet(generics.ListCreateAPIView):
+    """GET/POST /admin/payments/config/"""
+
+    queryset = PaymentConfiguration.objects.all()
+    serializer_class = PaymentConfigurationAdminSerializer
+    permission_classes = [IsFinanceOrAdmin]
+
+
+class AdminPaymentSubmissionQueueView(generics.ListAPIView):
+    """GET /admin/payments/submissions/?status=SUBMITTED"""
+
+    serializer_class = PaymentSubmissionAdminSerializer
+    permission_classes = [IsFinanceOrAdmin]
+
+    def get_queryset(self):
+        qs = PaymentSubmission.objects.select_related(
+            "user", "payment_configuration", "reviewed_by"
+        )
+        status_param = self.request.query_params.get("status")
+        if status_param:
+            qs = qs.filter(status=status_param)
+        return qs
+
+
+class ApproveSubmissionView(APIView):
+    permission_classes = [IsFinanceOrAdmin]
+
+    def post(self, request, id):
+        submission = _get_submission_or_404(id)
+        if isinstance(submission, Response):
+            return submission
+        try:
+            mark_under_review(submission=submission, admin_user=request.user)
+            submission = approve_submission(
+                submission=submission, admin_user=request.user
+            )
+        except PaymentSubmissionError as e:
+            return api_response(
+                success=False, message=str(e), status_code=status.HTTP_400_BAD_REQUEST
+            )
+        return api_response(
+            success=True,
+            message="Payment verified.",
+            data=PaymentSubmissionAdminSerializer(submission).data,
+        )
+
+
+class RejectSubmissionView(APIView):
+    permission_classes = [IsFinanceOrAdmin]
+
+    def post(self, request, id):
+        submission = _get_submission_or_404(id)
+        if isinstance(submission, Response):
+            return submission
+        serializer = RejectSubmissionSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-
-        payment = confirm_payment(**serializer.validated_data)
-        return success_response(data=PaymentSerializer(payment).data)
-
-    def _has_valid_signature(self, request, provider: str) -> bool:
-        secret = settings.PAYMENT_WEBHOOK_SECRETS.get(provider, "")
-        if not secret:
-            if settings.DEBUG:
-                return True
-            logger.error(
-                "No webhook secret configured for provider '%s' outside DEBUG.",
-                provider,
+        try:
+            submission = reject_submission(
+                submission=submission,
+                admin_user=request.user,
+                reason=serializer.validated_data["reason"],
             )
-            return False
+        except PaymentSubmissionError as e:
+            return api_response(
+                success=False, message=str(e), status_code=status.HTTP_400_BAD_REQUEST
+            )
+        return api_response(
+            success=True,
+            message="Payment rejected.",
+            data=PaymentSubmissionAdminSerializer(submission).data,
+        )
 
-        signature = request.headers.get("X-Webhook-Signature", "")
-        if not signature:
-            return False
 
-        expected = compute_hmac_sha256(secret.encode("utf-8"), request.body).hex()
-        return constant_time_equals(expected.encode("utf-8"), signature.encode("utf-8"))
+class RequestProofView(APIView):
+    permission_classes = [IsFinanceOrAdmin]
+
+    def post(self, request, id):
+        submission = _get_submission_or_404(id)
+        if isinstance(submission, Response):
+            return submission
+        serializer = RequestProofSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        try:
+            submission = request_new_proof(
+                submission=submission,
+                admin_user=request.user,
+                message=serializer.validated_data["message"],
+            )
+        except PaymentSubmissionError as e:
+            return api_response(
+                success=False, message=str(e), status_code=status.HTTP_400_BAD_REQUEST
+            )
+        return api_response(
+            success=True,
+            message="New proof requested from user.",
+            data=PaymentSubmissionAdminSerializer(submission).data,
+        )
+
+
+def _get_submission_or_404(id):
+    submission = PaymentSubmission.objects.filter(id=id).first()
+    if not submission:
+        return api_response(
+            success=False, message="Not found.", status_code=status.HTTP_404_NOT_FOUND
+        )
+    return submission
