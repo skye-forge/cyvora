@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VARNIS — Interactive Prototype</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%234F46E5'/%3E%3Cpath d='M16 8 L22 12 L22 20 L16 24 L10 20 L10 12 Z' fill='white'/%3E%3C/svg%3E" />
+</head>
+<body>
+  <div class="app-shell">
+
+    <!-- ============================== LEFT: SCREEN INDEX ============================== -->
+    <aside class="index-sidebar">
+      <div class="index-header">
+        <div class="index-logo">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2 L20 6 L20 14 L12 22 L4 14 L4 6 Z"/>
+          </svg>
+        </div>
+        <div>
+          <div class="index-title">VARNIS</div>
+          <div class="index-subtitle">Interactive Prototype</div>
+        </div>
+      </div>
+
+      <div class="index-group">
+        <div class="index-group-label">Onboarding</div>
+        <button class="index-item" data-nav="splash"><span class="num">01</span> Splash</button>
+        <button class="index-item" data-nav="signin"><span class="num">02</span> Sign In</button>
+        <button class="index-item" data-nav="signup"><span class="num">03</span> Sign Up</button>
+      </div>
+
+      <div class="index-group">
+        <div class="index-group-label">Identity Verification</div>
+        <button class="index-item" data-nav="kyc-intro"><span class="num">04</span> KYC Intro</button>
+        <button class="index-item" data-nav="kyc-capture"><span class="num">05</span> Capture CNI</button>
+        <button class="index-item" data-nav="kyc-processing"><span class="num">06</span> Processing</button>
+        <button class="index-item" data-nav="kyc-approved"><span class="num">07</span> Approved</button>
+      </div>
+
+      <div class="index-group">
+        <div class="index-group-label">Main App</div>
+        <button class="index-item" data-nav="dashboard"><span class="num">08</span> Dashboard</button>
+        <button class="index-item" data-nav="report"><span class="num">09</span> Report Incident</button>
+        <button class="index-item" data-nav="community"><span class="num">10</span> Community</button>
+        <button class="index-item" data-nav="notifications"><span class="num">11</span> Notifications</button>
+        <button class="index-item" data-nav="learning"><span class="num">12</span> Safety Lessons</button>
+        <button class="index-item" data-nav="profile"><span class="num">13</span> Profile</button>
+      </div>
+
+      <div class="index-group">
+        <div class="index-group-label">Support</div>
+        <button class="index-item" data-nav="support"><span class="num">14</span> Support Home</button>
+        <button class="index-item" data-nav="faq"><span class="num">15</span> FAQ</button>
+        <button class="index-item" data-nav="new-ticket"><span class="num">16</span> New Ticket</button>
+        <button class="index-item" data-nav="ticket-detail"><span class="num">17</span> Ticket Chat</button>
+      </div>
+
+      <div class="index-group">
+        <div class="index-group-label">Recovery Center</div>
+        <button class="index-item" data-nav="recovery-home"><span class="num">18</span> Recovery Home</button>
+        <button class="index-item" data-nav="ownership"><span class="num">19</span> Ownership Verify</button>
+        <button class="index-item" data-nav="category"><span class="num">20</span> Asset Category</button>
+        <button class="index-item" data-nav="device-form"><span class="num">21</span> Device Form</button>
+        <button class="index-item" data-nav="review"><span class="num">22</span> Review &amp; Submit</button>
+        <button class="index-item" data-nav="payment"><span class="num">23</span> Payment</button>
+        <button class="index-item" data-nav="case-detail"><span class="num">24</span> Case Timeline</button>
+        <button class="index-item" data-nav="imei-check"><span class="num">25</span> Check IMEI</button>
+      </div>
+    </aside>
+
+    <!-- ============================== CENTER: PHONE ============================== -->
+    <div class="phone-stage">
+      <div class="phone">
+        <div class="phone-screen">
+          <div class="screens" id="screens">
+
+            <!-- ============ 01 SPLASH ============ -->
+            <section class="screen active screen-splash" data-screen="splash" data-goto="signin">
+              <div class="splash-decoration splash-decoration-1"></div>
+              <div class="splash-decoration splash-decoration-2"></div>
+              <div class="splash-content">
+                <div class="splash-logo">
+                  <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 2 L20 6 L20 14 L12 22 L4 14 L4 6 Z"/>
+                  </svg>
+                </div>
+                <div class="splash-name">VARNIS</div>
+                <div class="splash-tagline">Cameroon's civic security<br>&amp; cybersecurity platform</div>
+              </div>
+              <div class="splash-loader">LOADING</div>
+            </section>
+
+            <!-- ============ 02 SIGN IN ============ -->
+            <section class="screen" data-screen="signin">
+              <div class="status-bar"><span class="time">9:41</span><span class="indicators"><svg width="16" height="10" viewBox="0 0 16 10" fill="currentColor"><rect x="0" y="4" width="3" height="6" rx="1"/><rect x="4" y="2" width="3" height="8" rx="1"/><rect x="8" y="0" width="3" height="10" rx="1"/></svg><svg width="24" height="12" viewBox="0 0 24 12" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="2" width="18" height="8" rx="2"/><rect x="20" y="4" width="2" height="4" rx="1" fill="currentColor"/><rect x="3" y="4" width="12" height="4" rx="1" fill="currentColor"/></svg></span></div>
+              <div class="screen-body">
+                <div class="auth-container">
+                  <div class="auth-header">
+                    <div class="auth-logo">
+                      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2 L20 6 L20 14 L12 22 L4 14 L4 6 Z"/>
+                      </svg>
+                    </div>
+                    <div class="auth-title">Welcome back</div>
+                    <div class="auth-subtitle">Sign in to continue reporting and staying safe.</div>
+                  </div>
+                  <div class="input-group">
+                    <label class="input-label">Email or phone</label>
+                    <input type="text" class="input" placeholder="you@example.cm">
+                  </div>
+                  <div class="input-group">
+                    <label class="input-label">Password</label>
+                    <input type="password" class="input" placeholder="••••••••••" value="password">
+                  </div>
+                  <div style="text-align:right; margin-bottom:20px;">
+                    <a href="#" style="font-size:12px; color:var(--primary); font-weight:600;">Forgot password?</a>
+                  </div>
+                  <button class="btn btn-primary" data-goto="kyc-intro">Sign in</button>
+                  <div class="auth-footer">
+                    New to VARNIS? <a href="#" data-goto="signup">Create account</a>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <!-- ============ 03 SIGN UP ============ -->
+            <section class="screen" data-screen="signup">
+              <div class="status-bar"><span class="time">9:41</span><span class="indicators"><svg width="16" height="10" viewBox="0 0 16 10" fill="currentColor"><rect x="0" y="4" width="3" height="6" rx="1"/><rect x="4" y="2" width="3" height="8" rx="1"/><rect x="8" y="0" width="3" height="10" rx="1"/></svg></span></div>
+              <div class="appbar">
+                <button class="appbar-back" data-back><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+                <div class="appbar-title">Create your account</div>
+              </div>
+              <div class="screen-body">
+                <div class="auth-container" style="padding-top:16px;">
+                  <div class="input-group">
+                    <label class="input-label">Full name</label>
+                    <input type="text" class="input" placeholder="Amie Diland" value="Amie Diland">
+                  </div>
+                  <div class="input-group">
+                    <label class="input-label">Email</label>
+                    <input type="email" class="input" placeholder="you@example.cm">
+                  </div>
+                  <div class="input-group">
+                    <label class="input-label">Phone number</label>
+                    <input type="tel" class="input" placeholder="+237 6XX XX XX XX">
+                  </div>
+                  <div class="input-group">
+                    <label class="input-label">Password</label>
+                    <input type="password" class="input" placeholder="At least 8 characters">
+                    <div class="input-hint">Use a mix of letters, numbers, and symbols.</div>
+                  </div>
+                  <div class="input-group">
+                    <label class="input-label">Preferred language</label>
+                    <div class="auth-lang">
+                      <button class="active">English</button>
+                      <button>Français</button>
+                    </div>
+                  </div>
+                  <button class="btn btn-primary" style="margin-top:8px;" data-goto="kyc-intro">Create account</button>
+                  <div class="auth-terms">By creating an account, you agree to VARNIS's Terms of Service and acknowledge our Privacy Policy under Cameroon Law No. 2010/013.</div>
+                </div>
+              </div>
+            </section>
+
+            <!-- ============ 04 KYC INTRO ============ -->
+            <section class="screen" data-screen="kyc-intro">
+              <div class="status-bar"><span class="time">9:41</span><span class="indicators"><svg width="16" height="10" viewBox="0 0 16 10" fill="currentColor"><rect x="0" y="4" width="3" height="6" rx="1"/><rect x="4" y="2" width="3" height="8" rx="1"/><rect x="8" y="0" width="3" height="10" rx="1"/></svg></span></div>
+              <div class="screen-body">
+                <div class="kyc-hero">
+                  <div class="kyc-icon-wrap">
+                    <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M12 2 L20 6 L20 14 L12 22 L4 14 L4 6 Z"/>
+                      <path d="M9 12 L11 14 L15 10"/>
+                    </svg>
+                  </div>
+                  <div class="kyc-title">Verify your identity</div>
+                  <div class="kyc-subtitle">This helps us keep VARNIS safe from fraud and ensures reports we forward to ANTIC carry a real identity.</div>
+                </div>
+                <div class="kyc-checklist">
+                  <div class="kyc-check">
+                    <div class="kyc-check-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+                    <div class="kyc-check-text">Your CNI (Carte Nationale d'Identité), front and back</div>
+                  </div>
+                  <div class="kyc-check">
+                    <div class="kyc-check-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+                    <div class="kyc-check-text">A well-lit space for a clear selfie</div>
+                  </div>
+                  <div class="kyc-check">
+                    <div class="kyc-check-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+                    <div class="kyc-check-text">About two minutes of your time</div>
+                  </div>
+                  <div class="kyc-check">
+                    <div class="kyc-check-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+                    <div class="kyc-check-text">Data encrypted at rest, per Law No. 2010/013</div>
+                  </div>
+                </div>
+                <div class="kyc-cta">
+                  <button class="btn btn-primary" data-goto="kyc-capture">Start verification</button>
+                  <button class="btn btn-ghost" style="margin-top:8px;" data-goto="dashboard">Skip for now</button>
+                </div>
+              </div>
+            </section>
+
+            <!-- ============ 05 KYC CAPTURE ============ -->
+            <section class="screen" data-screen="kyc-capture">
+              <div class="status-bar"><span class="time">9:41</span><span class="indicators"><svg width="16" height="10" viewBox="0 0 16 10" fill="currentColor"><rect x="0" y="4" width="3" height="6" rx="1"/><rect x="4" y="2" width="3" height="8" rx="1"/><rect x="8" y="0" width="3" height="10" rx="1"/></svg></span></div>
+              <div class="appbar">
+                <button class="appbar-back" data-back><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+                <div class="appbar-title">Capture your CNI</div>
+              </div>
+              <div class="screen-body">
+                <div class="capture-steps">
+                  <div class="capture-step done"></div>
+                  <div class="capture-step active"></div>
+                  <div class="capture-step"></div>
+                </div>
+                <div class="capture-body">
+                  <div style="font-size:15px; font-weight:700; color:var(--gray-900);">Back of your CNI</div>
+                  <div style="font-size:12px; color:var(--gray-500); margin-top:4px;">Step 2 of 3</div>
+                  <div class="capture-target">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.6;">
+                      <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                      <circle cx="12" cy="13" r="4"/>
+                    </svg>
+                  </div>
+                  <div class="capture-instruction">Place the back of your CNI within the frame. Make sure all four corners are visible and text is legible.</div>
+                  <button class="btn btn-primary" data-goto="kyc-processing">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                    Take photo
+                  </button>
+                </div>
+              </div>
+            </section>
+
+            <!-- ============ 06 KYC PROCESSING ============ -->
+            <section class="screen" data-screen="kyc-processing">
+              <div class="status-bar"><span class="time">9:41</span><span class="indicators"><svg width="16" height="10" viewBox="0 0 16 10" fill="currentColor"><rect x="0" y="4" width="3" height="6" rx="1"/><rect x="4" y="2" width="3" height="8" rx="1"/><rect x="8" y="0" width="3" height="10" rx="1"/></svg></span></div>
+              <div class="screen-body">
+                <div class="processing-body">
+                  <div class="processing-pulse">
+                    <div class="processing-pulse-inner">
+                      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="8" r="4"/>
+                        <path d="M4 21v-2a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v2"/>
+                      </svg>
+                    </div>
+                  </div>
+                  <div class="processing-title">Reviewing your documents</div>
+                  <div class="processing-subtitle">A moderator is checking your CNI and selfie right now. Keep the app open — this screen will update automatically.</div>
+                  <div class="processing-steps">
+                    <div class="processing-step done">
+                      <div class="processing-step-dot"></div>
+                      <div class="processing-step-text">Documents submitted</div>
+                    </div>
+                    <div class="processing-step done">
+                      <div class="processing-step-dot"></div>
+                      <div class="processing-step-text">Queued for review</div>
+                    </div>
+                    <div class="processing-step active">
+                      <div class="processing-step-dot"></div>
+                      <div class="processing-step-text">Verifying CNI &amp; face match</div>
+                    </div>
+                  </div>
+                  <div style="margin-top:24px;">
+                    <button class="btn btn-ghost" data-goto="kyc-approved">Continue (demo)</button>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <!-- ============ 07 KYC APPROVED ============ -->
+            <section class="screen" data-screen="kyc-approved">
+              <div class="status-bar"><span class="time">9:41</span><span class="indicators"><svg width="16" height="10" viewBox="0 0 16 10" fill="currentColor"><rect x="0" y="4" width="3" height="6" rx="1"/><rect x="4" y="2" width="3" height="8" rx="1"/><rect x="8" y="0" width="3" height="10" rx="1"/></svg></span></div>
+              <div class="screen-body">
+                <div class="kyc-hero">
+                  <div class="kyc-icon-wrap success" style="animation: splashPulse 2.5s ease-in-out infinite;">
+                    <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M20 6L9 17l-5-5"/>
+                    </svg>
+                  </div>
+                  <div class="kyc-title">You're verified!</div>
+                  <div class="kyc-subtitle">Your identity is confirmed. You now have full access to reports, recovery, and community features.</div>
+                </div>
+                <div style="padding: 0 24px 24px;">
+                  <div class="card" style="background: var(--success-light); border-color: transparent;">
+                    <div style="display:flex; align-items:center; gap:10px;">
+                      <div style="width:40px; height:40px; border-radius:10px; background:var(--success); display:grid; place-items:center; color:white;">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 L20 6 L20 14 L12 22 L4 14 L4 6 Z"/></svg>
+                      </div>
+                      <div style="flex:1;">
+                        <div style="font-size:13px; font-weight:700; color:var(--success-dark);">Trust score: High</div>
+                        <div style="font-size:11px; color:var(--success-dark); opacity:0.85;">Verified on ${new Date().toLocaleDateString()}</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="kyc-cta">
+                  <button class="btn btn-primary" data-goto="dashboard">Continue to VARNIS</button>
+                </div>
+              </div>
+            </section>
+
+            <!-- ============ 08 DASHBOARD ============ -->
+            <section class="screen" data-screen="dashboard">
+              <div class="status-bar"><span class="time">9:41</span><span class="indicators"><svg width="16" height="10" viewBox="0 0 16 10" fill="currentColor"><rect x="0" y="4" width="3" height="6" rx="1"/><rect x="4" y="2" width="3" height="8" rx="1"/><rect x="8" y="0" width="3" height="10" rx="1"/></svg></span></div>
+              <div class="screen-body">
+                <div class="dashboard">
+                  <div class="dashboard-header">
+                    <div class="dashboard-brand">
+                      <div class="dashboard-brand-logo">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 L20 6 L20 14 L12 22 L4 14 L4 6 Z"/></svg>
+                      </div>
+                      <div class="dashboard-brand-text">VARNIS</div>
+                    </div>
+                    <button class="dashboard-bell" data-goto="notifications">
+                      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                    </button>
+                  </div>
+                  <div class="dashboard-greeting">
+                    <div class="dashboard-hello">Hello, Amie 👋</div>
+                    <div class="dashboard-sub">Your city's safety is our priority today.</div>
+                  </div>
+                  <div class="summary-card">
+                    <div class="summary-header">
+                      <div class="summary-title">Reporting Summary</div>
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--gray-400);"><path d="M3 3v18h18"/><path d="M18.7 8L14 12.7 10 8.7 3 15.7"/></svg>
+                    </div>
+                    <div class="summary-stats">
+                      <div>
+                        <div class="summary-stat-value" style="color:var(--primary);">12</div>
+                        <div class="summary-stat-label">Resolved Cases</div>
+                      </div>
+                      <div>
+                        <div class="summary-stat-value" style="color:var(--gray-400);">3</div>
+                        <div class="summary-stat-label">Pending Reports</div>
+                      </div>
+                    </div>
+                    <span class="chip chip-success"><span style="width:5px; height:5px; background:currentColor; border-radius:50%; display:inline-block; margin-right:5px;"></span>80% Success Rate</span>
+                  </div>
+                  <button class="dashboard-big-card primary" data-goto="report">
+                    <div class="dashboard-big-card-icon">
+                      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/></svg>
+                    </div>
+                    <div class="dashboard-big-card-title">Report Incident</div>
+                    <div class="dashboard-big-card-desc">
+                      <div class="dashboard-big-card-desc-text">Immediate help or reporting for civic issues.</div>
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </div>
+                  </button>
+                  <button class="dashboard-big-card success" data-goto="recovery-home">
+                    <div class="dashboard-big-badge">NEW</div>
+                    <div class="dashboard-big-card-icon">
+                      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 L20 6 L20 14 L12 22 L4 14 L4 6 Z"/></svg>
+                    </div>
+                    <div class="dashboard-big-card-title">Recovery Center</div>
+                    <div class="dashboard-big-card-desc">
+                      <div class="dashboard-big-card-desc-text">Report a lost device or check an IMEI before buying.</div>
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </div>
+                  </button>
+                  <div class="quick-row">
+                    <button class="quick-card" data-goto="learning">
+                      <div class="quick-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+                      <div class="quick-card-title">Safety Lessons</div>
+                      <div class="quick-card-sub">Learn how to stay safe</div>
+                    </button>
+                    <button class="quick-card" data-goto="community">
+                      <div class="quick-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+                      <div class="quick-card-title">Community</div>
+                      <div class="quick-card-sub">Local discussions</div>
+                    </button>
+                    <button class="quick-card" data-goto="support">
+                      <div class="quick-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></div>
+                      <div class="quick-card-title">Support</div>
+                      <div class="quick-card-sub">FAQ, chat, call</div>
+                    </button>
+                  </div>
+                  <div class="activity-card">
+                    <div class="activity-header">
+                      <div class="activity-title">Recent Activity</div>
+                      <a href="#" style="font-size:12px; color:var(--primary); font-weight:600;" data-goto="notifications">View All</a>
+                    </div>
+                    <div class="activity-item">
+                      <div class="activity-icon" style="background:var(--success-light); color:var(--success);">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg>
+                      </div>
+                      <div class="activity-item-body">
+                        <div class="activity-item-title">Report CV-6681D49 approved</div>
+                        <div class="activity-item-sub">Your phishing SMS report was verified.</div>
+                      </div>
+                    </div>
+                    <div class="activity-item">
+                      <div class="activity-icon" style="background:var(--primary-light); color:var(--primary);">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                      </div>
+                      <div class="activity-item-body">
+                        <div class="activity-item-title">New reply to your community tip</div>
+                        <div class="activity-item-sub">Officer Jean-Pierre commented on your post.</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="neighborhood-banner">
+                    <div>
+                      <div class="neighborhood-label">NEIGHBORHOOD WATCH</div>
+                      <div class="neighborhood-title">Protecting Douala-V together</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="bottom-nav">
+                <button class="bottom-nav-item active">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                  <span>Home</span>
+                </button>
+                <button class="bottom-nav-item" data-goto="community">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                  <span>Community</span>
+                </button>
+                <button class="bottom-nav-item" data-goto="learning">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+                  <span>Learn</span>
+                </button>
+                <button class="bottom-nav-item" data-goto="profile">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                  <span>Profile</span>
+                </button>
+              </div>
+            </section>
+
+            <!-- Screens continue in next file part -->
+          </div>
+        </div>
+        <div class="home-indicator"></div>
+      </div>
+    </div>
+
+    <!-- ============================== RIGHT: CONTROLS ============================== -->
+    <aside class="controls-sidebar">
+      <div class="controls-header">
+        <div class="controls-title">Prototype</div>
+        <div class="controls-desc">Click any screen on the left to jump. Buttons inside the phone navigate for real.</div>
+      </div>
+
+      <div class="controls-section">
+        <div class="controls-section-label">Presentation</div>
+        <button class="control-btn primary" id="btn-play">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"/></svg>
+          Auto-play pitch flow
+        </button>
+        <button class="control-btn" id="btn-reset">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+          Restart at splash
+        </button>
+      </div>
+
+      <div class="controls-section">
+        <div class="controls-section-label">Navigation</div>
+        <button class="control-btn" id="btn-back">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+          Go back
+        </button>
+      </div>
+
+      <div class="shortcuts">
+        <div><kbd>Space</kbd> auto-play</div>
+        <div><kbd>←</kbd> go back</div>
+        <div><kbd>Esc</kbd> stop playing</div>
+        <div><kbd>R</kbd> restart</div>
+      </div>
+    </aside>
+  </div>
+
+  <!-- Auto-play badge -->
+  <div class="playing-badge" id="playing-badge">
+    <span class="dot"></span>
+    <span>Presenting — <kbd style="padding:1px 5px; background:rgba(255,255,255,0.1); border-radius:3px; font-size:10px;">Esc</kbd> to stop</span>
+  </div>
+
+  <script src="screens-extra.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
