@@ -6,9 +6,23 @@ import pytest
 from django.test import override_settings
 from rest_framework.test import APIClient
 
+from apps.notifications.admin import EmailLogAdmin
 from apps.notifications.models import EmailLog
 
 pytestmark = pytest.mark.django_db
+
+
+def test_email_log_admin_uses_existing_model_fields():
+    fields = [
+        *EmailLogAdmin.list_display,
+        *EmailLogAdmin.search_fields,
+        *EmailLogAdmin.readonly_fields,
+    ]
+
+    for field in fields:
+        assert hasattr(
+            EmailLog, field
+        ), f"EmailLogAdmin references unknown field {field}"
 
 
 def _build_svix_headers(body: bytes, secret_raw: bytes = b"test-secret"):

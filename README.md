@@ -35,6 +35,8 @@ docker compose exec web python manage.py createsuperuser
 ```
 
 ```
+http://localhost:8000/admin/
+http://localhost:8000/api/docs
 https://varnis.up.railway.app/api/v1/   for all version 1 api      
 https://varnis.up.railway.app/api/docs/    the  api doc page      
 https://varnis.up.railway.app/admin/    admin dashboard

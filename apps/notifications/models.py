@@ -1,42 +1,8 @@
+
 import uuid
 
 from django.conf import settings
 from django.db import models
-
-
-class EmailLog(models.Model):
-    recipient = models.EmailField(max_length=254)
-    subject = models.CharField(max_length=255)
-    template_name = models.CharField(max_length=100, blank=True)
-    provider_message_id = models.CharField(max_length=100, blank=True, null=True)
-    STATUS_PENDING = "pending"
-    STATUS_SENT = "sent"
-    STATUS_DELIVERED = "delivered"
-    STATUS_BOUNCED = "bounced"
-    STATUS_FAILED = "failed"
-    STATUS_CHOICES = [
-        (STATUS_PENDING, "Pending"),
-        (STATUS_SENT, "Sent"),
-        (STATUS_DELIVERED, "Delivered"),
-        (STATUS_BOUNCED, "Bounced"),
-        (STATUS_FAILED, "Failed"),
-    ]
-    status = models.CharField(
-        max_length=20, choices=STATUS_CHOICES, default=STATUS_PENDING
-    )
-    error_message = models.TextField(blank=True, null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        db_table = "email_logs"
-        indexes = [
-            models.Index(fields=["status"], name="email_logs_status_e3be55_idx"),
-            models.Index(fields=["recipient"], name="email_logs_recipie_df5c2b_idx"),
-        ]
-
-    def __str__(self):
-        return f"{self.recipient} — {self.subject}"
 
 
 class NotificationCategory(models.TextChoices):
@@ -46,6 +12,45 @@ class NotificationCategory(models.TextChoices):
     LEARNING = "LEARNING", "Learning"
     NATIONAL_UPDATE = "NATIONAL_UPDATE", "National Update"
     SYSTEM = "SYSTEM", "System"
+
+
+class EmailStatus(models.TextChoices):
+    SENT = "SENT", "Sent"
+    FAILED = "FAILED", "Failed"
+
+
+class EmailLog(models.Model):
+    """
+    One row per outbound email attempt via Resend. Written by
+    notifications/services.py._send_email(). Kept separate from
+    Notification since not every notification sends an email, and this
+    is specifically an audit trail of provider calls (useful for
+    debugging delivery issues without digging through app logs).
+    """
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    notification = models.ForeignKey(
+        "Notification",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="email_logs",
+    )
+    to_email = models.EmailField()
+    subject = models.CharField(max_length=255)
+    provider = models.CharField(max_length=20, default="RESEND")
+    provider_message_id = models.CharField(max_length=100, blank=True)
+    status = models.CharField(max_length=10, choices=EmailStatus.choices)
+    error_message = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+        verbose_name = "Email Log"
+        verbose_name_plural = "Email Logs"
+
+    def __str__(self):
+        return f"{self.to_email} — {self.subject} ({self.status})"
 
 
 class Notification(models.Model):

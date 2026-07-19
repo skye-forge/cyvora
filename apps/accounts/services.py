@@ -66,9 +66,38 @@ def authenticate_user(*, email: str, password: str) -> User:
     return user
 
 
-def issue_tokens(user: User) -> dict:
+def issue_tokens(user: "User", request=None) -> dict:
+    """
+    Same as before (still sets the 'role' claim, same return shape), with
+    one addition: pass `request` when this is called from an actual login
+    (password, OTP verify, biometric, Google OAuth callback, etc.) and a
+    DeviceSession gets recorded automatically — IP, device, network type,
+    for the security investigation trail.
+
+    `request` is optional and defaults to None so this doesn't break any
+    call site you haven't updated yet (e.g. a token-refresh path that
+    isn't a "login" and shouldn't create a new session row). Update each
+    real login call site to pass request; leave non-login call sites as
+    they are.
+    """
     refresh = RefreshToken.for_user(user)
-    refresh["role"] = user.role
+    refresh["role"] = user.role  
+
+    if request is not None:
+        from apps.security.services import record_login_session
+
+        record_login_session(
+            user=user,
+            request=request,
+            refresh_token_jti=refresh["jti"],
+            device_model=(
+                request.data.get("device_model", "") if hasattr(request, "data") else ""
+            ),
+            app_version=(
+                request.data.get("app_version", "") if hasattr(request, "data") else ""
+            ),
+        )
+
     return {
         "access": str(refresh.access_token),
         "refresh": str(refresh),

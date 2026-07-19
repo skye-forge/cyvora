@@ -1,20 +1,19 @@
-
+# LOCATION: notifications/services.py
 #
 # Single entry point every other app should call: notify_user(user, event, context).
-# This is what kyc/services.py, tracking/services.py, and payments/services.py
-# import instead of touching fcm_client or the email client directly — keeps
-# channel choice (push vs email vs in-app-only) out of the business apps.
+# This is what apps/kyc/services.py, apps/tracking/services.py, and
+# apps/payments/services.py import instead of touching fcm_client or the
+# email client directly — keeps channel choice (push vs email vs in-app-only)
+# out of the business apps.
 #
-# ASSUMPTION FLAGGED: this file calls integrations.email.client.send_email(
-# to_email, subject, body). If your actual function name/signature in
-# integrations/email/client.py differs, update _send_email() below —
-# everything else in this file is unaffected.
+# Email goes through integrations/email/client.py's ResendClient.send(
+# to, subject, html, from_email=None) — confirmed against the real file.
 
 import logging
 
 from django.conf import settings
 
-from .models import Notification, NotificationCategory
+from .models import Notification, NotificationCategory, EmailLog, EmailStatus
 
 logger = logging.getLogger(__name__)
 
@@ -132,7 +131,7 @@ def notify_user(*, user, event: str, context: dict = None) -> Notification:
     notification.push_sent = push_ok
 
     if send_email:
-        email_ok = _send_email(user, title, body)
+        email_ok = _send_email(user, title, body, notification)
         notification.email_sent = email_ok
 
     notification.save(update_fields=["push_sent", "email_sent"])
@@ -152,16 +151,35 @@ def _send_push(user, title: str, body: str, context: dict) -> bool:
     )
 
 
-def _send_email(user, subject: str, body: str) -> bool:
+def _send_email(user, subject: str, body: str, notification: Notification) -> bool:
     if not getattr(user, "email", None):
         return False
-    try:
-        from integrations.email.client import (
-            send_email,
-        )  # ASSUMPTION: confirm this signature
 
-        send_email(user.email, subject, body)
+    from integrations.email.client import ResendClient
+
+    # body is currently plain text; wrap it minimally as HTML until real
+    # templates land in integrations/resend/templates.py per the architecture doc.
+    html = f"<p>{body}</p>"
+
+    try:
+        response = ResendClient.send(to=user.email, subject=subject, html=html)
+        EmailLog.objects.create(
+            notification=notification,
+            to_email=user.email,
+            subject=subject,
+            provider="RESEND",
+            provider_message_id=response.get("id", ""),
+            status=EmailStatus.SENT,
+        )
         return True
-    except Exception as exc:  # noqa: BLE001
+    except Exception as exc:  # noqa: BLE001 — must never break the calling transaction
         logger.error("Email send failed for %s: %s", user.email, exc)
+        EmailLog.objects.create(
+            notification=notification,
+            to_email=user.email,
+            subject=subject,
+            provider="RESEND",
+            status=EmailStatus.FAILED,
+            error_message=str(exc),
+        )
         return False

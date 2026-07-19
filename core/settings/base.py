@@ -56,6 +56,7 @@ LOCAL_APPS = [
     "apps.leaderboard",
     "apps.kyc",
     "apps.tracking",
+    "apps.security",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS

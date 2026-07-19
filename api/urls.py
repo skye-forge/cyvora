@@ -37,6 +37,9 @@ def api_root(request):
 urlpatterns = [
     path("", api_root, name="api-root"),
     path("auth/", include("apps.accounts.urls")),
+    path("kyc/", include("apps.kyc.urls")),
+    path("tracking/", include("apps.tracking.urls")),
+    path("leaderboard/", include("apps.leaderboard.urls")),
     path("learning/", include("apps.learning.urls")),
     path("incidents/", include("apps.incidents.urls")),
     path("webhooks/", include("apps.notifications.urls")),
