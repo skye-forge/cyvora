@@ -15,7 +15,7 @@ environ.Env.read_env(str(BASE_DIR / ".env"))
 
 SECRET_KEY = env("SECRET_KEY", default="insecure-dev-key")
 DEBUG = env.bool("DEBUG", default=False)
-ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["localhost", "127.0.0.1"])
+ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["localhost", "127.0.0.1", "healthcheck.railway.app", "varnis.up.railway.app"])
 STATIC_ROOT = BASE_DIR / "staticfiles"
 # ---------------------------------------------------------------------------
 # Applications
