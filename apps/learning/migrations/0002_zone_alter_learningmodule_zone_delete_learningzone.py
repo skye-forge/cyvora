@@ -12,6 +12,10 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
+         migrations.DeleteModel(
+            name='LearningZone',
+        ),
+
         migrations.CreateModel(
             name='Zone',
             fields=[
@@ -42,7 +46,5 @@ class Migration(migrations.Migration):
             name='zone',
             field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='modules', to='learning.zone'),
         ),
-        migrations.DeleteModel(
-            name='LearningZone',
-        ),
+       
     ]
