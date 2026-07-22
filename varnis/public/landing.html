@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VARNIS — Cameroon's Civic Cybersecurity Platform</title>
+<link rel="icon" type="image/jpeg" href="../assets/img/varnis-logo.jpeg">
+<meta name="description" content="VARNIS is Cameroon's bilingual, gamified cybersecurity platform: learn to spot scams, report incidents, track national threats, and earn verifiable safety certificates.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700;900&family=Work+Sans:wght@500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/tailwind-output.css">
+<link rel="stylesheet" href="../assets/css/site.css">
+<link rel="manifest" href="../manifest.json">
+</head>
+<body class="bg-background text-on-background">
+
+<!-- ============ Top bar ============ -->
+<header class="sticky top-0 z-40 border-b border-outline-variant bg-background/95 backdrop-blur">
+  <div class="mx-auto flex h-16 max-w-container items-center justify-between px-6 lg:px-10">
+    <a href="landing.html" class="flex items-center gap-3">
+      <span class="grid h-9 w-9 place-items-center overflow-hidden rounded-md bg-white"><img src="../assets/img/varnis-logo.jpeg" alt="VARNIS" class="h-full w-full object-contain p-0.5"></span>
+      <span class="leading-tight">
+        <span class="block text-body-lg font-bold text-primary">VARNIS</span>
+        <span class="block text-label-md text-on-surface-variant">Civic Safety Portal</span>
+      </span>
+    </a>
+    <nav class="hidden items-center gap-8 text-label-lg text-on-surface-variant md:flex">
+      <a href="#pillars" class="hover:text-primary">What it does</a>
+      <a href="#how" class="hover:text-primary">How it works</a>
+      <a href="#levels" class="hover:text-primary">Progression</a>
+      <a href="monitor.html" class="hover:text-primary">National monitor</a>
+    </nav>
+    <div class="flex items-center gap-2">
+      <button type="button" id="lang-toggle" class="cyv-iconbtn" aria-label="Switch language" title="Français / English"><span class="material-symbols-outlined">language</span></button>
+      <a href="login.html" class="btn btn-outline btn-sm max-sm:hidden">Sign in</a>
+      <a href="register.html" class="btn btn-primary btn-sm">Get started</a>
+    </div>
+  </div>
+</header>
+
+<main>
+  <!-- ============ Hero ============ -->
+  <section class="relative overflow-hidden bg-primary text-on-primary">
+    <div class="mx-auto grid max-w-container items-center gap-12 px-6 py-16 lg:grid-cols-2 lg:px-10 lg:py-24">
+      <div>
+        <span class="chip bg-secondary-fixed/20 text-secondary-fixed">Republic of Cameroon · ANTIC platform</span>
+        <h1 class="mt-5 text-display-lg leading-tight">Protect your cyberspace. Report scams. Stay one step ahead.</h1>
+        <p class="mt-5 max-w-xl text-body-lg text-on-primary/80">VARNIS is Cameroon's bilingual, gamified cybersecurity platform. Learn to spot mobile-money fraud, phishing and AI scams, report incidents in minutes, and track threats across all 10 regions.</p>
+        <div class="mt-8 flex flex-wrap gap-3">
+          <a href="register.html" class="btn bg-on-primary text-primary hover:bg-white">Create free account <span class="material-symbols-outlined text-[20px]">arrow_forward</span></a>
+          <a href="login.html" class="btn border border-on-primary/30 text-on-primary hover:bg-white/10">I already have an account</a>
+        </div>
+        <p class="mt-4 text-label-md text-on-primary/60">Free for citizens · Works in French &amp; English · No app store needed</p>
+      </div>
+
+      <!-- Hero stat panel -->
+      <div class="rounded-md border border-on-primary/15 bg-on-primary/5 p-6 lg:p-8">
+        <p class="text-label-lg uppercase tracking-wider text-on-primary/60">This month across Cameroon</p>
+        <div class="mt-5 grid grid-cols-2 gap-4">
+          <div class="rounded-md bg-on-primary/10 p-4"><p class="text-display-lg leading-none">1,284</p><p class="mt-2 text-label-md text-on-primary/70">Incidents reported</p></div>
+          <div class="rounded-md bg-on-primary/10 p-4"><p class="text-display-lg leading-none text-secondary-fixed">28%</p><p class="mt-2 text-label-md text-on-primary/70">Mobile-money fraud</p></div>
+          <div class="rounded-md bg-on-primary/10 p-4"><p class="text-headline-lg leading-none">Littoral</p><p class="mt-2 text-label-md text-on-primary/70">Most-targeted region</p></div>
+          <div class="rounded-md bg-on-primary/10 p-4"><p class="text-headline-lg leading-none">482M</p><p class="mt-2 text-label-md text-on-primary/70">FCFA estimated loss</p></div>
+        </div>
+        <a href="monitor.html" class="mt-5 inline-flex items-center gap-1 text-label-lg text-secondary-fixed hover:underline">See the live national monitor <span class="material-symbols-outlined text-[18px]">arrow_forward</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Trust strip ============ -->
+  <section class="border-b border-outline-variant bg-surface-container-low">
+    <div class="mx-auto flex max-w-container flex-wrap items-center justify-center gap-x-10 gap-y-3 px-6 py-6 text-label-lg text-on-surface-variant lg:px-10">
+      <span class="flex items-center gap-2"><span class="material-symbols-outlined text-secondary text-[20px]">shield</span> Aligned to Law No. 2010/012</span>
+      <span class="flex items-center gap-2"><span class="material-symbols-outlined text-secondary text-[20px]">lock</span> CPDP data-protection compliant</span>
+      <span class="flex items-center gap-2"><span class="material-symbols-outlined text-secondary text-[20px]">translate</span> Fully bilingual FR / EN</span>
+      <span class="flex items-center gap-2"><span class="material-symbols-outlined text-secondary text-[20px]">wifi</span> Works on 3G &amp; offline</span>
+    </div>
+  </section>
+
+  <!-- ============ Four pillars ============ -->
+  <section id="pillars" class="mx-auto max-w-container px-6 py-16 lg:px-10 lg:py-24">
+    <div class="max-w-2xl">
+      <span class="text-label-lg uppercase tracking-wider text-secondary">The four pillars</span>
+      <h2 class="mt-2 text-headline-lg text-primary">Everything you need to stay safe online, in one place</h2>
+      <p class="page-sub">From your first lesson to a verifiable certificate — and a national picture that gets sharper with every report.</p>
+    </div>
+    <div class="mt-10 grid grid-cols-1 gap-6 md:grid-cols-2">
+      <div class="card card-hover">
+        <span class="grid h-12 w-12 place-items-center rounded-md bg-primary/10 text-primary"><span class="material-symbols-outlined">school</span></span>
+        <h3 class="mt-4 text-headline-md text-on-surface">Learn</h3>
+        <p class="mt-2 text-body-md text-on-surface-variant">Eight gamified zones covering real Cameroonian threats. Earn XP, keep streaks, and climb from Novice to Patriote Digital.</p>
+        <a href="register.html" class="mt-4 inline-flex items-center gap-1 text-label-lg text-primary hover:underline">Start learning <span class="material-symbols-outlined text-[18px]">arrow_forward</span></a>
+      </div>
+      <div class="card card-hover">
+        <span class="grid h-12 w-12 place-items-center rounded-md bg-primary/10 text-primary"><span class="material-symbols-outlined">campaign</span></span>
+        <h3 class="mt-4 text-headline-md text-on-surface">Report</h3>
+        <p class="mt-2 text-body-md text-on-surface-variant">Report a scam in minutes across nine categories, with optional evidence. Submit named or anonymously — your privacy is protected.</p>
+        <a href="report-incident.html" class="mt-4 inline-flex items-center gap-1 text-label-lg text-primary hover:underline">Report an incident <span class="material-symbols-outlined text-[18px]">arrow_forward</span></a>
+      </div>
+      <div class="card card-hover">
+        <span class="grid h-12 w-12 place-items-center rounded-md bg-primary/10 text-primary"><span class="material-symbols-outlined">public</span></span>
+        <h3 class="mt-4 text-headline-md text-on-surface">Monitor</h3>
+        <p class="mt-2 text-body-md text-on-surface-variant">A public dashboard with a live heat map of all 10 regions, trending threats, and a feed of the latest anonymised reports.</p>
+        <a href="monitor.html" class="mt-4 inline-flex items-center gap-1 text-label-lg text-primary hover:underline">Open the monitor <span class="material-symbols-outlined text-[18px]">arrow_forward</span></a>
+      </div>
+      <div class="card card-hover">
+        <span class="grid h-12 w-12 place-items-center rounded-md bg-primary/10 text-primary"><span class="material-symbols-outlined">workspace_premium</span></span>
+        <h3 class="mt-4 text-headline-md text-on-surface">Certify</h3>
+        <p class="mt-2 text-body-md text-on-surface-variant">Earn Bronze, Silver and Gold safety certificates. Each is a QR-verifiable PDF anyone can authenticate on a public page.</p>
+        <a href="certificate-verify.html" class="mt-4 inline-flex items-center gap-1 text-label-lg text-primary hover:underline">Verify a certificate <span class="material-symbols-outlined text-[18px]">arrow_forward</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ How it works ============ -->
+  <section id="how" class="bg-surface-container-low">
+    <div class="mx-auto max-w-container px-6 py-16 lg:px-10 lg:py-24">
+      <div class="max-w-2xl">
+        <span class="text-label-lg uppercase tracking-wider text-secondary">How it works</span>
+        <h2 class="mt-2 text-headline-lg text-primary">Up and running in four steps</h2>
+      </div>
+      <ol class="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <li class="card">
+          <span class="step-node is-active">1</span>
+          <h3 class="mt-4 text-label-lg uppercase tracking-wider text-on-surface-variant">Create your account</h3>
+          <p class="mt-1 text-body-md text-on-surface">Sign up with a phone number or email, pick French or English, and take a quick 5-question assessment.</p>
+        </li>
+        <li class="card">
+          <span class="step-node is-active">2</span>
+          <h3 class="mt-4 text-label-lg uppercase tracking-wider text-on-surface-variant">Learn &amp; play</h3>
+          <p class="mt-1 text-body-md text-on-surface">Work through the zones, take the daily challenge, and earn XP and badges as you go.</p>
+        </li>
+        <li class="card">
+          <span class="step-node is-active">3</span>
+          <h3 class="mt-4 text-label-lg uppercase tracking-wider text-on-surface-variant">Report what you see</h3>
+          <p class="mt-1 text-body-md text-on-surface">Spotted a scam? Report it. Every report sharpens the national threat picture for everyone.</p>
+        </li>
+        <li class="card">
+          <span class="step-node is-active">4</span>
+          <h3 class="mt-4 text-label-lg uppercase tracking-wider text-on-surface-variant">Get certified</h3>
+          <p class="mt-1 text-body-md text-on-surface">Reach the tier thresholds and download a QR-verifiable certificate to share with your school or employer.</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ============ Progression levels ============ -->
+  <section id="levels" class="mx-auto max-w-container px-6 py-16 lg:px-10 lg:py-24">
+    <div class="max-w-2xl">
+      <span class="text-label-lg uppercase tracking-wider text-secondary">Progression</span>
+      <h2 class="mt-2 text-headline-lg text-primary">Five levels of digital patriotism</h2>
+      <p class="page-sub">Every lesson, challenge and report moves you up. Compete on national, regional and institutional leaderboards.</p>
+    </div>
+    <div class="mt-10 grid grid-cols-2 gap-4 md:grid-cols-5">
+      <div class="card text-center"><span class="material-symbols-outlined text-outline text-[28px]">looks_one</span><p class="mt-2 text-label-lg text-on-surface">Novice</p></div>
+      <div class="card text-center"><span class="material-symbols-outlined text-primary text-[28px]">looks_two</span><p class="mt-2 text-label-lg text-on-surface">Apprenti</p></div>
+      <div class="card text-center"><span class="material-symbols-outlined text-primary text-[28px]">looks_3</span><p class="mt-2 text-label-lg text-on-surface">Gardien</p></div>
+      <div class="card text-center"><span class="material-symbols-outlined text-secondary text-[28px]">looks_4</span><p class="mt-2 text-label-lg text-on-surface">Sentinelle</p></div>
+      <div class="card border-secondary bg-secondary/5 text-center max-md:col-span-2"><span class="material-symbols-outlined text-secondary text-[28px]">military_tech</span><p class="mt-2 text-label-lg text-secondary">Patriote Digital</p></div>
+    </div>
+  </section>
+
+  <!-- ============ For institutions ============ -->
+  <section class="bg-surface-container-low">
+    <div class="mx-auto grid max-w-container items-center gap-10 px-6 py-16 lg:grid-cols-2 lg:px-10 lg:py-20">
+      <div>
+        <span class="text-label-lg uppercase tracking-wider text-secondary">For institutions</span>
+        <h2 class="mt-2 text-headline-lg text-primary">Bring VARNIS to your school, bank or NGO</h2>
+        <p class="mt-3 text-body-md text-on-surface-variant">Enrol your members, track their progress on a private dashboard, issue branded certificates, and download activity reports — all from one place.</p>
+        <a href="institution.html" class="btn btn-primary mt-6">Explore institution features</a>
+      </div>
+      <ul class="grid grid-cols-1 gap-3 sm:grid-cols-2">
+        <li class="card flex items-start gap-3"><span class="material-symbols-outlined text-secondary">group</span><p class="text-body-md text-on-surface">Enrol and manage your members in bulk</p></li>
+        <li class="card flex items-start gap-3"><span class="material-symbols-outlined text-secondary">insights</span><p class="text-body-md text-on-surface">Track completion and scores by cohort</p></li>
+        <li class="card flex items-start gap-3"><span class="material-symbols-outlined text-secondary">badge</span><p class="text-body-md text-on-surface">Issue certificates carrying your logo</p></li>
+        <li class="card flex items-start gap-3"><span class="material-symbols-outlined text-secondary">description</span><p class="text-body-md text-on-surface">Download progress and activity reports</p></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============ Final CTA ============ -->
+  <section class="mx-auto max-w-container px-6 py-16 lg:px-10 lg:py-24">
+    <div class="card card-lg overflow-hidden bg-primary text-center text-on-primary">
+      <h2 class="mx-auto max-w-2xl text-headline-lg">Cameroon's cyberspace is safer when we protect it together.</h2>
+      <p class="mx-auto mt-3 max-w-xl text-body-lg text-on-primary/80">Join thousands of citizens learning, reporting and staying ahead of online threats.</p>
+      <div class="mt-8 flex flex-wrap justify-center gap-3">
+        <a href="register.html" class="btn bg-on-primary text-primary hover:bg-white">Create your free account</a>
+        <a href="login.html" class="btn border border-on-primary/30 text-on-primary hover:bg-white/10">Sign in</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ============ Footer ============ -->
+<footer class="border-t border-outline-variant bg-surface-container-low">
+  <div class="mx-auto flex max-w-container flex-col gap-4 px-6 py-8 text-label-md text-on-surface-variant sm:flex-row sm:items-center sm:justify-between lg:px-10">
+    <div class="flex items-center gap-2">
+      <span class="text-body-lg font-bold text-primary">VARNIS</span>
+      <span>· Civic Safety Portal · Republic of Cameroon</span>
+    </div>
+    <nav class="flex flex-wrap gap-6">
+      <a href="support.html" class="hover:text-primary">Support</a>
+      <a href="certificate-verify.html" class="hover:text-primary">Verify a certificate</a>
+      <a href="monitor.html" class="hover:text-primary">National monitor</a>
+      <a href="login.html" class="hover:text-primary">Sign in</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="../assets/js/config.js"></script>
+<script src="../assets/js/storage.js"></script>
+<script src="../assets/js/i18n.js"></script>
+<script>
+  // Language toggle: reuse the shared i18n helper if present.
+  (function () {
+    var btn = document.getElementById("lang-toggle");
+    if (!btn) return;
+    btn.addEventListener("click", function () {
+      if (typeof window.getCurrentLanguage === "function" && typeof window.setLanguage === "function") {
+        window.setLanguage(window.getCurrentLanguage() === "fr" ? "en" : "fr");
+      }
+    });
+  })();
+</script>
+</body>
+</html>

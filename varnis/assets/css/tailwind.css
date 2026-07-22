@@ -1,0 +1,142 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================================
+   Varnis — component layer
+   Institutional Modernism: Deep Trust Blue rail, white tonal
+   cards with 1px outline (no heavy shadows), Signal Green accents.
+   Every reusable surface from the reference comps lives here so
+   the 28 pages stay byte-consistent.
+   ============================================================ */
+@layer base {
+  html { -webkit-text-size-adjust: 100%; }
+  body { @apply bg-background text-on-background font-sans antialiased; }
+  :focus-visible { @apply outline-none ring-2 ring-primary/40 ring-offset-2 ring-offset-background rounded; }
+  /* Fail-safe: if JS never runs, content must still be visible.
+     site.css sets .reveal { opacity:0 } for the animation; without JS to
+     add .in-view, this keeps the page usable. */
+  .no-js .reveal, html:not(.js) .reveal { opacity: 1 !important; transform: none !important; }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+    .reveal { opacity: 1 !important; transform: none !important; }
+  }
+}
+
+@layer components {
+
+  /* ---------- App frame ---------- */
+  .cyv-shell { @apply min-h-screen bg-background; }
+  .cyv-rail {
+    @apply fixed left-0 top-0 z-40 flex h-screen w-64 flex-col
+           bg-primary text-on-primary
+           max-lg:-translate-x-full max-lg:transition-transform max-lg:duration-300;
+  }
+  .cyv-rail.is-open { @apply max-lg:translate-x-0; }
+  /* Admin (Management Platform) rail variant — same navy, green active accent */
+  .cyv-rail-admin .cyv-nav-item.is-active { @apply border-l-4 border-secondary bg-white/10; }
+  .cyv-main { @apply ml-64 min-h-screen max-lg:ml-0; }
+  .cyv-canvas { @apply mx-auto w-full max-w-container px-6 py-8 lg:px-10 lg:py-10; }
+
+  /* ---------- Top bar ---------- */
+  .cyv-topbar {
+    @apply sticky top-0 z-30 flex h-16 items-center gap-4 border-b border-outline-variant
+           bg-background/95 px-6 backdrop-blur lg:px-10;
+  }
+  .cyv-search {
+    @apply flex h-10 flex-1 items-center gap-2 rounded-full border border-outline-variant
+           bg-surface-container-low px-4 text-on-surface-variant
+           focus-within:border-primary;
+  }
+  .cyv-search input { @apply w-full bg-transparent text-body-md text-on-surface outline-none placeholder:text-outline; }
+  .cyv-iconbtn {
+    @apply relative grid h-10 w-10 place-items-center rounded-full text-on-surface-variant
+           transition-colors hover:bg-surface-container hover:text-on-surface;
+  }
+
+  /* ---------- Rail navigation ---------- */
+  .cyv-brand { @apply flex items-center gap-3 px-6 pb-2 pt-6; }
+  .cyv-nav { @apply flex flex-1 flex-col gap-1 overflow-y-auto px-3 py-4; }
+  .cyv-nav-item {
+    @apply flex items-center gap-3 rounded-md px-3 py-2.5 text-label-lg text-on-primary/70
+           transition-colors hover:bg-white/10 hover:text-on-primary;
+  }
+  .cyv-nav-item .material-symbols-outlined { @apply text-[22px]; }
+  .cyv-nav-item.is-active {
+    @apply border-l-4 border-secondary-fixed bg-white/10 pl-2 font-semibold text-on-primary;
+  }
+  .cyv-rail-foot { @apply mt-auto flex flex-col gap-1 px-3 pb-5; }
+  .cyv-emergency {
+    @apply mx-0 mb-3 flex items-center justify-center gap-2 rounded-md bg-secondary px-4 py-3
+           text-label-lg font-semibold text-on-secondary transition
+           hover:brightness-110 active:scale-[0.99];
+  }
+
+  /* ---------- Buttons ---------- */
+  .btn { @apply inline-flex items-center justify-center gap-2 rounded px-5 py-2.5 text-label-lg font-semibold transition active:scale-[0.99] disabled:pointer-events-none disabled:opacity-50; }
+  .btn-primary { @apply bg-primary text-on-primary hover:bg-primary-container; }
+  .btn-outline { @apply border border-primary/30 bg-transparent text-primary hover:bg-primary/5; }
+  .btn-ghost   { @apply text-primary hover:bg-primary/5; }
+  .btn-danger  { @apply bg-error text-on-error hover:brightness-110; }
+  .btn-sm { @apply px-4 py-2 text-label-md; }
+
+  /* ---------- Cards ---------- */
+  .card {
+    @apply rounded-md border border-outline-variant bg-surface-container-lowest p-6
+           transition-shadow;
+  }
+  .card-hover { @apply hover:border-primary hover:shadow-level-2; }
+  .card-lg { @apply p-8; }
+
+  /* ---------- Inputs ---------- */
+  .field-label { @apply mb-1.5 block text-label-lg text-on-surface-variant; }
+  .field {
+    @apply h-12 w-full rounded border border-outline-variant bg-surface-container-lowest px-4
+           text-body-md text-on-surface outline-none transition
+           placeholder:text-outline focus:border-primary focus:ring-2 focus:ring-primary/15;
+  }
+  select.field { @apply appearance-none bg-[length:1.25rem] bg-[right_0.75rem_center] bg-no-repeat pr-10; }
+
+  /* ---------- Status chips (4px radius per DESIGN.md) ---------- */
+  .chip { @apply inline-flex items-center gap-1.5 rounded-sm px-2.5 py-1 text-label-md font-semibold; }
+  .chip-dot { @apply h-1.5 w-1.5 rounded-full; }
+  .chip-secure  { @apply bg-secondary/10 text-secondary; }
+  .chip-review  { @apply bg-primary/10 text-primary; }
+  .chip-pending { @apply bg-outline-variant/40 text-on-surface-variant; }
+  .chip-error   { @apply bg-error/10 text-error; }
+
+  /* ---------- Data tables ---------- */
+  .cyv-table { @apply w-full border-collapse text-left; }
+  .cyv-table thead th {
+    @apply border-b border-outline-variant bg-surface-container-low px-6 py-3
+           text-label-sm uppercase tracking-wider text-on-surface-variant;
+  }
+  .cyv-table tbody td { @apply border-b border-outline-variant px-6 py-4 text-body-md; }
+  .cyv-table tbody tr { @apply transition-colors hover:bg-surface-container-low/60; }
+
+  /* ---------- Stat tiles (solid, from My Reports comp) ---------- */
+  .stat-tile { @apply flex flex-col justify-between rounded-md p-6; }
+  .stat-tile .stat-num { @apply text-display-lg leading-none; }
+  .stat-tile .stat-label { @apply mt-3 text-label-lg; }
+  .stat-navy  { @apply bg-primary text-on-primary; }
+  .stat-green { @apply bg-secondary text-on-secondary; }
+  .stat-dark  { @apply bg-tertiary text-on-tertiary; }
+  .stat-gray  { @apply border border-outline-variant bg-surface-container-high text-on-surface; }
+
+  /* ---------- Section heading ---------- */
+  .breadcrumb { @apply flex items-center gap-2 text-label-lg text-on-surface-variant; }
+  .page-title { @apply text-headline-lg text-primary; }
+  .page-sub   { @apply mt-1 text-body-md text-on-surface-variant; }
+
+  /* ---------- Profile tabs ---------- */
+  .profile-tab { @apply text-on-surface-variant transition-colors hover:bg-surface-container-low; }
+  .profile-tab.is-active { @apply bg-primary/5 font-semibold text-primary; }
+
+  /* ---------- Step rail (Report Incident wizard) ---------- */
+  .step-rail { @apply flex items-center; }
+  .step-node { @apply grid h-9 w-9 shrink-0 place-items-center rounded-full text-label-lg font-semibold; }
+  .step-node.is-done { @apply bg-primary text-on-primary; }
+  .step-node.is-active { @apply bg-primary text-on-primary ring-4 ring-primary/15; }
+  .step-node.is-todo { @apply bg-surface-container-high text-on-surface-variant; }
+  .step-line { @apply mx-2 h-px flex-1 bg-outline-variant; }
+}
