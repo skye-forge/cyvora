@@ -1,5 +1,5 @@
 from .models import Incident
-from integrations.ai.services import analyze_incident
+from apps.ai_engine.services import analyze_incident
 
 # def submit_incident(*, user, validated_data: dict) -> Incident:
 #     is_anonymous = validated_data.get("is_anonymous", False)

@@ -14,24 +14,30 @@ def health_check(request):
 @permission_classes([AllowAny])
 def api_root(request):
     """VARNIS API v1 — available endpoints."""
-    return Response({
-        "auth": "/api/v1/auth/",
-        "learning": "/api/v1/learning/",
-        "quizzes": "/api/v1/quizzes/",
-        "incidents": "/api/v1/incidents/",
-        "certificates": "/api/v1/certificates/",
-        "community": "/api/v1/community/",
-        "dashboard": "/api/v1/dashboard/",
-        "leaderboard": "/api/v1/leaderboard/",
-        "kyc": "/api/v1/kyc/",
-        "tracking": "/api/v1/tracking/",
-        "national_updates": "/api/v1/national-update/",
-        "webhooks": "/api/v1/webhooks/",
-        "health": "/api/v1/health",
-        "docs": "/api/docs/",
-        "admin": "/admin/",
-        "console": "/console/",
-    })
+    return Response(
+        {
+            "auth": "/api/v1/auth/",
+            "learning": "/api/v1/learning/",
+            "quizzes": "/api/v1/quizzes/",
+            "incidents": "/api/v1/incidents/",
+            "certificates": "/api/v1/certificates/",
+            "community": "/api/v1/community/",
+            "dashboard": "/api/v1/dashboard/",
+            "leaderboard": "/api/v1/leaderboard/",
+            "kyc": "/api/v1/kyc/",
+            "tracking": "/api/v1/tracking/",
+            "national_updates": "/api/v1/national-update/",
+            "security": "/api/v1/security/",
+            "legal": "/api/v1/legal/",
+            "payments": "/api/v1/payments/",
+            "webhooks": "/api/v1/webhooks/",
+            "health": "/api/v1/health",
+            "docs": "/api/docs/",
+            "admin": "/admin/",
+            "console": "/console/",
+            "support": "/api/v1/support/",
+        }
+    )
 
 
 urlpatterns = [
@@ -48,5 +54,9 @@ urlpatterns = [
     path("community/", include("apps.community.urls")),
     path("national-update/", include("apps.national_update.urls")),
     path("quizzes/", include("apps.quizzes.urls")),
+    path("security/", include("apps.security.urls")),
+    path("support/", include("apps.support.urls")),
+    path("legal/", include("apps.legal_resources.urls")),
+    path("payments/", include("apps.payments.urls")),
     path("health", health_check, name="health-check"),
 ]

@@ -1,0 +1,5941 @@
+openapi: 3.0.3
+info:
+  title: Varnis API
+  version: 1.0.0
+  description: Varnis — REST API
+paths:
+  /api/v1/:
+    get:
+      operationId: api_v1_retrieve
+      description: VARNIS API v1 — available endpoints.
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /api/v1/auth/login/:
+    post:
+      operationId: api_v1_auth_login_create
+      description: POST /api/v1/auth/login/
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Login'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Login'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Login'
+        required: true
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthSuccessResponse'
+          description: ''
+  /api/v1/auth/me/:
+    get:
+      operationId: api_v1_auth_me_retrieve
+      description: GET /api/v1/auth/me — PATCH /api/v1/auth/me
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthSuccessResponse'
+          description: ''
+    patch:
+      operationId: api_v1_auth_me_partial_update
+      description: GET /api/v1/auth/me — PATCH /api/v1/auth/me
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUpdateProfile'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUpdateProfile'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUpdateProfile'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthSuccessResponse'
+          description: ''
+  /api/v1/auth/refresh/:
+    post:
+      operationId: api_v1_auth_refresh_create
+      description: 'POST /api/v1/auth/refresh — body: {"refresh": "<token>"}'
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefreshTokenRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/RefreshTokenRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/RefreshTokenRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthSuccessResponse'
+          description: ''
+  /api/v1/auth/register/:
+    post:
+      operationId: api_v1_auth_register_create
+      description: POST /api/v1/auth/register/
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Register'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Register'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Register'
+        required: true
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthSuccessResponse'
+          description: ''
+  /api/v1/certificates/mine:
+    get:
+      operationId: api_v1_certificates_mine_list
+      description: 'FR-CERT-04: certificates listed under Profile.'
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedCertificateList'
+          description: ''
+  /api/v1/certificates/pricing/{course_id}:
+    get:
+      operationId: api_v1_certificates_pricing_retrieve
+      description: 'FR-CERT-06: show all active pricing tiers transparently.'
+      parameters:
+      - in: path
+        name: course_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/certificates/purchase:
+    post:
+      operationId: api_v1_certificates_purchase_create
+      description: POST /api/v1/certificates/purchase
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/certificates/verify/{cert_code}:
+    get:
+      operationId: api_v1_certificates_verify_retrieve
+      description: 'FR-CERT-05: public verification link, no auth required.'
+      parameters:
+      - in: path
+        name: cert_code
+        schema:
+          type: string
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /api/v1/community/feed:
+    get:
+      operationId: api_v1_community_feed_list
+      description: 'FR-COM-01/02: chronological feed, filterable by tag or keyword
+        search.'
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedCommunityPostList'
+          description: ''
+  /api/v1/community/posts/{id}/comments:
+    get:
+      operationId: api_v1_community_posts_comments_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    post:
+      operationId: api_v1_community_posts_comments_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/community/posts/{id}/like:
+    post:
+      operationId: api_v1_community_posts_like_create
+      description: POST = like, DELETE = unlike. FR-COM-05.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    delete:
+      operationId: api_v1_community_posts_like_destroy
+      description: POST = like, DELETE = unlike. FR-COM-05.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/community/posts/{id}/report:
+    post:
+      operationId: api_v1_community_posts_report_create
+      description: 'FR-COM-06: flag inappropriate content.'
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/community/tips:
+    post:
+      operationId: api_v1_community_tips_create
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/dashboard/:
+    get:
+      operationId: api_v1_dashboard_retrieve
+      description: 'GET /api/v1/dashboard/ — FR-DASH-01..07: personalized home screen
+        data.'
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DashboardResponse'
+          description: ''
+  /api/v1/health:
+    get:
+      operationId: api_v1_health_retrieve
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /api/v1/incidents/:
+    get:
+      operationId: api_v1_incidents_retrieve
+      description: |-
+        GET /api/v1/incidents/?status=pending — FR-TRK-01, "My Reports"
+        POST /api/v1/incidents/ — FR-INC-01..08, submit a report
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IncidentListEnvelope'
+          description: ''
+    post:
+      operationId: api_v1_incidents_create
+      description: |-
+        GET /api/v1/incidents/?status=pending — FR-TRK-01, "My Reports"
+        POST /api/v1/incidents/ — FR-INC-01..08, submit a report
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubmitIncident'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SubmitIncident'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SubmitIncident'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IncidentDetailEnvelope'
+          description: ''
+  /api/v1/incidents/{incident_id}/:
+    get:
+      operationId: api_v1_incidents_retrieve_2
+      description: GET /api/v1/incidents/{id} — FR-TRK-03/04, full status timeline
+        + evidence.
+      parameters:
+      - in: path
+        name: incident_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IncidentDetailEnvelope'
+          description: ''
+  /api/v1/incidents/{incident_id}/moderate/:
+    patch:
+      operationId: api_v1_incidents_moderate_partial_update
+      description: PATCH /api/v1/incidents/{id}/moderate — FR-MOD-02, moderator-only
+        status transitions.
+      parameters:
+      - in: path
+        name: incident_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedModerateIncident'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedModerateIncident'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedModerateIncident'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IncidentDetailEnvelope'
+          description: ''
+  /api/v1/kyc/admin/submissions/:
+    get:
+      operationId: api_v1_kyc_admin_submissions_list
+      description: GET /admin/kyc/submissions/?status=SUBMITTED
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedKYCSubmissionAdminList'
+          description: ''
+  /api/v1/kyc/admin/submissions/{id}/:
+    get:
+      operationId: api_v1_kyc_admin_submissions_retrieve
+      description: GET /admin/kyc/submissions/{id}/ — includes audit trail.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KYCSubmissionAdmin'
+          description: ''
+  /api/v1/kyc/admin/submissions/{id}/approve/:
+    post:
+      operationId: api_v1_kyc_admin_submissions_approve_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/kyc/admin/submissions/{id}/reject/:
+    post:
+      operationId: api_v1_kyc_admin_submissions_reject_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/kyc/history/:
+    get:
+      operationId: api_v1_kyc_history_list
+      description: GET /kyc/history/ — every submission the user has ever made.
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedKYCSubmissionList'
+          description: ''
+  /api/v1/kyc/me/:
+    get:
+      operationId: api_v1_kyc_me_retrieve
+      description: GET /kyc/me/ — current status + whether the user counts as verified.
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/kyc/submissions/:
+    post:
+      operationId: api_v1_kyc_submissions_create
+      description: POST /kyc/submissions/  — create draft or resubmit after rejection.
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/KYCSubmissionCreate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/KYCSubmissionCreate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/KYCSubmissionCreate'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KYCSubmissionCreate'
+          description: ''
+  /api/v1/kyc/submissions/{id}/submit/:
+    post:
+      operationId: api_v1_kyc_submissions_submit_create
+      description: POST /kyc/submissions/{id}/submit/
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/leaderboard/institution/{institution_id}:
+    get:
+      operationId: api_v1_leaderboard_institution_retrieve
+      parameters:
+      - in: path
+        name: institution_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/leaderboard/my-ranking:
+    get:
+      operationId: api_v1_leaderboard_my_ranking_retrieve
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/leaderboard/national:
+    get:
+      operationId: api_v1_leaderboard_national_retrieve
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/leaderboard/regional/{region}:
+    get:
+      operationId: api_v1_leaderboard_regional_retrieve
+      parameters:
+      - in: path
+        name: region
+        schema:
+          type: string
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/learning/completed-lessons/:
+    get:
+      operationId: api_v1_learning_completed_lessons_retrieve
+      description: GET /api/v1/learning/completed-lessons/
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/learning/completed-modules/:
+    get:
+      operationId: api_v1_learning_completed_modules_retrieve
+      description: GET /api/v1/learning/completed-modules/
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/learning/completed-zones/:
+    get:
+      operationId: api_v1_learning_completed_zones_retrieve
+      description: GET /api/v1/learning/completed-zones/
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/learning/courses/:
+    get:
+      operationId: api_v1_learning_courses_retrieve
+      description: GET /api/v1/learning/zones/
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/learning/courses/{zone_id}/modules/:
+    get:
+      operationId: api_v1_learning_courses_modules_retrieve
+      description: GET /api/v1/learning/zones/<zone_id>/modules/
+      parameters:
+      - in: path
+        name: zone_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/learning/daily-tip/:
+    get:
+      operationId: api_v1_learning_daily_tip_retrieve
+      description: GET /api/v1/learning/daily-tip/
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/learning/leaderboard/:
+    get:
+      operationId: api_v1_learning_leaderboard_retrieve
+      description: GET /api/v1/learning/leaderboard/
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/learning/lessons/{lesson_id}/complete/:
+    post:
+      operationId: api_v1_learning_lessons_complete_create
+      description: POST /api/v1/learning/lessons/<lesson_id>/complete/
+      parameters:
+      - in: path
+        name: lesson_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/learning/lessons/{lesson_id}/parts/:
+    get:
+      operationId: api_v1_learning_lessons_parts_retrieve
+      description: GET /api/v1/learning/lessons/<lesson_id>/parts/
+      parameters:
+      - in: path
+        name: lesson_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/learning/lessons/{lesson_id}/progress/:
+    get:
+      operationId: api_v1_learning_lessons_progress_retrieve
+      description: GET /api/v1/learning/lessons/<lesson_id>/progress/
+      parameters:
+      - in: path
+        name: lesson_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/learning/modules/{module_id}/lessons/:
+    get:
+      operationId: api_v1_learning_modules_lessons_retrieve
+      description: GET /api/v1/learning/modules/<module_id>/lessons/
+      parameters:
+      - in: path
+        name: module_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/learning/my-badges/:
+    get:
+      operationId: api_v1_learning_my_badges_retrieve
+      description: GET /api/v1/learning/my-badges/
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/learning/my-ranking/:
+    get:
+      operationId: api_v1_learning_my_ranking_retrieve
+      description: GET /api/v1/learning/my-ranking/
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/learning/my-streak/:
+    get:
+      operationId: api_v1_learning_my_streak_retrieve
+      description: GET /api/v1/learning/my-streak/
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/learning/progress/:
+    get:
+      operationId: api_v1_learning_progress_retrieve
+      description: GET /api/v1/learning/progress/
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/learning/resume/:
+    get:
+      operationId: api_v1_learning_resume_retrieve
+      description: GET /api/v1/learning/resume/
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/learning/xp-history/:
+    get:
+      operationId: api_v1_learning_xp_history_retrieve
+      description: GET /api/v1/learning/xp-history/
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/learning/zones/:
+    get:
+      operationId: api_v1_learning_zones_retrieve
+      description: GET /api/v1/learning/zones/
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/learning/zones/{zone_id}/modules/:
+    get:
+      operationId: api_v1_learning_zones_modules_retrieve
+      description: GET /api/v1/learning/zones/<zone_id>/modules/
+      parameters:
+      - in: path
+        name: zone_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/legal/articles:
+    get:
+      operationId: api_v1_legal_articles_list
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedLegalArticleListList'
+          description: ''
+  /api/v1/legal/articles/{id}:
+    get:
+      operationId: api_v1_legal_articles_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LegalArticleDetail'
+          description: ''
+  /api/v1/legal/articles/related-incident-category/{category_code}:
+    get:
+      operationId: api_v1_legal_articles_related_incident_category_retrieve
+      description: Called from the Report Incident flow — FR-LAW-05.
+      parameters:
+      - in: path
+        name: category_code
+        schema:
+          type: string
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /api/v1/legal/topics:
+    get:
+      operationId: api_v1_legal_topics_list
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedLegalTopicList'
+          description: ''
+  /api/v1/national-update/:
+    get:
+      operationId: api_v1_national_update_list
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedNationalUpdateListList'
+          description: ''
+  /api/v1/national-update/{id}:
+    get:
+      operationId: api_v1_national_update_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NationalUpdateDetail'
+          description: ''
+  /api/v1/payments/admin/config/:
+    get:
+      operationId: api_v1_payments_admin_config_list
+      description: GET/POST /admin/payments/config/
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedPaymentConfigurationAdminList'
+          description: ''
+    post:
+      operationId: api_v1_payments_admin_config_create
+      description: GET/POST /admin/payments/config/
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentConfigurationAdmin'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PaymentConfigurationAdmin'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PaymentConfigurationAdmin'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentConfigurationAdmin'
+          description: ''
+  /api/v1/payments/admin/submissions/:
+    get:
+      operationId: api_v1_payments_admin_submissions_list
+      description: GET /admin/payments/submissions/?status=SUBMITTED
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedPaymentSubmissionAdminList'
+          description: ''
+  /api/v1/payments/admin/submissions/{id}/approve/:
+    post:
+      operationId: api_v1_payments_admin_submissions_approve_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/payments/admin/submissions/{id}/reject/:
+    post:
+      operationId: api_v1_payments_admin_submissions_reject_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/payments/admin/submissions/{id}/request-proof/:
+    post:
+      operationId: api_v1_payments_admin_submissions_request_proof_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/payments/config/active/:
+    get:
+      operationId: api_v1_payments_config_active_retrieve
+      description: GET /payments/config/active/?method=MTN
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/payments/submissions/:
+    post:
+      operationId: api_v1_payments_submissions_create
+      description: POST /payments/submissions/  — user pays, uploads proof, in one
+        call.
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentSubmissionCreate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PaymentSubmissionCreate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PaymentSubmissionCreate'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentSubmissionCreate'
+          description: ''
+  /api/v1/payments/submissions/{id}/:
+    get:
+      operationId: api_v1_payments_submissions_retrieve
+      description: GET /payments/submissions/{id}/
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentSubmission'
+          description: ''
+  /api/v1/payments/submissions/{id}/resubmit/:
+    post:
+      operationId: api_v1_payments_submissions_resubmit_create
+      description: POST /payments/submissions/{id}/resubmit/ — after PROOF_REQUESTED.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/payments/submissions/mine/:
+    get:
+      operationId: api_v1_payments_submissions_mine_list
+      description: GET /payments/submissions/mine/
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedPaymentSubmissionList'
+          description: ''
+  /api/v1/quizzes/{quiz_id}/:
+    get:
+      operationId: api_v1_quizzes_retrieve
+      description: GET /api/quizzes/{quiz_id}/ — questions without correct answers.
+      parameters:
+      - in: path
+        name: quiz_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Quiz'
+          description: ''
+  /api/v1/quizzes/{quiz_id}/submit/:
+    post:
+      operationId: api_v1_quizzes_submit_create
+      description: POST /api/quizzes/{quiz_id}/submit/ — grade and record an attempt.
+      parameters:
+      - in: path
+        name: quiz_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/security/admin/sessions/:
+    get:
+      operationId: api_v1_security_admin_sessions_list
+      description: GET /admin/security/sessions/?user_id=<uuid> — full history, not
+        just active.
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedDeviceSessionList'
+          description: ''
+  /api/v1/security/sessions/{id}/revoke/:
+    post:
+      operationId: api_v1_security_sessions_revoke_create
+      description: POST /security/sessions/{id}/revoke/  — logout one device.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/security/sessions/mine/:
+    get:
+      operationId: api_v1_security_sessions_mine_list
+      description: GET /security/sessions/mine/
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedDeviceSessionList'
+          description: ''
+  /api/v1/security/sessions/revoke-all/:
+    post:
+      operationId: api_v1_security_sessions_revoke_all_create
+      description: |-
+        POST /security/sessions/revoke-all/  — logout all devices.
+        Pass {"keep_current": true} with the current session's refresh_token_jti
+        resolved server-side if you want to preserve the active session.
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/tracking/admin/requests/:
+    get:
+      operationId: api_v1_tracking_admin_requests_list
+      description: GET /admin/tracking/requests/?status=QUEUED
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedTrackingRequestList'
+          description: ''
+  /api/v1/tracking/admin/requests/{id}/:
+    get:
+      operationId: api_v1_tracking_admin_requests_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrackingRequestDetail'
+          description: ''
+  /api/v1/tracking/admin/requests/{id}/assign-authority/:
+    post:
+      operationId: api_v1_tracking_admin_requests_assign_authority_create
+      description: POST /admin/tracking/requests/{id}/assign-authority/
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/tracking/admin/requests/{id}/close/:
+    post:
+      operationId: api_v1_tracking_admin_requests_close_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/tracking/admin/requests/{id}/mark-located/:
+    post:
+      operationId: api_v1_tracking_admin_requests_mark_located_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/tracking/admin/requests/{id}/mark-recovered/:
+    post:
+      operationId: api_v1_tracking_admin_requests_mark_recovered_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/tracking/admin/requests/{id}/mark-under-investigation/:
+    post:
+      operationId: api_v1_tracking_admin_requests_mark_under_investigation_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/tracking/admin/requests/{id}/ownership-verification/:
+    post:
+      operationId: api_v1_tracking_admin_requests_ownership_verification_create
+      description: POST /admin/tracking/requests/{id}/ownership-verification/
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/tracking/admin/requests/{id}/request-evidence/:
+    post:
+      operationId: api_v1_tracking_admin_requests_request_evidence_create
+      description: POST /admin/tracking/requests/{id}/request-evidence/
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/tracking/evidence-requests/{id}/fulfill/:
+    post:
+      operationId: api_v1_tracking_evidence_requests_fulfill_create
+      description: POST /tracking/evidence-requests/{id}/fulfill/
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/tracking/requests/:
+    post:
+      operationId: api_v1_tracking_requests_create
+      description: POST /tracking/requests/
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TrackingRequestCreate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TrackingRequestCreate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TrackingRequestCreate'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrackingRequestCreate'
+          description: ''
+  /api/v1/tracking/requests/{id}/:
+    get:
+      operationId: api_v1_tracking_requests_retrieve
+      description: GET /tracking/requests/{id}/ — includes full timeline.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrackingRequestDetail'
+          description: ''
+  /api/v1/tracking/requests/{id}/cancel/:
+    post:
+      operationId: api_v1_tracking_requests_cancel_create
+      description: POST /tracking/requests/{id}/cancel/
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/tracking/requests/{id}/evidence/:
+    post:
+      operationId: api_v1_tracking_requests_evidence_create
+      description: POST /tracking/requests/{id}/evidence/
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Evidence'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Evidence'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Evidence'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Evidence'
+          description: ''
+  /api/v1/tracking/requests/{id}/initiate-payment/:
+    post:
+      operationId: api_v1_tracking_requests_initiate_payment_create
+      description: |-
+        POST /tracking/requests/{id}/initiate-payment/ — DRAFT->OWNERSHIP_VERIFIED is
+        admin-only; this moves OWNERSHIP_VERIFIED -> PAYMENT_PENDING once the
+        citizen taps 'Pay Now' on the tracking fee screen.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/tracking/requests/mine/:
+    get:
+      operationId: api_v1_tracking_requests_mine_list
+      description: GET /tracking/requests/mine/?status=UNDER_INVESTIGATION
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedTrackingRequestList'
+          description: ''
+  /api/v1/webhooks/resend:
+    post:
+      operationId: api_v1_webhooks_resend_create
+      description: |-
+        POST /api/v1/webhooks/resend
+
+        Machine-to-machine callback from Resend — intentionally does NOT use
+        the standard success/error envelope, since Resend's webhook consumer
+        expects its own response shape, not ours.
+      tags:
+      - api
+      security:
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /console/audit-logs:
+    get:
+      operationId: console_audit_logs_list
+      description: |-
+        Read-only. No create/update/delete endpoints exist for this resource —
+        audit rows are only ever written by the signal receiver, never via API.
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      tags:
+      - console
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedAuditLogList'
+          description: ''
+  /console/community/content-reports:
+    get:
+      operationId: console_community_content_reports_retrieve
+      description: User-filed content reports awaiting review.
+      tags:
+      - console
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /console/community/content-reports/{id}/resolve:
+    post:
+      operationId: console_community_content_reports_resolve_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - console
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /console/community/moderation-queue:
+    get:
+      operationId: console_community_moderation_queue_list
+      description: Posts escalated by automated screening, awaiting human review.
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      tags:
+      - console
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedCommunityPostList'
+          description: ''
+  /console/community/posts/{id}/decision:
+    post:
+      operationId: console_community_posts_decision_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - console
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /console/daily-tips/:
+    get:
+      operationId: console_daily_tips_list
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      tags:
+      - console
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedAdminDailyTipList'
+          description: ''
+    post:
+      operationId: console_daily_tips_create
+      tags:
+      - console
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminDailyTip'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AdminDailyTip'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AdminDailyTip'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminDailyTip'
+          description: ''
+  /console/daily-tips/{id}/:
+    get:
+      operationId: console_daily_tips_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this daily tip.
+        required: true
+      tags:
+      - console
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminDailyTip'
+          description: ''
+    put:
+      operationId: console_daily_tips_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this daily tip.
+        required: true
+      tags:
+      - console
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminDailyTip'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AdminDailyTip'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AdminDailyTip'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminDailyTip'
+          description: ''
+    patch:
+      operationId: console_daily_tips_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this daily tip.
+        required: true
+      tags:
+      - console
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedAdminDailyTip'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedAdminDailyTip'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedAdminDailyTip'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminDailyTip'
+          description: ''
+    delete:
+      operationId: console_daily_tips_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this daily tip.
+        required: true
+      tags:
+      - console
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /console/legal/articles:
+    get:
+      operationId: console_legal_articles_list
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      tags:
+      - console
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedLegalArticleAdminList'
+          description: ''
+    post:
+      operationId: console_legal_articles_create
+      tags:
+      - console
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LegalArticleAdmin'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/LegalArticleAdmin'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/LegalArticleAdmin'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LegalArticleAdmin'
+          description: ''
+  /console/legal/articles/{id}:
+    get:
+      operationId: console_legal_articles_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - console
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LegalArticleAdmin'
+          description: ''
+    put:
+      operationId: console_legal_articles_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - console
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LegalArticleAdmin'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/LegalArticleAdmin'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/LegalArticleAdmin'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LegalArticleAdmin'
+          description: ''
+    patch:
+      operationId: console_legal_articles_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - console
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedLegalArticleAdmin'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedLegalArticleAdmin'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedLegalArticleAdmin'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LegalArticleAdmin'
+          description: ''
+    delete:
+      operationId: console_legal_articles_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - console
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /console/legal/articles/{id}/publish:
+    post:
+      operationId: console_legal_articles_publish_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - console
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /console/lesson-parts/:
+    get:
+      operationId: console_lesson_parts_list
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      tags:
+      - console
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedAdminLessonPartList'
+          description: ''
+    post:
+      operationId: console_lesson_parts_create
+      tags:
+      - console
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminLessonPart'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AdminLessonPart'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AdminLessonPart'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminLessonPart'
+          description: ''
+  /console/lesson-parts/{id}/:
+    get:
+      operationId: console_lesson_parts_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this lesson part.
+        required: true
+      tags:
+      - console
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminLessonPart'
+          description: ''
+    put:
+      operationId: console_lesson_parts_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this lesson part.
+        required: true
+      tags:
+      - console
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminLessonPart'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AdminLessonPart'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AdminLessonPart'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminLessonPart'
+          description: ''
+    patch:
+      operationId: console_lesson_parts_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this lesson part.
+        required: true
+      tags:
+      - console
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedAdminLessonPart'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedAdminLessonPart'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedAdminLessonPart'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminLessonPart'
+          description: ''
+    delete:
+      operationId: console_lesson_parts_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this lesson part.
+        required: true
+      tags:
+      - console
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /console/lessons/:
+    get:
+      operationId: console_lessons_list
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      tags:
+      - console
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedAdminLessonList'
+          description: ''
+    post:
+      operationId: console_lessons_create
+      tags:
+      - console
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminLesson'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AdminLesson'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AdminLesson'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminLesson'
+          description: ''
+  /console/lessons/{id}/:
+    get:
+      operationId: console_lessons_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this lesson.
+        required: true
+      tags:
+      - console
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminLesson'
+          description: ''
+    put:
+      operationId: console_lessons_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this lesson.
+        required: true
+      tags:
+      - console
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminLesson'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AdminLesson'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AdminLesson'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminLesson'
+          description: ''
+    patch:
+      operationId: console_lessons_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this lesson.
+        required: true
+      tags:
+      - console
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedAdminLesson'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedAdminLesson'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedAdminLesson'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminLesson'
+          description: ''
+    delete:
+      operationId: console_lessons_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this lesson.
+        required: true
+      tags:
+      - console
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /console/moderation/queue:
+    get:
+      operationId: console_moderation_queue_list
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      tags:
+      - console
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedModerationQueueItemList'
+          description: ''
+  /console/moderation/reports/{id}/review:
+    post:
+      operationId: console_moderation_reports_review_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - console
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /console/modules/:
+    get:
+      operationId: console_modules_list
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      tags:
+      - console
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedAdminLearningModuleList'
+          description: ''
+    post:
+      operationId: console_modules_create
+      tags:
+      - console
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminLearningModule'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AdminLearningModule'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AdminLearningModule'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminLearningModule'
+          description: ''
+  /console/modules/{id}/:
+    get:
+      operationId: console_modules_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this learning module.
+        required: true
+      tags:
+      - console
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminLearningModule'
+          description: ''
+    put:
+      operationId: console_modules_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this learning module.
+        required: true
+      tags:
+      - console
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminLearningModule'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AdminLearningModule'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AdminLearningModule'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminLearningModule'
+          description: ''
+    patch:
+      operationId: console_modules_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this learning module.
+        required: true
+      tags:
+      - console
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedAdminLearningModule'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedAdminLearningModule'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedAdminLearningModule'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminLearningModule'
+          description: ''
+    delete:
+      operationId: console_modules_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this learning module.
+        required: true
+      tags:
+      - console
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /console/national-updates:
+    get:
+      operationId: console_national_updates_list
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      tags:
+      - console
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedNationalUpdateAdminList'
+          description: ''
+    post:
+      operationId: console_national_updates_create
+      tags:
+      - console
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NationalUpdateAdmin'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/NationalUpdateAdmin'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/NationalUpdateAdmin'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NationalUpdateAdmin'
+          description: ''
+  /console/national-updates/{id}:
+    get:
+      operationId: console_national_updates_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - console
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NationalUpdateAdmin'
+          description: ''
+    put:
+      operationId: console_national_updates_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - console
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NationalUpdateAdmin'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/NationalUpdateAdmin'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/NationalUpdateAdmin'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NationalUpdateAdmin'
+          description: ''
+    patch:
+      operationId: console_national_updates_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - console
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedNationalUpdateAdmin'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedNationalUpdateAdmin'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedNationalUpdateAdmin'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NationalUpdateAdmin'
+          description: ''
+  /console/national-updates/{id}/publish:
+    post:
+      operationId: console_national_updates_publish_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - console
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /console/zones/:
+    get:
+      operationId: console_zones_list
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      tags:
+      - console
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedAdminZoneList'
+          description: ''
+    post:
+      operationId: console_zones_create
+      tags:
+      - console
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminZone'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AdminZone'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AdminZone'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminZone'
+          description: ''
+  /console/zones/{id}/:
+    get:
+      operationId: console_zones_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Learning Zone.
+        required: true
+      tags:
+      - console
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminZone'
+          description: ''
+    put:
+      operationId: console_zones_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Learning Zone.
+        required: true
+      tags:
+      - console
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminZone'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AdminZone'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AdminZone'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminZone'
+          description: ''
+    patch:
+      operationId: console_zones_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Learning Zone.
+        required: true
+      tags:
+      - console
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedAdminZone'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedAdminZone'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedAdminZone'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminZone'
+          description: ''
+    delete:
+      operationId: console_zones_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Learning Zone.
+        required: true
+      tags:
+      - console
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+components:
+  schemas:
+    AdminDailyTip:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        title:
+          type: string
+          maxLength: 255
+        content:
+          type: string
+        category:
+          type: string
+          maxLength: 100
+        is_active:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - content
+      - created_at
+      - id
+      - title
+    AdminLearningModule:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        title:
+          type: string
+          maxLength: 255
+        description:
+          type: string
+        order:
+          type: integer
+          maximum: 32767
+          minimum: 0
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        zone:
+          type: string
+          format: uuid
+      required:
+      - created_at
+      - id
+      - title
+      - zone
+    AdminLesson:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        title:
+          type: string
+          maxLength: 255
+        content:
+          type: string
+        order:
+          type: integer
+          maximum: 32767
+          minimum: 0
+        duration_minutes:
+          type: integer
+          maximum: 32767
+          minimum: 0
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        module:
+          type: integer
+      required:
+      - content
+      - created_at
+      - id
+      - module
+      - title
+    AdminLessonPart:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        part_type:
+          $ref: '#/components/schemas/PartTypeEnum'
+        title:
+          type: string
+          maxLength: 255
+        content: {}
+        order:
+          type: integer
+          maximum: 32767
+          minimum: 0
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        lesson:
+          type: integer
+      required:
+      - created_at
+      - id
+      - lesson
+    AdminZone:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        display_order:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        status:
+          $ref: '#/components/schemas/AdminZoneStatusEnum'
+        published_at:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        title:
+          type: string
+          description: Unique zone title.
+          maxLength: 150
+        slug:
+          type: string
+          readOnly: true
+          pattern: ^[-a-zA-Z0-9_]+$
+        description:
+          type: string
+        icon:
+          type: string
+          description: Frontend icon identifier (heroicons, lucide, material...).
+          maxLength: 100
+        color:
+          type: string
+          description: Hex color used by frontend.
+          maxLength: 7
+        difficulty:
+          $ref: '#/components/schemas/DifficultyEnum'
+        estimated_hours:
+          type: integer
+          maximum: 32767
+          minimum: 0
+          description: Estimated hours to complete this learning zone.
+      required:
+      - created_at
+      - id
+      - published_at
+      - slug
+      - title
+      - updated_at
+    AdminZoneStatusEnum:
+      enum:
+      - draft
+      - review
+      - published
+      - archived
+      type: string
+      description: |-
+        * `draft` - Draft
+        * `review` - In Review
+        * `published` - Published
+        * `archived` - Archived
+    AgencyEnum:
+      enum:
+      - POLICE
+      - GENDARMERIE
+      - TELECOM
+      - TRANSPORT_MINISTRY
+      - INSURANCE
+      - OTHER
+      type: string
+      description: |-
+        * `POLICE` - Police
+        * `GENDARMERIE` - National Gendarmerie
+        * `TELECOM` - Telecom Operator
+        * `TRANSPORT_MINISTRY` - Ministry of Transport
+        * `INSURANCE` - Insurance
+        * `OTHER` - Other
+    AuditLog:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        actor_label:
+          type: string
+          maxLength: 255
+        verb:
+          type: string
+          maxLength: 100
+        target_type:
+          type: string
+          readOnly: true
+        target_object_id:
+          type: string
+          nullable: true
+          maxLength: 64
+        target_repr:
+          type: string
+          maxLength: 255
+        metadata: {}
+        ip_address:
+          type: string
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - id
+      - target_type
+      - verb
+    AuthSuccessResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+        data:
+          type: object
+          additionalProperties: {}
+      required:
+      - success
+    AuthorityCase:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        case_number:
+          type: string
+          maxLength: 50
+        agency:
+          $ref: '#/components/schemas/AgencyEnum'
+        agency_display:
+          type: string
+          readOnly: true
+        institution_name:
+          type: string
+          maxLength: 150
+        institution_id:
+          type: string
+          format: uuid
+          nullable: true
+        assigned_officer:
+          type: string
+          maxLength: 150
+        assigned_date:
+          type: string
+          format: date
+          nullable: true
+        expected_completion:
+          type: string
+          format: date
+          nullable: true
+        status:
+          $ref: '#/components/schemas/AuthorityCaseStatusEnum'
+        status_display:
+          type: string
+          readOnly: true
+        remarks:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - agency
+      - agency_display
+      - created_at
+      - id
+      - status_display
+      - updated_at
+    AuthorityCaseStatusEnum:
+      enum:
+      - ASSIGNED
+      - ACKNOWLEDGED
+      - IN_PROGRESS
+      - AWAITING_DOCUMENTS
+      - COMPLETED
+      type: string
+      description: |-
+        * `ASSIGNED` - Assigned
+        * `ACKNOWLEDGED` - Acknowledged
+        * `IN_PROGRESS` - In Progress
+        * `AWAITING_DOCUMENTS` - Awaiting Documents
+        * `COMPLETED` - Completed
+    Category5dbEnum:
+      enum:
+      - ELECTRONIC_DEVICE
+      - VEHICLE
+      type: string
+      description: |-
+        * `ELECTRONIC_DEVICE` - Electronic Device
+        * `VEHICLE` - Vehicle
+    Category936Enum:
+      enum:
+      - security_alert
+      - guideline
+      - advisory
+      - general
+      type: string
+      description: |-
+        * `security_alert` - Security Alert
+        * `guideline` - New Guideline
+        * `advisory` - Advisory
+        * `general` - General Announcement
+    Certificate:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        tier:
+          allOf:
+          - $ref: '#/components/schemas/TierEnum'
+          readOnly: true
+        cert_code:
+          type: string
+          readOnly: true
+        pdf_url:
+          type: string
+          readOnly: true
+        qr_url:
+          type: string
+          readOnly: true
+        issued_at:
+          type: string
+          format: date-time
+          readOnly: true
+        expires_at:
+          type: string
+          format: date-time
+          readOnly: true
+        is_valid:
+          type: string
+          readOnly: true
+      required:
+      - cert_code
+      - expires_at
+      - id
+      - is_valid
+      - issued_at
+      - pdf_url
+      - qr_url
+      - tier
+    CommunityPost:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        type:
+          $ref: '#/components/schemas/TypeEnum'
+        content:
+          type: string
+        media_url:
+          type: string
+          format: uri
+          maxLength: 200
+        tags:
+          description: 'Example: ["Scam", "Safety", "Fraud"]'
+        author_name:
+          type: string
+          readOnly: true
+        is_author_verified:
+          type: string
+          readOnly: true
+        likes_count:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        comments_count:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - author_name
+      - content
+      - created_at
+      - id
+      - is_author_verified
+      - type
+    DashboardResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+        data:
+          type: object
+          additionalProperties: {}
+      required:
+      - success
+    DeviceCategoryEnum:
+      enum:
+      - PHONE
+      - LAPTOP
+      - TABLET
+      - DESKTOP
+      - SMART_WATCH
+      - ROUTER
+      - DRONE
+      - CAMERA
+      - GAMING_CONSOLE
+      - EXTERNAL_DRIVE
+      - OTHER
+      type: string
+      description: |-
+        * `PHONE` - Phone
+        * `LAPTOP` - Laptop
+        * `TABLET` - Tablet
+        * `DESKTOP` - Desktop
+        * `SMART_WATCH` - Smart Watch
+        * `ROUTER` - Router
+        * `DRONE` - Drone
+        * `CAMERA` - Camera
+        * `GAMING_CONSOLE` - Gaming Console
+        * `EXTERNAL_DRIVE` - External Drive
+        * `OTHER` - Other
+    DeviceSession:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        device_name:
+          type: string
+          readOnly: true
+          description: Human label shown in the UI, e.g. 'Chrome on Windows', 'Android
+            App'.
+        device_model:
+          type: string
+          readOnly: true
+          description: e.g. 'Samsung Galaxy A14' — sent by Flutter client, blank for
+            web.
+        os_name:
+          type: string
+          readOnly: true
+        os_version:
+          type: string
+          readOnly: true
+        app_version:
+          type: string
+          readOnly: true
+        ip_address:
+          type: string
+          readOnly: true
+          nullable: true
+        network_type:
+          allOf:
+          - $ref: '#/components/schemas/NetworkTypeEnum'
+          readOnly: true
+        network_type_display:
+          type: string
+          readOnly: true
+        location_label:
+          type: string
+          readOnly: true
+          description: e.g. 'Yaoundé, Cameroon' — populate later via IP geolocation
+            lookup if added.
+        is_active:
+          type: boolean
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        last_seen_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - app_version
+      - created_at
+      - device_model
+      - device_name
+      - id
+      - ip_address
+      - is_active
+      - last_seen_at
+      - location_label
+      - network_type
+      - network_type_display
+      - os_name
+      - os_version
+    DifficultyEnum:
+      enum:
+      - beginner
+      - intermediate
+      - advanced
+      type: string
+      description: |-
+        * `beginner` - Beginner
+        * `intermediate` - Intermediate
+        * `advanced` - Advanced
+    ElectronicDevice:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        device_category:
+          $ref: '#/components/schemas/DeviceCategoryEnum'
+        brand:
+          type: string
+          maxLength: 100
+        model:
+          type: string
+          maxLength: 100
+        color:
+          type: string
+          maxLength: 50
+        serial_number:
+          type: string
+          maxLength: 100
+        imei:
+          type: string
+          maxLength: 20
+        purchase_date:
+          type: string
+          format: date
+          nullable: true
+        receipt_file:
+          type: string
+          format: uri
+          nullable: true
+      required:
+      - brand
+      - device_category
+      - id
+      - model
+    Evidence:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        file:
+          type: string
+          format: uri
+        description:
+          type: string
+          maxLength: 255
+        uploaded_by:
+          type: integer
+          readOnly: true
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - file
+      - id
+      - uploaded_by
+    EvidenceRequest:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        requested_by:
+          type: integer
+          readOnly: true
+          nullable: true
+        message:
+          type: string
+          readOnly: true
+        status:
+          allOf:
+          - $ref: '#/components/schemas/EvidenceRequestStatusEnum'
+          readOnly: true
+        status_display:
+          type: string
+          readOnly: true
+        fulfilled_by_evidence:
+          type: string
+          format: uuid
+          readOnly: true
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        fulfilled_at:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+      required:
+      - created_at
+      - fulfilled_at
+      - fulfilled_by_evidence
+      - id
+      - message
+      - requested_by
+      - status
+      - status_display
+    EvidenceRequestStatusEnum:
+      enum:
+      - OPEN
+      - FULFILLED
+      type: string
+      description: |-
+        * `OPEN` - Open
+        * `FULFILLED` - Fulfilled
+    IdDocumentTypeEnum:
+      enum:
+      - NATIONAL_ID
+      - PASSPORT
+      - DRIVER_LICENSE
+      type: string
+      description: |-
+        * `NATIONAL_ID` - National ID Card
+        * `PASSPORT` - Passport
+        * `DRIVER_LICENSE` - Driver's License
+    IncidentCategory:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        description:
+          type: string
+          readOnly: true
+      required:
+      - description
+      - id
+      - name
+    IncidentDetail:
+      type: object
+      description: |-
+        Full report view (FR-TRK-03/04): status timeline fields,
+        description, evidence, rejection reason if any.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        report_reference:
+          type: string
+          readOnly: true
+        category:
+          allOf:
+          - $ref: '#/components/schemas/IncidentCategory'
+          readOnly: true
+        description:
+          type: string
+        evidence_urls: {}
+        location_shared:
+          type: boolean
+        latitude:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,6})?$
+          nullable: true
+        longitude:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,6})?$
+          nullable: true
+        status:
+          allOf:
+          - $ref: '#/components/schemas/Status1c7Enum'
+          readOnly: true
+        rejection_reason:
+          type: string
+          readOnly: true
+          nullable: true
+        reporter:
+          type: integer
+          readOnly: true
+          nullable: true
+        is_anonymous:
+          type: boolean
+        submitted_at:
+          type: string
+          format: date-time
+          readOnly: true
+        resolved_at:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+      required:
+      - category
+      - description
+      - id
+      - rejection_reason
+      - report_reference
+      - reporter
+      - resolved_at
+      - status
+      - submitted_at
+    IncidentDetailEnvelope:
+      type: object
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+        data:
+          $ref: '#/components/schemas/IncidentDetail'
+      required:
+      - data
+      - success
+    IncidentList:
+      type: object
+      description: |-
+        Slim shape for 'My Reports' (FR-TRK-01/02): category, short title,
+        submission date, status badge — not the full report body.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        report_reference:
+          type: string
+          readOnly: true
+        category:
+          allOf:
+          - $ref: '#/components/schemas/IncidentCategory'
+          readOnly: true
+        short_title:
+          type: string
+          readOnly: true
+        status:
+          allOf:
+          - $ref: '#/components/schemas/Status1c7Enum'
+          readOnly: true
+        submitted_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - category
+      - id
+      - report_reference
+      - short_title
+      - status
+      - submitted_at
+    IncidentListEnvelope:
+      type: object
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/IncidentList'
+      required:
+      - data
+      - success
+    KYCSubmission:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        id_document_type:
+          allOf:
+          - $ref: '#/components/schemas/IdDocumentTypeEnum'
+          readOnly: true
+        id_document_type_display:
+          type: string
+          readOnly: true
+        id_number:
+          type: string
+          readOnly: true
+        full_name:
+          type: string
+          readOnly: true
+        date_of_birth:
+          type: string
+          format: date
+          readOnly: true
+        id_document_front:
+          type: string
+          format: uri
+          readOnly: true
+        id_document_back:
+          type: string
+          format: uri
+          readOnly: true
+          nullable: true
+        selfie_photo:
+          type: string
+          format: uri
+          readOnly: true
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusEe3Enum'
+          readOnly: true
+        status_display:
+          type: string
+          readOnly: true
+        is_latest:
+          type: boolean
+          readOnly: true
+          description: True for the single active submission per user; older ones
+            stay False.
+        supersedes:
+          type: string
+          format: uuid
+          readOnly: true
+          nullable: true
+          description: Previous submission this one replaces, if this is a resubmission.
+        rejection_reason:
+          type: string
+          readOnly: true
+        expires_at:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+          description: Set on approval — when this KYC record must be renewed.
+        reviewed_at:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - date_of_birth
+      - expires_at
+      - full_name
+      - id
+      - id_document_back
+      - id_document_front
+      - id_document_type
+      - id_document_type_display
+      - id_number
+      - is_latest
+      - rejection_reason
+      - reviewed_at
+      - selfie_photo
+      - status
+      - status_display
+      - supersedes
+      - updated_at
+    KYCSubmissionAdmin:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        id_document_type:
+          allOf:
+          - $ref: '#/components/schemas/IdDocumentTypeEnum'
+          readOnly: true
+        id_document_type_display:
+          type: string
+          readOnly: true
+        id_number:
+          type: string
+          readOnly: true
+        full_name:
+          type: string
+          readOnly: true
+        date_of_birth:
+          type: string
+          format: date
+          readOnly: true
+        id_document_front:
+          type: string
+          format: uri
+          readOnly: true
+        id_document_back:
+          type: string
+          format: uri
+          readOnly: true
+          nullable: true
+        selfie_photo:
+          type: string
+          format: uri
+          readOnly: true
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusEe3Enum'
+          readOnly: true
+        status_display:
+          type: string
+          readOnly: true
+        is_latest:
+          type: boolean
+          readOnly: true
+          description: True for the single active submission per user; older ones
+            stay False.
+        supersedes:
+          type: string
+          format: uuid
+          readOnly: true
+          nullable: true
+          description: Previous submission this one replaces, if this is a resubmission.
+        rejection_reason:
+          type: string
+          readOnly: true
+        expires_at:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+          description: Set on approval — when this KYC record must be renewed.
+        reviewed_at:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        user_email:
+          type: string
+          readOnly: true
+        reviewed_by_name:
+          type: string
+          readOnly: true
+          default: ''
+      required:
+      - created_at
+      - date_of_birth
+      - expires_at
+      - full_name
+      - id
+      - id_document_back
+      - id_document_front
+      - id_document_type
+      - id_document_type_display
+      - id_number
+      - is_latest
+      - rejection_reason
+      - reviewed_at
+      - reviewed_by_name
+      - selfie_photo
+      - status
+      - status_display
+      - supersedes
+      - updated_at
+      - user_email
+    KYCSubmissionCreate:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        id_document_type:
+          $ref: '#/components/schemas/IdDocumentTypeEnum'
+        id_number:
+          type: string
+          maxLength: 50
+        full_name:
+          type: string
+          maxLength: 150
+        date_of_birth:
+          type: string
+          format: date
+        id_document_front:
+          type: string
+          format: uri
+        id_document_back:
+          type: string
+          format: uri
+          nullable: true
+        selfie_photo:
+          type: string
+          format: uri
+      required:
+      - date_of_birth
+      - full_name
+      - id
+      - id_document_front
+      - id_document_type
+      - id_number
+      - selfie_photo
+    LanguageEnum:
+      enum:
+      - fr
+      - en
+      type: string
+      description: |-
+        * `fr` - Français
+        * `en` - English
+    LegalArticleAdmin:
+      type: object
+      description: Used by admin_console for create/edit. last_updated_by/at are server-set,
+        never client-supplied.
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        topic:
+          type: string
+          format: uuid
+        title_en:
+          type: string
+          maxLength: 255
+        title_fr:
+          type: string
+          maxLength: 255
+        summary_body_en:
+          type: string
+        summary_body_fr:
+          type: string
+        source_reference:
+          type: string
+          maxLength: 255
+        official_url:
+          type: string
+          format: uri
+          maxLength: 200
+        is_published:
+          type: boolean
+        related_lessons:
+          type: array
+          items:
+            type: integer
+        related_incident_categories: {}
+      required:
+      - id
+      - source_reference
+      - summary_body_en
+      - summary_body_fr
+      - title_en
+      - title_fr
+      - topic
+    LegalArticleDetail:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        topic:
+          allOf:
+          - $ref: '#/components/schemas/LegalTopic'
+          readOnly: true
+        title_en:
+          type: string
+          maxLength: 255
+        title_fr:
+          type: string
+          maxLength: 255
+        summary_body_en:
+          type: string
+        summary_body_fr:
+          type: string
+        source_reference:
+          type: string
+          maxLength: 255
+        official_source_url:
+          type: string
+          format: uri
+          readOnly: true
+        last_updated:
+          type: string
+          format: date-time
+          readOnly: true
+        disclaimer:
+          type: string
+          readOnly: true
+      required:
+      - disclaimer
+      - id
+      - last_updated
+      - official_source_url
+      - source_reference
+      - summary_body_en
+      - summary_body_fr
+      - title_en
+      - title_fr
+      - topic
+    LegalArticleList:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        topic:
+          allOf:
+          - $ref: '#/components/schemas/LegalTopic'
+          readOnly: true
+        title_en:
+          type: string
+          maxLength: 255
+        title_fr:
+          type: string
+          maxLength: 255
+        source_reference:
+          type: string
+          maxLength: 255
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - id
+      - source_reference
+      - title_en
+      - title_fr
+      - topic
+      - updated_at
+    LegalTopic:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          maxLength: 120
+        slug:
+          type: string
+          maxLength: 50
+          pattern: ^[-a-zA-Z0-9_]+$
+        description:
+          type: string
+        order:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+      required:
+      - id
+      - name
+      - slug
+    Login:
+      type: object
+      description: |-
+        `email` accepts either an email address or a phone number —
+        see apps.accounts.services.EmailOrPhoneBackend. Field name kept as
+        `email` for backward compatibility with existing API clients.
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+          writeOnly: true
+      required:
+      - email
+      - password
+    ModerateIncidentStatusEnum:
+      enum:
+      - under_review
+      - approved
+      - rejected
+      type: string
+      description: |-
+        * `under_review` - Under Review
+        * `approved` - Approved
+        * `rejected` - Rejected
+    ModerationQueueItem:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        report_reference:
+          type: string
+          maxLength: 20
+        category:
+          type: integer
+        description:
+          type: string
+        status:
+          $ref: '#/components/schemas/Status1c7Enum'
+        submitted_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - category
+      - description
+      - id
+      - report_reference
+      - submitted_at
+    NationalUpdateAdmin:
+      type: object
+      description: Used by admin_console for create/edit. published_by/at/push_dispatched
+        are server-set only.
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        title_en:
+          type: string
+          maxLength: 255
+        title_fr:
+          type: string
+          maxLength: 255
+        body_en:
+          type: string
+        body_fr:
+          type: string
+        category:
+          $ref: '#/components/schemas/Category936Enum'
+        urgency_flag:
+          type: boolean
+        region_scope: {}
+        is_published:
+          type: boolean
+          readOnly: true
+      required:
+      - body_en
+      - body_fr
+      - id
+      - is_published
+      - title_en
+      - title_fr
+    NationalUpdateDetail:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        title_en:
+          type: string
+          maxLength: 255
+        title_fr:
+          type: string
+          maxLength: 255
+        body_en:
+          type: string
+        body_fr:
+          type: string
+        category:
+          $ref: '#/components/schemas/Category936Enum'
+        urgency_flag:
+          type: boolean
+        region_scope: {}
+        published_at:
+          type: string
+          format: date-time
+          nullable: true
+      required:
+      - body_en
+      - body_fr
+      - id
+      - title_en
+      - title_fr
+    NationalUpdateList:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        title_en:
+          type: string
+          maxLength: 255
+        title_fr:
+          type: string
+          maxLength: 255
+        category:
+          $ref: '#/components/schemas/Category936Enum'
+        urgency_flag:
+          type: boolean
+        region_scope: {}
+        published_at:
+          type: string
+          format: date-time
+          nullable: true
+      required:
+      - id
+      - title_en
+      - title_fr
+    NetworkTypeEnum:
+      enum:
+      - WIFI
+      - MOBILE_DATA
+      - UNKNOWN
+      type: string
+      description: |-
+        * `WIFI` - WiFi
+        * `MOBILE_DATA` - Mobile Data
+        * `UNKNOWN` - Unknown
+    Option:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        text_en:
+          type: string
+          maxLength: 255
+        text_fr:
+          type: string
+          maxLength: 255
+        order:
+          type: integer
+          maximum: 32767
+          minimum: 0
+      required:
+      - id
+      - text_en
+      - text_fr
+    OwnershipVerification:
+      type: object
+      properties:
+        matched_account_name:
+          type: boolean
+        matched_phone:
+          type: boolean
+        matched_password:
+          type: boolean
+        friend_account_used:
+          type: boolean
+          description: True if verification relied on a linked/friend account.
+        score:
+          type: integer
+          readOnly: true
+        passes:
+          type: boolean
+          readOnly: true
+        verified_by:
+          type: integer
+          readOnly: true
+          nullable: true
+        verified_at:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        notes:
+          type: string
+      required:
+      - passes
+      - score
+      - verified_at
+      - verified_by
+    PaginatedAdminDailyTipList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdminDailyTip'
+    PaginatedAdminLearningModuleList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdminLearningModule'
+    PaginatedAdminLessonList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdminLesson'
+    PaginatedAdminLessonPartList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdminLessonPart'
+    PaginatedAdminZoneList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdminZone'
+    PaginatedAuditLogList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/AuditLog'
+    PaginatedCertificateList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Certificate'
+    PaginatedCommunityPostList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommunityPost'
+    PaginatedDeviceSessionList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/DeviceSession'
+    PaginatedKYCSubmissionAdminList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/KYCSubmissionAdmin'
+    PaginatedKYCSubmissionList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/KYCSubmission'
+    PaginatedLegalArticleAdminList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/LegalArticleAdmin'
+    PaginatedLegalArticleListList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/LegalArticleList'
+    PaginatedLegalTopicList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/LegalTopic'
+    PaginatedModerationQueueItemList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ModerationQueueItem'
+    PaginatedNationalUpdateAdminList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/NationalUpdateAdmin'
+    PaginatedNationalUpdateListList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/NationalUpdateList'
+    PaginatedPaymentConfigurationAdminList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/PaymentConfigurationAdmin'
+    PaginatedPaymentSubmissionAdminList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/PaymentSubmissionAdmin'
+    PaginatedPaymentSubmissionList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/PaymentSubmission'
+    PaginatedTrackingRequestList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/TrackingRequest'
+    PartTypeEnum:
+      enum:
+      - text
+      - quiz
+      - video
+      - interactive
+      type: string
+      description: |-
+        * `text` - Text
+        * `quiz` - Quiz
+        * `video` - Video
+        * `interactive` - Interactive
+    PatchedAdminDailyTip:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        title:
+          type: string
+          maxLength: 255
+        content:
+          type: string
+        category:
+          type: string
+          maxLength: 100
+        is_active:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+    PatchedAdminLearningModule:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        title:
+          type: string
+          maxLength: 255
+        description:
+          type: string
+        order:
+          type: integer
+          maximum: 32767
+          minimum: 0
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        zone:
+          type: string
+          format: uuid
+    PatchedAdminLesson:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        title:
+          type: string
+          maxLength: 255
+        content:
+          type: string
+        order:
+          type: integer
+          maximum: 32767
+          minimum: 0
+        duration_minutes:
+          type: integer
+          maximum: 32767
+          minimum: 0
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        module:
+          type: integer
+    PatchedAdminLessonPart:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        part_type:
+          $ref: '#/components/schemas/PartTypeEnum'
+        title:
+          type: string
+          maxLength: 255
+        content: {}
+        order:
+          type: integer
+          maximum: 32767
+          minimum: 0
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        lesson:
+          type: integer
+    PatchedAdminZone:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        display_order:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        status:
+          $ref: '#/components/schemas/AdminZoneStatusEnum'
+        published_at:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        title:
+          type: string
+          description: Unique zone title.
+          maxLength: 150
+        slug:
+          type: string
+          readOnly: true
+          pattern: ^[-a-zA-Z0-9_]+$
+        description:
+          type: string
+        icon:
+          type: string
+          description: Frontend icon identifier (heroicons, lucide, material...).
+          maxLength: 100
+        color:
+          type: string
+          description: Hex color used by frontend.
+          maxLength: 7
+        difficulty:
+          $ref: '#/components/schemas/DifficultyEnum'
+        estimated_hours:
+          type: integer
+          maximum: 32767
+          minimum: 0
+          description: Estimated hours to complete this learning zone.
+    PatchedLegalArticleAdmin:
+      type: object
+      description: Used by admin_console for create/edit. last_updated_by/at are server-set,
+        never client-supplied.
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        topic:
+          type: string
+          format: uuid
+        title_en:
+          type: string
+          maxLength: 255
+        title_fr:
+          type: string
+          maxLength: 255
+        summary_body_en:
+          type: string
+        summary_body_fr:
+          type: string
+        source_reference:
+          type: string
+          maxLength: 255
+        official_url:
+          type: string
+          format: uri
+          maxLength: 200
+        is_published:
+          type: boolean
+        related_lessons:
+          type: array
+          items:
+            type: integer
+        related_incident_categories: {}
+    PatchedModerateIncident:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/ModerateIncidentStatusEnum'
+        reason:
+          type: string
+          default: ''
+        alert_content:
+          type: string
+          nullable: true
+    PatchedNationalUpdateAdmin:
+      type: object
+      description: Used by admin_console for create/edit. published_by/at/push_dispatched
+        are server-set only.
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        title_en:
+          type: string
+          maxLength: 255
+        title_fr:
+          type: string
+          maxLength: 255
+        body_en:
+          type: string
+        body_fr:
+          type: string
+        category:
+          $ref: '#/components/schemas/Category936Enum'
+        urgency_flag:
+          type: boolean
+        region_scope: {}
+        is_published:
+          type: boolean
+          readOnly: true
+    PatchedUpdateProfile:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 150
+        phone:
+          type: string
+          nullable: true
+          maxLength: 20
+        language:
+          $ref: '#/components/schemas/LanguageEnum'
+    PaymentConfigurationAdmin:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        payment_method:
+          $ref: '#/components/schemas/PaymentMethodEnum'
+        label:
+          type: string
+          description: Internal label, e.g. 'Finance Account 1' — not shown to users.
+          maxLength: 100
+        account_name:
+          type: string
+          maxLength: 150
+        account_number:
+          type: string
+          maxLength: 20
+        reference_code:
+          type: string
+          description: Code users should quote as payment reference, e.g. VRN2026.
+          maxLength: 50
+        instructions:
+          type: string
+        is_active:
+          type: boolean
+          description: Only one active configuration per payment_method is served
+            to users.
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - account_name
+      - account_number
+      - created_at
+      - id
+      - payment_method
+      - reference_code
+      - updated_at
+    PaymentMethodEnum:
+      enum:
+      - MTN
+      - ORANGE
+      - CARD
+      type: string
+      description: |-
+        * `MTN` - MTN Mobile Money
+        * `ORANGE` - Orange Money
+        * `CARD` - Card Payment
+    PaymentSubmission:
+      type: object
+      description: Read serializer — user's own history / detail view.
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        purpose:
+          allOf:
+          - $ref: '#/components/schemas/PurposeEnum'
+          readOnly: true
+        purpose_display:
+          type: string
+          readOnly: true
+        related_object_id:
+          type: string
+          format: uuid
+          readOnly: true
+          nullable: true
+        payment_method:
+          type: string
+          readOnly: true
+        payer_name:
+          type: string
+          readOnly: true
+        payer_phone:
+          type: string
+          readOnly: true
+        amount_expected:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          readOnly: true
+        amount_declared:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          readOnly: true
+        transaction_ref:
+          type: string
+          readOnly: true
+        proof_file:
+          type: string
+          format: uri
+          readOnly: true
+        status:
+          allOf:
+          - $ref: '#/components/schemas/Status2d5Enum'
+          readOnly: true
+        status_display:
+          type: string
+          readOnly: true
+        rejection_reason:
+          type: string
+          readOnly: true
+        proof_request_message:
+          type: string
+          readOnly: true
+        reviewed_at:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - amount_declared
+      - amount_expected
+      - created_at
+      - id
+      - payer_name
+      - payer_phone
+      - payment_method
+      - proof_file
+      - proof_request_message
+      - purpose
+      - purpose_display
+      - rejection_reason
+      - related_object_id
+      - reviewed_at
+      - status
+      - status_display
+      - transaction_ref
+      - updated_at
+    PaymentSubmissionAdmin:
+      type: object
+      description: Adds reviewer + user identity for the finance/admin queue.
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        purpose:
+          allOf:
+          - $ref: '#/components/schemas/PurposeEnum'
+          readOnly: true
+        purpose_display:
+          type: string
+          readOnly: true
+        related_object_id:
+          type: string
+          format: uuid
+          readOnly: true
+          nullable: true
+        payment_method:
+          type: string
+          readOnly: true
+        payer_name:
+          type: string
+          readOnly: true
+        payer_phone:
+          type: string
+          readOnly: true
+        amount_expected:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          readOnly: true
+        amount_declared:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          readOnly: true
+        transaction_ref:
+          type: string
+          readOnly: true
+        proof_file:
+          type: string
+          format: uri
+          readOnly: true
+        status:
+          allOf:
+          - $ref: '#/components/schemas/Status2d5Enum'
+          readOnly: true
+        status_display:
+          type: string
+          readOnly: true
+        rejection_reason:
+          type: string
+          readOnly: true
+        proof_request_message:
+          type: string
+          readOnly: true
+        reviewed_at:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        user_email:
+          type: string
+          readOnly: true
+        reviewed_by_name:
+          type: string
+          readOnly: true
+          default: ''
+      required:
+      - amount_declared
+      - amount_expected
+      - created_at
+      - id
+      - payer_name
+      - payer_phone
+      - payment_method
+      - proof_file
+      - proof_request_message
+      - purpose
+      - purpose_display
+      - rejection_reason
+      - related_object_id
+      - reviewed_at
+      - reviewed_by_name
+      - status
+      - status_display
+      - transaction_ref
+      - updated_at
+      - user_email
+    PaymentSubmissionCreate:
+      type: object
+      description: User creates a submission and attaches proof in one step.
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        purpose:
+          $ref: '#/components/schemas/PurposeEnum'
+        related_object_id:
+          type: string
+          format: uuid
+          nullable: true
+        payment_configuration:
+          type: string
+          format: uuid
+          description: Which account the user was instructed to pay.
+        payer_name:
+          type: string
+          maxLength: 150
+        payer_phone:
+          type: string
+          maxLength: 20
+        amount_expected:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        amount_declared:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        transaction_ref:
+          type: string
+          maxLength: 100
+        proof_file:
+          type: string
+          format: uri
+      required:
+      - amount_declared
+      - amount_expected
+      - id
+      - payer_name
+      - payer_phone
+      - payment_configuration
+      - proof_file
+      - purpose
+    PurposeEnum:
+      enum:
+      - TRACKING_FEE
+      - INSTITUTION_LICENSE
+      type: string
+      description: |-
+        * `TRACKING_FEE` - Tracking Request Fee
+        * `INSTITUTION_LICENSE` - Institution Licensing
+    Question:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        text_en:
+          type: string
+        text_fr:
+          type: string
+        order:
+          type: integer
+          maximum: 32767
+          minimum: 0
+        options:
+          type: array
+          items:
+            $ref: '#/components/schemas/Option'
+          readOnly: true
+      required:
+      - id
+      - options
+      - text_en
+      - text_fr
+    Quiz:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        course:
+          type: string
+          format: uuid
+        title:
+          type: string
+          maxLength: 150
+        pass_score_percent:
+          type: integer
+          maximum: 32767
+          minimum: 0
+        time_limit_seconds:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          nullable: true
+        questions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Question'
+          readOnly: true
+      required:
+      - course
+      - id
+      - questions
+      - title
+    RefreshTokenRequest:
+      type: object
+      properties:
+        refresh:
+          type: string
+          writeOnly: true
+      required:
+      - refresh
+    Register:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 150
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        phone:
+          type: string
+          nullable: true
+          maxLength: 20
+        language:
+          $ref: '#/components/schemas/LanguageEnum'
+        password:
+          type: string
+          writeOnly: true
+      required:
+      - email
+      - name
+      - password
+    Status1c7Enum:
+      enum:
+      - pending
+      - under_review
+      - approved
+      - rejected
+      type: string
+      description: |-
+        * `pending` - Pending
+        * `under_review` - Under Review
+        * `approved` - Approved
+        * `rejected` - Rejected
+    Status2d5Enum:
+      enum:
+      - PENDING
+      - SUBMITTED
+      - UNDER_REVIEW
+      - VERIFIED
+      - REJECTED
+      - PROOF_REQUESTED
+      - REFUNDED
+      type: string
+      description: |-
+        * `PENDING` - Pending
+        * `SUBMITTED` - Submitted
+        * `UNDER_REVIEW` - Under Review
+        * `VERIFIED` - Verified
+        * `REJECTED` - Rejected
+        * `PROOF_REQUESTED` - Proof Requested
+        * `REFUNDED` - Refunded
+    Status913Enum:
+      enum:
+      - DRAFT
+      - OWNERSHIP_VERIFIED
+      - PAYMENT_PENDING
+      - PAYMENT_SUBMITTED
+      - PAYMENT_APPROVED
+      - QUEUED
+      - SENT_TO_AUTHORITY
+      - UNDER_INVESTIGATION
+      - LOCATED
+      - RECOVERED
+      - CLOSED
+      - CANCELLED
+      type: string
+      description: |-
+        * `DRAFT` - Draft
+        * `OWNERSHIP_VERIFIED` - Ownership Verified
+        * `PAYMENT_PENDING` - Payment Pending
+        * `PAYMENT_SUBMITTED` - Payment Submitted
+        * `PAYMENT_APPROVED` - Payment Approved
+        * `QUEUED` - Queued
+        * `SENT_TO_AUTHORITY` - Sent to Authority
+        * `UNDER_INVESTIGATION` - Under Investigation
+        * `LOCATED` - Located
+        * `RECOVERED` - Recovered
+        * `CLOSED` - Closed
+        * `CANCELLED` - Cancelled
+    StatusEe3Enum:
+      enum:
+      - DRAFT
+      - SUBMITTED
+      - UNDER_REVIEW
+      - APPROVED
+      - REJECTED
+      - EXPIRED
+      type: string
+      description: |-
+        * `DRAFT` - Draft
+        * `SUBMITTED` - Submitted
+        * `UNDER_REVIEW` - Under Review
+        * `APPROVED` - Approved
+        * `REJECTED` - Rejected
+        * `EXPIRED` - Expired
+    SubmitIncident:
+      type: object
+      properties:
+        category_id:
+          type: integer
+        description:
+          type: string
+        evidence_urls: {}
+        location_shared:
+          type: boolean
+        latitude:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,6})?$
+          nullable: true
+        longitude:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,6})?$
+          nullable: true
+        is_anonymous:
+          type: boolean
+      required:
+      - category_id
+      - description
+    TierEnum:
+      enum:
+      - bronze
+      - silver
+      - gold
+      type: string
+      description: |-
+        * `bronze` - Bronze
+        * `silver` - Silver
+        * `gold` - Gold
+    TimelineEvent:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        event_type:
+          type: string
+          readOnly: true
+        description:
+          type: string
+          readOnly: true
+        created_by_name:
+          type: string
+          readOnly: true
+          default: ''
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - created_by_name
+      - description
+      - event_type
+      - id
+    TrackingRequest:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        reference_code:
+          type: string
+          readOnly: true
+          description: Human-facing ID, e.g. VRN-2026-00145. Set in save().
+        category:
+          allOf:
+          - $ref: '#/components/schemas/Category5dbEnum'
+          readOnly: true
+        category_display:
+          type: string
+          readOnly: true
+        status:
+          allOf:
+          - $ref: '#/components/schemas/Status913Enum'
+          readOnly: true
+        status_display:
+          type: string
+          readOnly: true
+        description:
+          type: string
+          readOnly: true
+          description: Circumstances of loss/theft as reported by the citizen.
+        device_detail:
+          allOf:
+          - $ref: '#/components/schemas/ElectronicDevice'
+          readOnly: true
+        vehicle_detail:
+          allOf:
+          - $ref: '#/components/schemas/Vehicle'
+          readOnly: true
+        ownership_verification:
+          allOf:
+          - $ref: '#/components/schemas/OwnershipVerification'
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        closed_at:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+      required:
+      - category
+      - category_display
+      - closed_at
+      - created_at
+      - description
+      - device_detail
+      - id
+      - ownership_verification
+      - reference_code
+      - status
+      - status_display
+      - updated_at
+      - vehicle_detail
+    TrackingRequestCreate:
+      type: object
+      description: |-
+        Accepts the flat create payload (category + nested device/vehicle data)
+        and delegates to services.create_tracking_request so the OneToOne
+        child rows and the first timeline event are created atomically.
+      properties:
+        category:
+          $ref: '#/components/schemas/TrackingRequestCreateCategoryEnum'
+        description:
+          type: string
+        device_data:
+          $ref: '#/components/schemas/ElectronicDevice'
+        vehicle_data:
+          $ref: '#/components/schemas/Vehicle'
+      required:
+      - category
+    TrackingRequestCreateCategoryEnum:
+      enum:
+      - ELECTRONIC_DEVICE
+      - VEHICLE
+      type: string
+      description: |-
+        * `ELECTRONIC_DEVICE` - ELECTRONIC_DEVICE
+        * `VEHICLE` - VEHICLE
+    TrackingRequestDetail:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        reference_code:
+          type: string
+          readOnly: true
+          description: Human-facing ID, e.g. VRN-2026-00145. Set in save().
+        category:
+          allOf:
+          - $ref: '#/components/schemas/Category5dbEnum'
+          readOnly: true
+        category_display:
+          type: string
+          readOnly: true
+        status:
+          allOf:
+          - $ref: '#/components/schemas/Status913Enum'
+          readOnly: true
+        status_display:
+          type: string
+          readOnly: true
+        description:
+          type: string
+          readOnly: true
+          description: Circumstances of loss/theft as reported by the citizen.
+        device_detail:
+          allOf:
+          - $ref: '#/components/schemas/ElectronicDevice'
+          readOnly: true
+        vehicle_detail:
+          allOf:
+          - $ref: '#/components/schemas/Vehicle'
+          readOnly: true
+        ownership_verification:
+          allOf:
+          - $ref: '#/components/schemas/OwnershipVerification'
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        closed_at:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        authority_cases:
+          type: array
+          items:
+            $ref: '#/components/schemas/AuthorityCase'
+          readOnly: true
+        evidence_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Evidence'
+          readOnly: true
+        evidence_requests:
+          type: array
+          items:
+            $ref: '#/components/schemas/EvidenceRequest'
+          readOnly: true
+        timeline_events:
+          type: array
+          items:
+            $ref: '#/components/schemas/TimelineEvent'
+          readOnly: true
+      required:
+      - authority_cases
+      - category
+      - category_display
+      - closed_at
+      - created_at
+      - description
+      - device_detail
+      - evidence_items
+      - evidence_requests
+      - id
+      - ownership_verification
+      - reference_code
+      - status
+      - status_display
+      - timeline_events
+      - updated_at
+      - vehicle_detail
+    TypeEnum:
+      enum:
+      - alert
+      - tip
+      type: string
+      description: |-
+        * `alert` - Alert
+        * `tip` - Tip
+    Vehicle:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        vehicle_category:
+          $ref: '#/components/schemas/VehicleCategoryEnum'
+        manufacturer:
+          type: string
+          maxLength: 100
+        model:
+          type: string
+          maxLength: 100
+        year:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          nullable: true
+        plate_number:
+          type: string
+          maxLength: 20
+        vin:
+          type: string
+          maxLength: 50
+        registration_file:
+          type: string
+          format: uri
+          nullable: true
+        insurance_file:
+          type: string
+          format: uri
+          nullable: true
+        ownership_document_file:
+          type: string
+          format: uri
+          nullable: true
+      required:
+      - id
+      - manufacturer
+      - model
+      - vehicle_category
+    VehicleCategoryEnum:
+      enum:
+      - CAR
+      - MOTORCYCLE
+      - TRUCK
+      - BUS
+      - TAXI
+      - TRICYCLE
+      - OTHER
+      type: string
+      description: |-
+        * `CAR` - Car
+        * `MOTORCYCLE` - Motorcycle
+        * `TRUCK` - Truck
+        * `BUS` - Bus
+        * `TAXI` - Taxi
+        * `TRICYCLE` - Tricycle
+        * `OTHER` - Other
+  securitySchemes:
+    jwtAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

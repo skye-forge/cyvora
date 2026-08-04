@@ -36,7 +36,7 @@ The codebase at `c:\Users\frank\Desktop\varnis_backend` reveals a mature Django 
 | **Backend Lead** | 🟢 Active | Django architecture, API design, all 5 apps implemented — **this is you** |
 | **Flutter Lead** | 🟡 Assumed | The backend serves a Flutter app per the competition doc, but no Flutter code in this repo |
 | **React/PWA Lead** | 🔴 Not assigned | Admin dashboard / PWA not started; referenced in README for Sprint 4+ |
-| **ML Lead** | 🟡 Implicit (Rayan) | ML microservice planned (Sprint 3), `integrations/ai/` is empty. README mentions "Rayan's FastAPI service" |
+| **ML Lead** | 🟡 Implicit (Rayan) | ML microservice planned (Sprint 3), `integrations/ai_engine/` is empty. README mentions "Rayan's FastAPI service" |
 | **UI/UX Designer** | 🔴 Not assigned | No Figma files, design tokens, or component library referenced in repo |
 | **QA Lead** | 🟢 Active | 28 tests across 5 test files, pytest configured, factory-boy fixtures |
 | **DevOps Engineer** | 🟢 Active | Docker Compose (5 services), Dockerfile, GitHub Actions CI, nginx/gunicorn config |

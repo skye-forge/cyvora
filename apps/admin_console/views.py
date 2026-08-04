@@ -1,6 +1,9 @@
-from rest_framework import generics, status
+from drf_spectacular.utils import extend_schema
+from rest_framework import generics, serializers, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+
+from api.responses import build_success_response_schema
 
 from shared.permissions.roles import IsModerator
 from apps.incidents.models import Incident
@@ -24,6 +27,10 @@ class ModerationQueueView(generics.ListAPIView):
 class ModerationReviewView(APIView):
     permission_classes = [IsModerator]
 
+    @extend_schema(
+        request=ModerationReviewSerializer,
+        responses={200: build_success_response_schema(serializers.DictField())},
+    )
     def post(self, request, pk):
         serializer = ModerationReviewSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)

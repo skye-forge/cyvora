@@ -1,7 +1,7 @@
 """
 Auto-classification via the NLP microservice (Rayan's FastAPI service —
 team project document, section 3.1: NLP MICROSERVICE). Not wired in
-until integrations/ai/client.py exists (Sprint 3).
+until integrations/ai_engine/client.py exists (Sprint 3).
 """
 
 from shared.exceptions import ServiceError

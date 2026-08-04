@@ -57,6 +57,9 @@ LOCAL_APPS = [
     "apps.kyc",
     "apps.tracking",
     "apps.security",
+    "channels",
+    "apps.ai_engine",
+    "apps.support",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -93,6 +96,26 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "core.wsgi.application"
 ASGI_APPLICATION = "core.asgi.application"
+
+# ---------------------------------------------------------------------------
+# Channels / ASGI
+# ---------------------------------------------------------------------------
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [env("REDIS_URL", default="redis://localhost:6379/0")],
+        },
+    },
+}
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": env("REDIS_URL", default="redis://localhost:6379/1"),
+        "OPTIONS": {"CLIENT_CLASS": "django_redis.client.DefaultClient"},
+    },
+}
 
 # ---------------------------------------------------------------------------
 # Database
@@ -216,8 +239,14 @@ RESEND_FROM_EMAIL = env("RESEND_FROM_EMAIL", default="no-reply@varnis.cm")
 RESEND_WEBHOOK_SECRET = env("RESEND_WEBHOOK_SECRET", default="")
 
 GEMINI_API_KEY = env("GEMINI_API_KEY", default="")
-AI_SERVICE_URL = env("AI_SERVICE_URL", default="")
-AI_SERVICE_TIMEOUT = env.int("AI_SERVICE_TIMEOUT", default=10)
+
+# "gemini" today; flip to "internal" once the ML team's own triage
+# endpoint is ready (see apps/ai_engine/triage/internal_provider.py).
+AI_TRIAGE_PROVIDER = env("AI_TRIAGE_PROVIDER", default="gemini")
+
+# Only needed once AI_TRIAGE_PROVIDER = "internal"
+INTERNAL_TRIAGE_URL = env("INTERNAL_TRIAGE_URL", default="")
+INTERNAL_TRIAGE_TIMEOUT = 8
 
 STORAGE_ACCESS_KEY = env("STORAGE_ACCESS_KEY", default="")
 STORAGE_SECRET_KEY = env("STORAGE_SECRET_KEY", default="")

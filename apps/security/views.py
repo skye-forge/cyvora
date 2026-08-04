@@ -1,6 +1,8 @@
-
-from rest_framework import generics, permissions, status
+from drf_spectacular.utils import extend_schema
+from rest_framework import generics, permissions, serializers, status
 from rest_framework.views import APIView
+
+from api.responses import build_success_response_schema
 
 from .models import DeviceSession
 from .serializers import DeviceSessionSerializer
@@ -28,6 +30,9 @@ class RevokeDeviceSessionView(APIView):
 
     permission_classes = [permissions.IsAuthenticated]
 
+    @extend_schema(
+        responses={200: build_success_response_schema(serializers.DictField())}
+    )
     def post(self, request, id):
         revoked = revoke_session(user=request.user, session_id=id)
         if not revoked:
@@ -46,6 +51,9 @@ class RevokeAllDeviceSessionsView(APIView):
 
     permission_classes = [permissions.IsAuthenticated]
 
+    @extend_schema(
+        responses={200: build_success_response_schema(serializers.DictField())}
+    )
     def post(self, request):
         except_id = request.data.get("except_session_id")
         count = revoke_all_sessions(user=request.user, except_session_id=except_id)

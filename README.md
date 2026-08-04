@@ -35,6 +35,7 @@ docker compose exec web python manage.py createsuperuser
 ```
 
 ```
+http://127.0.0.1:8000/api/schema/
 http://localhost:8000/admin/
 http://localhost:8000/api/docs
 https://varnis.up.railway.app/api/v1/   for all version 1 api      
@@ -146,28 +147,3 @@ entirely server-side in `apps/quizzes/services.py`.
 same as before, follow the `learning`/`incidents` app layout when building
 each one.
 
-
-{
-  "$schema": "https://railway.com/railway.schema.json",
-  "build": {
-    "builder": "NIXPACKS",
-    "buildCommand": "pip install -r requirements.txt",
-    "buildEnvironment": "V3"
-  },
-  "deploy": {
-    "runtime": "V2",
-    "numReplicas": 1,
-    "startCommand": "gunicorn core.wsgi:application --bind 0.0.0.0:$PORT",
-    "healthcheckPath": "/api/v1/health",
-    "sleepApplication": false,
-    "useLegacyStacker": false,
-    "ipv6EgressEnabled": false,
-    "multiRegionConfig": {
-      "sfo": {
-        "numReplicas": 1
-      }
-    },
-    "restartPolicyType": "ON_FAILURE",
-    "restartPolicyMaxRetries": 10
-  }
-}

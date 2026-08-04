@@ -1,3 +1,5 @@
+from drf_spectacular.utils import extend_schema, inline_serializer
+from rest_framework import serializers
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework_simplejwt.exceptions import TokenError
@@ -15,10 +17,27 @@ from .serializers import (
 )
 
 
+def _success_envelope_schema():
+    return inline_serializer(
+        "AuthSuccessResponse",
+        fields={
+            "success": serializers.BooleanField(),
+            "message": serializers.CharField(required=False, allow_blank=True),
+            "data": serializers.DictField(required=False),
+        },
+    )
+
+
 class RegisterView(ServiceExceptionHandlingMixin, APIView):
     """POST /api/v1/auth/register/"""
-    permission_classes = [AllowAny]
 
+    permission_classes = [AllowAny]
+    serializer_class = RegisterSerializer
+
+    @extend_schema(
+        request=RegisterSerializer,
+        responses={201: _success_envelope_schema()},
+    )
     def post(self, request):
         serializer = RegisterSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -39,8 +58,14 @@ class RegisterView(ServiceExceptionHandlingMixin, APIView):
 
 class LoginView(ServiceExceptionHandlingMixin, APIView):
     """POST /api/v1/auth/login/"""
-    permission_classes = [AllowAny]
 
+    permission_classes = [AllowAny]
+    serializer_class = LoginSerializer
+
+    @extend_schema(
+        request=LoginSerializer,
+        responses={200: _success_envelope_schema()},
+    )
     def post(self, request):
         serializer = LoginSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -60,8 +85,16 @@ class LoginView(ServiceExceptionHandlingMixin, APIView):
 
 class RefreshTokenView(APIView):
     """POST /api/v1/auth/refresh — body: {"refresh": "<token>"}"""
+
     permission_classes = [AllowAny]
 
+    @extend_schema(
+        request=inline_serializer(
+            "RefreshTokenRequest",
+            fields={"refresh": serializers.CharField(write_only=True)},
+        ),
+        responses={200: _success_envelope_schema()},
+    )
     def post(self, request):
         refresh_token = request.data.get("refresh")
         if not refresh_token:
@@ -78,14 +111,25 @@ class RefreshTokenView(APIView):
 
 class MeView(ServiceExceptionHandlingMixin, APIView):
     """GET /api/v1/auth/me — PATCH /api/v1/auth/me"""
-    permission_classes = [IsAuthenticated]
 
+    permission_classes = [IsAuthenticated]
+    serializer_class = UserSerializer
+
+    @extend_schema(responses={200: _success_envelope_schema()})
     def get(self, request):
         return success_response(data=UserSerializer(request.user).data)
 
+    @extend_schema(
+        request=UpdateProfileSerializer,
+        responses={200: _success_envelope_schema()},
+    )
     def patch(self, request):
         serializer = UpdateProfileSerializer(data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
 
-        user = services.update_profile(user=request.user, validated_data=serializer.validated_data)
-        return success_response(data=UserSerializer(user).data, message="Profile updated.")
+        user = services.update_profile(
+            user=request.user, validated_data=serializer.validated_data
+        )
+        return success_response(
+            data=UserSerializer(user).data, message="Profile updated."
+        )

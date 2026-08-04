@@ -22,17 +22,13 @@ urlpatterns = [
     path("api/v1/", include("api.urls")),
     # Admin console (separate namespace, not under api/v1/)
     path("console/", include("apps.admin_console.urls")),
-    path("security/", include("apps.security.urls")),
-    # Legal resources direct for public sharing
-    path("legal/", include("apps.legal_resources.urls")),
-    # Payments webhooks (machine-to-machine, not citizen-facing)
-    path("payments/", include("apps.payments.urls")),
 ]
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     try:
         import debug_toolbar
+
         urlpatterns += [path("__debug__/", include(debug_toolbar.urls))]
     except ImportError:
         pass

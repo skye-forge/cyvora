@@ -1,6 +1,9 @@
-from rest_framework import generics, permissions, status
+from drf_spectacular.utils import extend_schema
+from rest_framework import generics, permissions, serializers, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+
+from api.responses import build_success_response_schema
 
 from .models import PaymentConfiguration, PaymentSubmission, PaymentSubmissionStatus
 from .serializers import (
@@ -34,6 +37,11 @@ class ActivePaymentConfigurationView(APIView):
 
     permission_classes = [permissions.IsAuthenticated]
 
+    @extend_schema(
+        responses={
+            200: build_success_response_schema(PaymentConfigurationPublicSerializer())
+        }
+    )
     def get(self, request):
         method = request.query_params.get("method")
         if not method:
@@ -105,6 +113,10 @@ class ResubmitProofView(APIView):
 
     permission_classes = [permissions.IsAuthenticated]
 
+    @extend_schema(
+        request=ResubmitProofSerializer,
+        responses={200: build_success_response_schema(PaymentSubmissionSerializer())},
+    )
     def post(self, request, id):
         submission = PaymentSubmission.objects.filter(id=id, user=request.user).first()
         if not submission:
@@ -164,6 +176,11 @@ class AdminPaymentSubmissionQueueView(generics.ListAPIView):
 class ApproveSubmissionView(APIView):
     permission_classes = [IsFinanceOrAdmin]
 
+    @extend_schema(
+        responses={
+            200: build_success_response_schema(PaymentSubmissionAdminSerializer())
+        }
+    )
     def post(self, request, id):
         submission = _get_submission_or_404(id)
         if isinstance(submission, Response):
@@ -187,6 +204,12 @@ class ApproveSubmissionView(APIView):
 class RejectSubmissionView(APIView):
     permission_classes = [IsFinanceOrAdmin]
 
+    @extend_schema(
+        request=RejectSubmissionSerializer,
+        responses={
+            200: build_success_response_schema(PaymentSubmissionAdminSerializer())
+        },
+    )
     def post(self, request, id):
         submission = _get_submission_or_404(id)
         if isinstance(submission, Response):
@@ -213,6 +236,12 @@ class RejectSubmissionView(APIView):
 class RequestProofView(APIView):
     permission_classes = [IsFinanceOrAdmin]
 
+    @extend_schema(
+        request=RequestProofSerializer,
+        responses={
+            200: build_success_response_schema(PaymentSubmissionAdminSerializer())
+        },
+    )
     def post(self, request, id):
         submission = _get_submission_or_404(id)
         if isinstance(submission, Response):

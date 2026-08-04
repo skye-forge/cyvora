@@ -63,5 +63,5 @@ class QuizAttemptResultSerializer(serializers.ModelSerializer):
         model = QuizAttempt
         fields = [
             "id", "quiz", "score_percent", "passed",
-            "points_awarded", "started_at", "submitted_at", "answers",
+            "points_awarded", "attempted_at", "submitted_at", "answers",
         ]

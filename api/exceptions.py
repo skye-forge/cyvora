@@ -3,7 +3,7 @@ import logging
 from rest_framework.response import Response
 from rest_framework.views import exception_handler as drf_exception_handler
 
-from shared.exceptions.base import AppException
+from shared.models.base import AppException
 
 logger = logging.getLogger(__name__)
 

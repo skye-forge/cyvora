@@ -1,8 +1,10 @@
-
-from rest_framework import generics, status
+from drf_spectacular.utils import extend_schema
+from rest_framework import generics, serializers, status
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
+
+from api.responses import build_success_response_schema
 
 from shared.permissions.roles import IsModerator
 
@@ -35,6 +37,10 @@ class CommunityFeedListView(generics.ListAPIView):
 class TipCreateView(APIView):
     permission_classes = [IsAuthenticated]
 
+    @extend_schema(
+        request=TipCreateSerializer,
+        responses={201: build_success_response_schema(CommunityPostSerializer())},
+    )
     def post(self, request):
         serializer = TipCreateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -49,6 +55,13 @@ class TipCreateView(APIView):
 class PostCommentListCreateView(APIView):
     permission_classes = [IsAuthenticated]
 
+    @extend_schema(
+        responses={
+            200: build_success_response_schema(
+                serializers.ListSerializer(child=CommunityCommentSerializer())
+            )
+        }
+    )
     def get(self, request, pk):
         post = CommunityPost.objects.get(pk=pk)
         comments = post.comments.select_related("author")
@@ -59,6 +72,10 @@ class PostCommentListCreateView(APIView):
             }
         )
 
+    @extend_schema(
+        request=CommentCreateSerializer,
+        responses={201: build_success_response_schema(CommunityCommentSerializer())},
+    )
     def post(self, request, pk):
         serializer = CommentCreateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -78,11 +95,17 @@ class PostLikeToggleView(APIView):
 
     permission_classes = [IsAuthenticated]
 
+    @extend_schema(
+        responses={200: build_success_response_schema(serializers.DictField())}
+    )
     def post(self, request, pk):
         post = CommunityPost.objects.get(pk=pk)
         created = services.like_post(actor=request.user, post=post)
         return Response({"success": True, "liked": created})
 
+    @extend_schema(
+        responses={200: build_success_response_schema(serializers.DictField())}
+    )
     def delete(self, request, pk):
         post = CommunityPost.objects.get(pk=pk)
         services.unlike_post(actor=request.user, post=post)
@@ -94,6 +117,10 @@ class PostReportView(APIView):
 
     permission_classes = [IsAuthenticated]
 
+    @extend_schema(
+        request=ContentReportSerializer,
+        responses={201: build_success_response_schema(serializers.DictField())},
+    )
     def post(self, request, pk):
         serializer = ContentReportSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -123,6 +150,9 @@ class CommunityContentReportQueueView(generics.ListAPIView):
 
     permission_classes = [IsModerator]
 
+    @extend_schema(
+        responses={200: build_success_response_schema(serializers.DictField())}
+    )
     def get(self, request):
         reports = selectors.pending_content_reports()
         data = [
@@ -142,6 +172,10 @@ class CommunityContentReportQueueView(generics.ListAPIView):
 class CommunityModerationDecisionView(APIView):
     permission_classes = [IsModerator]
 
+    @extend_schema(
+        request=ModerationDecisionSerializer,
+        responses={200: build_success_response_schema(serializers.DictField())},
+    )
     def post(self, request, pk):
         serializer = ModerationDecisionSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -156,6 +190,10 @@ class CommunityModerationDecisionView(APIView):
 class CommunityContentReportResolveView(APIView):
     permission_classes = [IsModerator]
 
+    @extend_schema(
+        request=ModerationDecisionSerializer,
+        responses={200: build_success_response_schema(serializers.DictField())},
+    )
     def post(self, request, pk):
         serializer = ModerationDecisionSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)

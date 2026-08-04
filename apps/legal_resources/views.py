@@ -1,6 +1,9 @@
-from rest_framework import generics, permissions
+from drf_spectacular.utils import extend_schema
+from rest_framework import generics, permissions, serializers
 from rest_framework.response import Response
 from rest_framework.views import APIView
+
+from api.responses import build_success_response_schema
 
 from . import selectors, services
 from .models import LegalTopic, LegalArticle
@@ -46,6 +49,13 @@ class RelatedArticlesByIncidentCategoryView(APIView):
 
     permission_classes = [permissions.AllowAny]
 
+    @extend_schema(
+        responses={
+            200: build_success_response_schema(
+                serializers.ListSerializer(child=LegalArticleListSerializer())
+            )
+        }
+    )
     def get(self, request, category_code):
         articles = selectors.get_articles_for_incident_category(category_code)
         serializer = LegalArticleListSerializer(articles, many=True)
@@ -88,6 +98,9 @@ class AdminLegalArticlePublishView(APIView):
 
     permission_classes = [IsLegalEditor]
 
+    @extend_schema(
+        responses={200: build_success_response_schema(serializers.DictField())}
+    )
     def post(self, request, pk):
         article = LegalArticle.objects.get(pk=pk)
         article = services.publish_article(actor=request.user, article=article)

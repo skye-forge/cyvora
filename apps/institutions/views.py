@@ -1,8 +1,10 @@
-from rest_framework import generics
+from drf_spectacular.utils import extend_schema
+from rest_framework import generics, serializers
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from api.responses import build_success_response_schema
 from . import selectors, services
 from .models import Institution, InstitutionLicensePricing
 from .serializers import (
@@ -18,6 +20,10 @@ from .serializers import (
 class InstitutionRegisterView(APIView):
     permission_classes = [IsAuthenticated]
 
+    @extend_schema(
+        request=InstitutionRegisterSerializer,
+        responses={201: build_success_response_schema(InstitutionSerializer())},
+    )
     def post(self, request):
         serializer = InstitutionRegisterSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -48,6 +54,10 @@ class LicensePricingListView(generics.ListAPIView):
 class InstitutionLicensePurchaseView(APIView):
     permission_classes = [IsAuthenticated]
 
+    @extend_schema(
+        request=LicensePurchaseSerializer,
+        responses={201: build_success_response_schema(serializers.DictField())},
+    )
     def post(self, request, pk):
         serializer = LicensePurchaseSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -62,6 +72,13 @@ class InstitutionLicensePurchaseView(APIView):
 class InstitutionMembersView(APIView):
     permission_classes = [IsAuthenticated]
 
+    @extend_schema(
+        responses={
+            200: build_success_response_schema(
+                serializers.ListSerializer(child=MembershipSerializer())
+            )
+        }
+    )
     def get(self, request, pk):
         institution = Institution.objects.get(pk=pk)
         members = selectors.get_members(institution)
@@ -73,6 +90,10 @@ class InstitutionMembersView(APIView):
 class InstitutionEnrollView(APIView):
     permission_classes = [IsAuthenticated]
 
+    @extend_schema(
+        request=EnrollUserSerializer,
+        responses={201: build_success_response_schema(MembershipSerializer())},
+    )
     def post(self, request, pk):
         serializer = EnrollUserSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -99,6 +120,9 @@ class InstitutionEnrollView(APIView):
 class InstitutionProgressView(APIView):
     permission_classes = [IsAuthenticated]
 
+    @extend_schema(
+        responses={200: build_success_response_schema(serializers.DictField())}
+    )
     def get(self, request, pk):
         institution = Institution.objects.get(pk=pk)
         data = services.get_institution_progress(institution=institution)

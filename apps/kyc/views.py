@@ -1,6 +1,9 @@
-from rest_framework import generics, permissions, status
+from drf_spectacular.utils import extend_schema
+from rest_framework import generics, permissions, serializers, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
+
+from api.responses import build_success_response_schema
 
 from .models import KYCSubmission
 from .serializers import (
@@ -53,6 +56,9 @@ class SubmitKYCForReviewView(APIView):
 
     permission_classes = [permissions.IsAuthenticated]
 
+    @extend_schema(
+        responses={200: build_success_response_schema(KYCSubmissionSerializer())}
+    )
     def post(self, request, id):
         submission = KYCSubmission.objects.filter(id=id, user=request.user).first()
         if not submission:
@@ -79,6 +85,9 @@ class MyKYCStatusView(APIView):
 
     permission_classes = [permissions.IsAuthenticated]
 
+    @extend_schema(
+        responses={200: build_success_response_schema(serializers.DictField())}
+    )
     def get(self, request):
         latest = get_latest_submission(request.user)
         data = {
@@ -137,6 +146,9 @@ class AdminKYCDetailView(generics.RetrieveAPIView):
 class AdminApproveKYCView(APIView):
     permission_classes = [IsKYCReviewerOrAdmin]
 
+    @extend_schema(
+        responses={200: build_success_response_schema(KYCSubmissionAdminSerializer())}
+    )
     def post(self, request, id):
         submission = _get_or_404(id)
         if isinstance(submission, Response):
@@ -160,6 +172,10 @@ class AdminApproveKYCView(APIView):
 class AdminRejectKYCView(APIView):
     permission_classes = [IsKYCReviewerOrAdmin]
 
+    @extend_schema(
+        request=RejectKYCSerializer,
+        responses={200: build_success_response_schema(KYCSubmissionAdminSerializer())},
+    )
     def post(self, request, id):
         submission = _get_or_404(id)
         if isinstance(submission, Response):

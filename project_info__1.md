@@ -315,7 +315,7 @@ Task definitions are split across `accounts/tasks.py` (welcome email dispatch) a
 | institutions                | Not started | Institution model + membership not built; User has a commented-out FK |
 | reports                     | Not started | Not in Sprint plan until Sprint 4–5                                   |
 | audit                       | Not started | No AuditLog model or middleware; commented out in INSTALLED_APPS      |
-| AI integration client       | Not started | `integrations/ai/` is empty — no ML service client                    |
+| AI integration client       | Not started | `integrations/ai_engine/` is empty — no ML service client                    |
 | Storage (R2/S3) client      | Not started | `integrations/storage/` is empty — no file upload endpoint            |
 | Media evidence upload       | Not started | No endpoint accepts file uploads                                      |
 | QR certificate verification | Not started | Depends on certificates app                                           |

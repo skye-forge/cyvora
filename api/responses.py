@@ -2,6 +2,9 @@
 Standard response envelope used across every endpoint so that
 Flutter / React clients can rely on one consistent shape.
 """
+
+from drf_spectacular.utils import inline_serializer
+from rest_framework import serializers
 from rest_framework.response import Response
 from rest_framework import status as http_status
 
@@ -24,10 +27,35 @@ def error_response(
     """
     return Response({"success": False, "message": message}, status=status)
 
+
 #
 # Standard response envelope for every endpoint in the project:
 # {"success": bool, "message": str, "data": ..., "meta": {...}}
 # Import as: from api.responses import api_response
+
+
+def build_success_response_schema(
+    data_serializer=None, *, name: str = "SuccessResponse"
+):
+    fields = {
+        "success": serializers.BooleanField(),
+        "message": serializers.CharField(required=False, allow_blank=True),
+    }
+    if data_serializer is None:
+        fields["data"] = serializers.DictField(required=False, allow_null=True)
+    else:
+        fields["data"] = data_serializer
+    return inline_serializer(name, fields=fields)
+
+
+def build_error_response_schema(*, name: str = "ErrorResponse"):
+    return inline_serializer(
+        name,
+        fields={
+            "success": serializers.BooleanField(),
+            "message": serializers.CharField(),
+        },
+    )
 
 
 def api_response(

@@ -62,6 +62,7 @@ class QuizAttempt(BaseModel):
     score_percent = models.DecimalField(max_digits=5, decimal_places=2, default=0)
     passed = models.BooleanField(default=False)
     points_awarded = models.PositiveIntegerField(default=0)
+    attempted_at = models.DateTimeField(auto_now_add=True)
     submitted_at = models.DateTimeField(null=True, blank=True)
 
     class Meta:

@@ -1,5 +1,8 @@
-from rest_framework import generics
+from drf_spectacular.utils import extend_schema
+from rest_framework import generics, serializers
 from rest_framework.exceptions import ValidationError
+
+from api.responses import build_success_response_schema
 
 from shared.permissions.roles import IsSuperAdmin
 from . import selectors
@@ -39,3 +42,7 @@ class AuditLogDetailView(generics.RetrieveAPIView):
     permission_classes = [IsSuperAdmin]
     serializer_class = AuditLogSerializer
     queryset = selectors.all_logs()
+
+    @extend_schema(responses={200: build_success_response_schema(AuditLogSerializer())})
+    def retrieve(self, request, *args, **kwargs):
+        return super().retrieve(request, *args, **kwargs)
