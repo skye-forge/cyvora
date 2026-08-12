@@ -12,7 +12,7 @@ from django.conf import settings
 from django.contrib.auth.hashers import check_password, make_password
 from django.core.mail import send_mail
 from django.utils import timezone
-
+from django.core.exceptions import ValidationError
 from .models import AccountOTP
 from shared.exceptions import ServiceError
 
@@ -162,7 +162,7 @@ def verify_otp(pending_id, code):
     except (
         AccountOTP.DoesNotExist,
         ValueError,
-        django.core.exceptions.ValidationError,
+        ValidationError,
     ):
         raise ServiceError("Invalid or expired verification code.", status=400)
 

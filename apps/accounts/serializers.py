@@ -27,10 +27,11 @@ class UserSerializer(serializers.ModelSerializer):
 
 class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, validators=[validate_password])
+    otpChannel = serializers.ChoiceField(choices=["email", "sms"], required=False, default="email")
 
     class Meta:
         model = User
-        fields = ["name", "email", "phone", "language", "password"]
+        fields = ["name", "email", "phone", "language", "password", "otpChannel"]
 
     def validate_email(self, value):
         if User.objects.filter(email__iexact=value).exists():
@@ -53,3 +54,12 @@ class UpdateProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ["name", "phone", "language"]
+
+
+class VerifyOtpSerializer(serializers.Serializer):
+    pendingId = serializers.UUIDField()
+    code = serializers.CharField(min_length=6, max_length=6)
+
+
+class ResendOtpSerializer(serializers.Serializer):
+    pendingId = serializers.UUIDField()

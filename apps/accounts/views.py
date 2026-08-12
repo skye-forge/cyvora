@@ -42,6 +42,7 @@ class RegisterView(ServiceExceptionHandlingMixin, APIView):
     def post(self, request):
         serializer = RegisterSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
+        serializer.validated_data.pop("otpChannel", None)  # Remove otpChannel from validated_data before passing to register_user
 
         user = services.register_user(**serializer.validated_data)
         # tokens = services.issue_tokens(user)
