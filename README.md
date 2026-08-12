@@ -146,4 +146,3 @@ entirely server-side in `apps/quizzes/services.py`.
 `certificates`, `dashboard`, `leaderboard`, `institutions`, `reports` —
 same as before, follow the `learning`/`incidents` app layout when building
 each one.
-
