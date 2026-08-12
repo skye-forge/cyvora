@@ -3,6 +3,9 @@ from django.db import models
 
 from shared.constants import Languages, Roles
 from shared.validators import validate_cameroon_phone
+import uuid
+from django.conf import settings
+from django.utils import timezone
 
 from .managers import UserManager
 
@@ -61,3 +64,30 @@ class User(AbstractUser):
         self.xp_points += amount
         self.level = self.calculate_level()
         self.save(update_fields=["xp_points", "level"])
+
+
+class AccountOTP(models.Model):
+    class Purpose(models.TextChoices):
+        REGISTER = "register", "Register"
+        LOGIN = "login", "Login"
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="otps"
+    )
+    purpose = models.CharField(max_length=16, choices=Purpose.choices)
+    channel = models.CharField(
+        max_length=8, default="email"
+    )  # "phone" unused until an SMS gateway exists
+    code_hash = models.CharField(max_length=128)
+    attempts = models.PositiveSmallIntegerField(default=0)
+    max_attempts = models.PositiveSmallIntegerField(default=5)
+    expires_at = models.DateTimeField()
+    consumed_at = models.DateTimeField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def is_expired(self):
+        return timezone.now() >= self.expires_at
+
+    def is_consumed(self):
+        return self.consumed_at is not None

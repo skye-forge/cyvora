@@ -5,7 +5,16 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from shared.exceptions import AuthenticationFailedError, ValidationFailedError
 
 from .models import User
+import random
+from datetime import timedelta
 
+from django.conf import settings
+from django.contrib.auth.hashers import check_password, make_password
+from django.core.mail import send_mail
+from django.utils import timezone
+
+from .models import AccountOTP
+from shared.exceptions import ServiceError
 
 class EmailOrPhoneBackend(ModelBackend):
     """Authenticate users by email or phone using the existing accounts app structure."""
@@ -37,7 +46,7 @@ class EmailOrPhoneBackend(ModelBackend):
 
 
 def register_user(
-    *, name: str, email: str, password: str, phone: str = None, language: str = "fr"
+    *, name: str, email: str, password: str, phone: str = None, language: str = "fr", is_active: bool = False
 ) -> User:
     """
     Creates a citizen account. Institution/system admin accounts are
@@ -109,3 +118,83 @@ def update_profile(*, user: User, validated_data: dict) -> User:
         setattr(user, field, value)
     user.save(update_fields=list(validated_data.keys()) + ["updated_at"])
     return user
+
+
+OTP_TTL_MINUTES = 10
+OTP_RESEND_COOLDOWN_SECONDS = 45
+
+
+def _generate_code():
+    return f"{random.randint(0, 999999):06d}"
+
+
+def _send_otp_email(user, code):
+    send_mail(
+        subject="Your Varnis verification code",
+        message=f"Your verification code is {code}. It expires in {OTP_TTL_MINUTES} minutes.",
+        from_email=settings.DEFAULT_FROM_EMAIL,  # ← must be set — see note below
+        recipient_list=[user.email],
+        fail_silently=False,
+    )
+
+
+def issue_otp(user, purpose, channel="email"):
+    """Create a fresh OTP and email the code. Wipes any previous unconsumed
+    OTP for the same user+purpose so only the newest code ever works."""
+    AccountOTP.objects.filter(
+        user=user, purpose=purpose, consumed_at__isnull=True
+    ).delete()
+    code = _generate_code()
+    otp = AccountOTP.objects.create(
+        user=user,
+        purpose=purpose,
+        channel=channel,
+        code_hash=make_password(code),
+        expires_at=timezone.now() + timedelta(minutes=OTP_TTL_MINUTES),
+    )
+    _send_otp_email(user, code)
+    return otp
+
+
+def verify_otp(pending_id, code):
+    try:
+        otp = AccountOTP.objects.select_related("user").get(id=pending_id)
+    except (
+        AccountOTP.DoesNotExist,
+        ValueError,
+        django.core.exceptions.ValidationError,
+    ):
+        raise ServiceError("Invalid or expired verification code.", status=400)
+
+    if otp.is_consumed():
+        raise ServiceError("This code has already been used.", status=400)
+    if otp.is_expired():
+        raise ServiceError("This code has expired. Request a new one.", status=400)
+    if otp.attempts >= otp.max_attempts:
+        raise ServiceError("Too many attempts. Request a new code.", status=429)
+
+    if not check_password(code, otp.code_hash):
+        otp.attempts += 1
+        otp.save(update_fields=["attempts"])
+        raise ServiceError("Incorrect code.", status=400)
+
+    otp.consumed_at = timezone.now()
+    otp.save(update_fields=["consumed_at"])
+
+    user = otp.user
+    if otp.purpose == AccountOTP.Purpose.REGISTER and not user.is_active:
+        user.is_active = True
+        user.save(update_fields=["is_active"])
+    return user
+
+
+def resend_otp(pending_id):
+    try:
+        otp = AccountOTP.objects.select_related("user").get(id=pending_id)
+    except (AccountOTP.DoesNotExist, ValueError):
+        raise ServiceError("Invalid verification session.", status=400)
+    if otp.is_consumed():
+        raise ServiceError("This session has already been verified.", status=400)
+    if timezone.now() < otp.created_at + timedelta(seconds=OTP_RESEND_COOLDOWN_SECONDS):
+        raise ServiceError("Please wait before requesting another code.", status=429)
+    return issue_otp(otp.user, otp.purpose, otp.channel)

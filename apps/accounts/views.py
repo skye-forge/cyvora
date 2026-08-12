@@ -12,10 +12,11 @@ from . import services
 from .serializers import (
     LoginSerializer,
     RegisterSerializer,
+    ResendOtpSerializer,
     UpdateProfileSerializer,
     UserSerializer,
+    VerifyOtpSerializer,
 )
-
 
 def _success_envelope_schema():
     return inline_serializer(
@@ -43,15 +44,17 @@ class RegisterView(ServiceExceptionHandlingMixin, APIView):
         serializer.is_valid(raise_exception=True)
 
         user = services.register_user(**serializer.validated_data)
-        tokens = services.issue_tokens(user)
+        # tokens = services.issue_tokens(user)
+        otp_channel = serializer.validated_data.get("otpChannel") or "email"
+        otp = services.issue_otp(user, purpose="register", channel=otp_channel)
 
         return success_response(
             data={
-                "access": tokens["access"],
-                "refresh": tokens["refresh"],
+                "otpRequired": True,
+                "pendingID": str(otp.id),
                 "user": UserSerializer(user).data,
             },
-            message="Account created successfully.",
+            message="Account created. Check your email for the verification code.",
             status=201,
         )
 
@@ -71,16 +74,61 @@ class LoginView(ServiceExceptionHandlingMixin, APIView):
         serializer.is_valid(raise_exception=True)
 
         user = services.authenticate_user(**serializer.validated_data)
-        tokens = services.issue_tokens(user)
+        # tokens = services.issue_tokens(user)
+        otp = services.issue_otp(user, purpose="login", channel="email")
 
+        return success_response(
+            data={
+                "otpRequired": True,
+                "pendingID": str(otp.id),
+                "user": UserSerializer(user).data,
+            },
+            message="Enter the verification code sent to your email to finish signing in.",
+        )
+
+
+class VerifyOtpView(ServiceExceptionHandlingMixin, APIView):
+    """POST /api/v1/auth/otp/verify/"""
+
+    permission_classes = [AllowAny]
+    serializer_class = VerifyOtpSerializer
+
+    @extend_schema(
+        request=VerifyOtpSerializer, responses={200: _success_envelope_schema()}
+    )
+    def post(self, request):
+        serializer = VerifyOtpSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        user = services.verify_otp(
+            pending_id=serializer.validated_data["pendingId"],
+            code=serializer.validated_data["code"],
+        )
+        tokens = services.issue_tokens(user)
         return success_response(
             data={
                 "access": tokens["access"],
                 "refresh": tokens["refresh"],
                 "user": UserSerializer(user).data,
             },
-            message="Login successful.",
+            message="Verified.",
         )
+
+
+class ResendOtpView(ServiceExceptionHandlingMixin, APIView):
+    """POST /api/v1/auth/otp/resend/"""
+
+    permission_classes = [AllowAny]
+    serializer_class = ResendOtpSerializer
+
+    @extend_schema(
+        request=ResendOtpSerializer, responses={200: _success_envelope_schema()}
+    )
+    def post(self, request):
+        serializer = ResendOtpSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        otp = services.resend_otp(pending_id=serializer.validated_data["pendingId"])
+        return success_response(data={"pendingId": str(otp.id)}, message="Code resent.")
 
 
 class RefreshTokenView(APIView):
