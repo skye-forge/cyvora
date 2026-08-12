@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Verify OTP | VARNIS</title>
+<link rel="icon" type="image/jpeg" href="../assets/img/varnis-logo.jpeg">
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700;900&amp;family=Work+Sans:wght@500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="../assets/css/tailwind-output.css"/>
+<link rel="stylesheet" href="../assets/css/site.css"/>
+    <script src="../assets/js/config.js"></script>
+    <script src="../assets/js/storage.js"></script>
+    <script src="../assets/js/mock-data.js"></script>
+    <script src="../assets/js/api.js"></script>
+    <script src="../assets/js/validation.js"></script>
+    <script src="../assets/js/i18n.js"></script>
+</head>
+<body class="bg-background text-on-background min-h-screen flex items-center justify-center p-4 antialiased">
+
+<div class="w-full max-w-md">
+  <div class="text-center mb-8">
+    <div class="inline-flex items-center justify-center w-16 h-16 rounded-xl bg-primary text-on-primary mb-4">
+      <span class="material-symbols-outlined text-3xl" id="otp-icon">mail</span>
+    </div>
+    <h1 class="text-headline-md font-bold text-on-surface" id="otp-heading">Verify your email</h1>
+    <p class="text-on-surface-variant text-body-md mt-2" id="otp-subtext">Enter the 6-digit code sent to your inbox</p>
+  </div>
+  <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-8">
+    <form class="flex flex-col gap-6" id="otp-form">
+      <div class="flex justify-center gap-2" id="otp-inputs">
+        <input maxlength="1" inputmode="numeric" class="w-12 h-14 text-center text-headline-md font-semibold border border-outline-variant rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20" />
+        <input maxlength="1" inputmode="numeric" class="w-12 h-14 text-center text-headline-md font-semibold border border-outline-variant rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20" />
+        <input maxlength="1" inputmode="numeric" class="w-12 h-14 text-center text-headline-md font-semibold border border-outline-variant rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20" />
+        <input maxlength="1" inputmode="numeric" class="w-12 h-14 text-center text-headline-md font-semibold border border-outline-variant rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20" />
+        <input maxlength="1" inputmode="numeric" class="w-12 h-14 text-center text-headline-md font-semibold border border-outline-variant rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20" />
+        <input maxlength="1" inputmode="numeric" class="w-12 h-14 text-center text-headline-md font-semibold border border-outline-variant rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20" />
+      </div>
+      <button type="submit" class="w-full h-12 bg-primary text-on-primary rounded-lg font-label-lg">Verify code</button>
+      <p class="text-center text-label-md text-on-surface-variant">Didn't receive it? <button type="button" id="otp-resend" class="text-primary font-label-lg">Resend code</button></p>
+      <p class="text-center text-caption text-outline" id="otp-demo-note"></p>
+    </form>
+  </div>
+</div>
+<script>
+document.querySelectorAll('#otp-inputs input').forEach((inp, i, arr) => {
+  inp.addEventListener('input', () => { if (inp.value && arr[i+1]) arr[i+1].focus(); });
+  inp.addEventListener('keydown', e => { if (e.key==='Backspace' && !inp.value && arr[i-1]) arr[i-1].focus(); });
+});
+
+// Channel is decided at registration (email by default whenever the user
+// gave one — no SMS gateway yet) and cached on the user record. This page
+// just reflects that choice; it doesn't decide it. See register.html and
+// API_INTEGRATION_MAP.md ("OTP delivery channel") for the full contract.
+var pendingUser = (window.VarnisStore && window.VarnisStore.getUser()) || {};
+var otpChannel = pendingUser.otpChannel || (pendingUser.email ? 'email' : 'phone');
+var pendingId = (function () { try { return sessionStorage.getItem('varnis_pending_otp_id') || ''; } catch (e) { return ''; } })();
+var identifier = pendingId; // verifyOtp/resendOtp now key off pendingId, not email/phone
+
+if (otpChannel === 'phone') {
+  document.getElementById('otp-icon').textContent = 'sms';
+  document.getElementById('otp-heading').textContent = 'Verify your number';
+  document.getElementById('otp-subtext').textContent = 'Enter the 6-digit code sent to your phone';
+} else {
+  document.getElementById('otp-icon').textContent = 'mail';
+  document.getElementById('otp-heading').textContent = 'Verify your email';
+  document.getElementById('otp-subtext').textContent = 'Enter the 6-digit code sent to your inbox' + (identifier ? ' (' + identifier + ')' : '');
+}
+
+// OTP verification establishes the session. It calls the real endpoint
+// (POST /auth/otp/verify) via VarnisAPI, which persists the token through
+// VarnisStore. In mock mode the API returns a demo token so the flow
+// (register -> otp -> onboarding) still passes auth-guard.js.
+// OTP verification is running on demo data right now no matter what
+// USE_MOCKS is set to — the backend has no /auth/otp/* routes yet (see
+// API_INTEGRATION_MAP.md), so api.js forces this specific call to mock
+// even in live mode. Any correctly-formatted 6-digit code will be
+// accepted until that changes. Saying so beats a silent fake pass.
+// TODO: delete this note once /auth/otp/verify is live on the backend
+// and removed from NOT_ON_BACKEND in api.js.
+document.getElementById('otp-demo-note').textContent = 'Demo mode: code delivery isn\u2019t connected yet, so any 6-digit code is accepted.';
+
+document.getElementById('otp-form').addEventListener('submit', function (e) {
+  e.preventDefault();
+  var code = Array.prototype.map.call(document.querySelectorAll('#otp-inputs input'), function (i) { return i.value; }).join('');
+
+  // This was previously missing entirely — an empty/short code would still
+  // "succeed" because the mock resolver doesn't check the code at all. Real
+  // verification can't happen until the backend has /auth/otp/verify (see
+  // API_INTEGRATION_MAP.md), but there's no reason the form itself should
+  // accept a blank submission in the meantime.
+  if (!/^\d{6}$/.test(code)) {
+    if (window.VarnisValidation && window.VarnisValidation.showValidationErrors) {
+      window.VarnisValidation.showValidationErrors(['Enter the 6-digit code.']);
+    } else {
+      alert('Enter the 6-digit code.');
+    }
+    return;
+  }
+
+  function done() { location.href = 'language.html'; }
+
+  if (window.VarnisAPI && window.VarnisAPI.auth && window.VarnisAPI.auth.verifyOtp) {
+    window.VarnisAPI.auth.verifyOtp(identifier, code).then(done).catch(function () {
+      // On failure in live mode, surface a message; in mock mode this won't hit.
+      alert('Could not verify the code. Please try again.');
+    });
+  } else {
+    try {
+      var key = (window.VarnisConfig && window.VarnisConfig.AUTH_TOKEN_KEY) || 'varnis_token';
+      if (!localStorage.getItem(key)) localStorage.setItem(key, 'mock-token-' + Date.now());
+    } catch (err) { /* storage unavailable */ }
+    done();
+  }
+});
+
+var resendBtn = document.getElementById('otp-resend');
+var resendCooldown = 0;
+function tickResend() {
+  if (resendCooldown <= 0) { resendBtn.textContent = 'Resend code'; resendBtn.disabled = false; return; }
+  resendBtn.disabled = true;
+  var m = Math.floor(resendCooldown / 60), s = resendCooldown % 60;
+  resendBtn.textContent = 'Resend in ' + m + ':' + (s < 10 ? '0' : '') + s;
+  resendCooldown--;
+  setTimeout(tickResend, 1000);
+}
+resendCooldown = 45;
+tickResend();
+resendBtn.addEventListener('click', function () {
+  if (resendBtn.disabled) return;
+  if (window.VarnisAPI && window.VarnisAPI.auth && window.VarnisAPI.auth.resendOtp) {
+    window.VarnisAPI.auth.resendOtp(identifier).catch(function () { /* best-effort */ });
+  }
+  resendCooldown = 45;
+  tickResend();
+});
+</script>
+
+
+</body>
+</html>

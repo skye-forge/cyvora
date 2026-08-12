@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Device Recovery | VARNIS Admin</title>
+<link rel="icon" type="image/jpeg" href="../assets/img/varnis-logo.jpeg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700;900&family=Work+Sans:wght@500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/tailwind-output.css">
+<link rel="stylesheet" href="../assets/css/site.css">
+<style>
+  .case-row.is-active { border-color: #002869; background: rgba(0,40,105,0.04); }
+</style>
+</head>
+<body class="cyv-shell">
+<div class="cyv-rail-scrim fixed inset-0 z-30 hidden bg-black/40 lg:hidden" id="cyv-rail-scrim"></div>
+<aside class="cyv-rail cyv-rail-admin" id="cyv-rail">
+      <div class="cyv-brand">
+        <div class="grid h-9 w-9 place-items-center overflow-hidden rounded-md bg-secondary">
+          <span class="material-symbols-outlined text-on-secondary" style="font-variation-settings:'FILL' 1">verified_user</span>
+        </div>
+        <div class="leading-tight">
+          <p class="text-body-lg font-bold">VARNIS</p>
+          <p class="text-label-md uppercase tracking-wider text-on-primary/60">Management Platform</p>
+        </div>
+      </div>
+      <nav class="cyv-nav">
+        <a href="index.html" class="cyv-nav-item"><span class="material-symbols-outlined">dashboard</span><span>Overview</span></a>
+        <a href="reports.html" class="cyv-nav-item"><span class="material-symbols-outlined">flag</span><span>Reports</span></a>
+        <a href="users.html" class="cyv-nav-item"><span class="material-symbols-outlined">group</span><span>Users</span></a>
+        <a href="recovery.html" class="cyv-nav-item is-active"><span class="material-symbols-outlined">travel_explore</span><span>Recovery</span></a>
+        <a href="kyc.html" class="cyv-nav-item"><span class="material-symbols-outlined">verified_user</span><span>Verification</span></a>
+        <a href="learning.html" class="cyv-nav-item"><span class="material-symbols-outlined">school</span><span>Learning</span></a>
+        <a href="alerts.html" class="cyv-nav-item"><span class="material-symbols-outlined">notifications</span><span>Alerts</span></a>
+        <a href="community.html" class="cyv-nav-item"><span class="material-symbols-outlined">forum</span><span>Community</span></a>
+        <a href="settings.html" class="cyv-nav-item"><span class="material-symbols-outlined">settings</span><span>Settings</span></a>
+      </nav>
+      <div class="cyv-rail-foot">
+        <div class="flex items-center gap-3 rounded-md bg-white/5 px-3 py-2.5">
+          <span class="grid h-9 w-9 place-items-center rounded-full bg-secondary/20 text-secondary-fixed"><span class="material-symbols-outlined text-[20px]">shield_person</span></span>
+          <div class="min-w-0 leading-tight">
+            <p class="truncate text-label-lg text-on-primary">VARNIS Admin</p>
+            <p class="truncate text-label-md text-on-primary/60">Super Admin</p>
+          </div>
+          <button type="button" id="admin-signout" class="ml-auto text-on-primary/60 hover:text-on-primary" aria-label="Sign out"><span class="material-symbols-outlined text-[20px]">logout</span></button>
+        </div>
+      </div>
+    </aside>
+<div class="cyv-main">
+      <header class="cyv-topbar">
+        <button class="cyv-iconbtn lg:hidden" id="cyv-rail-toggle" aria-label="Open menu"><span class="material-symbols-outlined">menu</span></button>
+        <label class="cyv-search">
+          <span class="material-symbols-outlined text-[20px]">search</span>
+          <input type="search" id="case-search" placeholder="Search by tracking ID, IMEI, plate or owner…" aria-label="Search">
+        </label>
+        <a href="../public/notifications.html" class="cyv-iconbtn" aria-label="Notifications"><span class="material-symbols-outlined">notifications</span></a>
+        <div class="flex items-center gap-2 pl-2">
+          <span class="hidden text-right sm:block leading-tight"><span class="block text-label-lg text-on-surface">VARNIS Admin</span><span class="block text-label-md text-on-surface-variant">Super Admin</span></span>
+          <span class="grid h-10 w-10 place-items-center rounded-full bg-primary/10 text-primary"><span class="material-symbols-outlined">shield_person</span></span>
+        </div>
+      </header>
+      <main class="cyv-canvas" data-page="admin-recovery">
+        <div class="mb-6">
+          <h1 class="page-title">Device recovery</h1>
+          <p class="page-sub">Confirm tracking-fee payments, move cases through the authority workflow, and ask citizens for more evidence.</p>
+        </div>
+
+        <div class="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+          <div class="card"><p class="text-label-lg uppercase tracking-wider text-on-surface-variant">Payments to confirm</p><p class="mt-2 text-headline-lg text-error" data-kpi="pay">—</p></div>
+          <div class="card"><p class="text-label-lg uppercase tracking-wider text-on-surface-variant">With authorities</p><p class="mt-2 text-headline-lg text-primary" data-kpi="authority">—</p></div>
+          <div class="card"><p class="text-label-lg uppercase tracking-wider text-on-surface-variant">Recovered</p><p class="mt-2 text-headline-lg text-secondary" data-kpi="recovered">—</p></div>
+          <div class="card"><p class="text-label-lg uppercase tracking-wider text-on-surface-variant">Fees collected</p><p class="mt-2 text-headline-lg text-primary" data-kpi="fees">—</p></div>
+        </div>
+
+        <div class="grid grid-cols-1 gap-6 xl:grid-cols-[24rem_1fr] xl:items-start">
+          <section>
+            <div class="mb-3 flex flex-wrap gap-2" id="stage-filters">
+              <button class="btn btn-outline btn-sm" data-f="">All</button>
+              <button class="btn btn-outline btn-sm" data-f="payment_submitted">Payment</button>
+              <button class="btn btn-outline btn-sm" data-f="active">Active</button>
+              <button class="btn btn-outline btn-sm" data-f="done">Closed</button>
+            </div>
+            <div id="case-list" class="flex flex-col gap-3">
+              <div class="card"><p class="text-body-md text-on-surface-variant">Loading cases…</p></div>
+            </div>
+          </section>
+
+          <section id="case-panel">
+            <div class="card card-lg flex flex-col items-center gap-3 py-16 text-center">
+              <span class="material-symbols-outlined text-[40px] text-outline">travel_explore</span>
+              <p class="text-body-lg text-on-surface">Pick a case to manage it</p>
+              <p class="max-w-sm text-body-md text-on-surface-variant">Payment confirmation, stage changes and evidence requests all happen here.</p>
+            </div>
+          </section>
+        </div>
+      </main>
+</div>
+
+<script src="../assets/js/auth-guard.js"></script>
+<script src="../assets/js/config.js"></script>
+<script src="../assets/js/storage.js"></script>
+<script src="../assets/js/mock-data.js"></script>
+<script src="../assets/js/api.js"></script>
+<script src="../assets/js/templates.js"></script>
+<script src="../assets/js/validation.js"></script>
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/features.js"></script>
+<script src="../assets/js/app.js"></script>
+<script defer src="../assets/js/site.js"></script>
+<script>
+(function () {
+  "use strict";
+  var F = window.VarnisFeatures, API = window.VarnisAPI, T = window.VarnisTemplates;
+  var esc = F.esc;
+  var cases = [];
+  var filter = "";
+  var selectedId = null;
+
+  function toast(m, t) { if (window.showToast) window.showToast(m, t || "info"); }
+
+  function kpis() {
+    var set = function (k, v) {
+      var el = document.querySelector('[data-kpi="' + k + '"]');
+      if (el) el.textContent = v;
+    };
+    set("pay", cases.filter(function (c) { return c.payment && c.payment.status === "pending"; }).length);
+    set("authority", cases.filter(function (c) {
+      return ["sent_to_authorities", "under_investigation", "evidence_requested", "device_located"].indexOf(c.stage) !== -1;
+    }).length);
+    set("recovered", cases.filter(function (c) { return c.stage === "recovered" || c.stage === "closed"; }).length);
+    set("fees", F.fcfa(cases.reduce(function (n, c) {
+      return n + (c.payment && c.payment.status === "approved" ? Number(c.payment.amount || 0) : 0);
+    }, 0)));
+  }
+
+  function matchesFilter(c) {
+    if (!filter) return true;
+    if (filter === "payment_submitted") return c.payment && c.payment.status === "pending";
+    if (filter === "done") return c.stage === "recovered" || c.stage === "closed";
+    if (filter === "active") return c.stage !== "recovered" && c.stage !== "closed";
+    return true;
+  }
+
+  function renderList() {
+    var q = (document.getElementById("case-search").value || "").toLowerCase().trim();
+    var items = cases.filter(function (c) {
+      if (!matchesFilter(c)) return false;
+      if (!q) return true;
+      var hay = [c.trackingId, c.assetLabel, (c.owner || {}).name, c.asset.imei, c.asset.serial, c.asset.plate].join(" ").toLowerCase();
+      return hay.indexOf(q) !== -1;
+    });
+
+    var host = document.getElementById("case-list");
+    if (!items.length) {
+      host.innerHTML = '<div class="card py-10 text-center"><p class="text-body-md text-on-surface-variant">No cases match.</p></div>';
+      return;
+    }
+    host.innerHTML = items.map(function (c) {
+      var meta = F.stageMeta(c.stage);
+      var needsPay = c.payment && c.payment.status === "pending";
+      return '<button type="button" class="case-row card card-hover w-full text-left' + (c.id === selectedId ? " is-active" : "") + '" data-id="' + esc(c.id) + '">' +
+        '<div class="flex items-start justify-between gap-3">' +
+          '<p class="text-label-md uppercase tracking-wider text-on-surface-variant">' + esc(c.trackingId) + "</p>" +
+          (needsPay ? '<span class="chip chip-error"><span class="material-symbols-outlined text-[15px]">priority_high</span> Payment</span>'
+                    : '<span class="chip chip-review">' + esc(meta.label) + "</span>") +
+        "</div>" +
+        '<p class="mt-2 flex items-center gap-2 text-body-md font-semibold text-on-surface">' +
+          '<span class="material-symbols-outlined text-[20px] text-primary">' + (c.assetType === "vehicle" ? "directions_car" : "smartphone") + "</span>" +
+          esc(c.assetLabel) + "</p>" +
+        '<p class="mt-1 truncate text-caption text-on-surface-variant">' + esc((c.owner || {}).name || "—") +
+          " · updated " + esc(T.timeAgo(c.updatedAt)) + "</p></button>";
+    }).join("");
+    host.querySelectorAll("[data-id]").forEach(function (b) {
+      b.addEventListener("click", function () { select(b.getAttribute("data-id")); });
+    });
+  }
+
+  function nextStages(c) {
+    var i = F.stageIndex(c.stage);
+    return F.RECOVERY_STAGES.filter(function (s, idx) { return idx > i && s.id !== "evidence_requested"; });
+  }
+
+  function renderPanel(c) {
+    var meta = F.stageMeta(c.stage);
+    var pay = c.payment;
+    var payMeta = pay ? F.PAYMENT_STATUS[pay.status] : null;
+    var assetRows = c.assetType === "vehicle"
+      ? [["Type", c.asset.vehicleType], ["Make", c.asset.manufacturer], ["Model", c.asset.model],
+         ["Year", c.asset.year], ["Plate", c.asset.plate], ["VIN", c.asset.vin]]
+      : [["Type", c.asset.deviceType], ["Brand", c.asset.brand], ["Model", c.asset.model],
+         ["IMEI", c.asset.imei], ["Serial", c.asset.serial]];
+
+    document.getElementById("case-panel").innerHTML =
+      '<div class="flex flex-col gap-6">' +
+        '<div class="card card-lg">' +
+          '<div class="flex flex-wrap items-start justify-between gap-4">' +
+            "<div>" +
+              '<h2 class="text-headline-md text-primary">' + esc(c.assetLabel) + "</h2>" +
+              '<p class="page-sub">' + esc(c.trackingId) + (c.caseFile ? " · " + esc(c.caseFile) : "") +
+                " · filed " + esc(T.formatDate(c.createdAt)) + "</p>" +
+            "</div>" +
+            '<span class="chip chip-review"><span class="material-symbols-outlined text-[15px]">' + esc(meta.icon) + "</span> " + esc(meta.label) + "</span>" +
+          "</div>" +
+          '<div class="mt-5 grid grid-cols-1 gap-6 sm:grid-cols-2">' +
+            "<div><p class=\"text-label-lg uppercase tracking-wider text-on-surface-variant\">Owner</p>" +
+              '<p class="mt-2 text-body-md text-on-surface">' + esc((c.owner || {}).name || "—") + "</p>" +
+              '<p class="text-caption text-on-surface-variant">' + esc((c.owner || {}).phone || "") + "</p>" +
+              (c.onBehalf ? '<p class="mt-1 text-caption text-primary">Filed on their behalf by ' + esc(c.submittedBy) + "</p>" : "") +
+              '<p class="mt-3 text-caption text-on-surface-variant">Lost ' + esc(c.incidentDate || "—") + " · last seen " + esc(c.lastSeen || "—") + "</p></div>" +
+            '<div><p class="text-label-lg uppercase tracking-wider text-on-surface-variant">Asset</p>' +
+              '<dl class="mt-2 flex flex-col gap-1">' + assetRows.filter(function (r) { return r[1]; }).map(function (r) {
+                return '<div class="flex justify-between gap-3"><dt class="text-caption text-on-surface-variant">' + esc(r[0]) +
+                       '</dt><dd class="text-body-md text-on-surface">' + esc(r[1]) + "</dd></div>";
+              }).join("") + "</dl></div>" +
+          "</div>" +
+          ((c.documents || []).length
+            ? '<div class="mt-5 border-t border-outline-variant pt-4"><p class="text-label-lg uppercase tracking-wider text-on-surface-variant">Documents</p>' +
+              '<ul class="mt-2 flex flex-wrap gap-2">' + c.documents.map(function (d) {
+                return '<li class="flex items-center gap-2 rounded-md border border-outline-variant px-3 py-1.5 text-caption text-on-surface-variant">' +
+                  '<span class="material-symbols-outlined text-[16px] text-primary">' + (/\.pdf$/i.test(d.name) ? "picture_as_pdf" : "image") + "</span>" +
+                  esc(d.name) + "</li>";
+              }).join("") + "</ul></div>"
+            : "") +
+        "</div>" +
+
+        (pay
+          ? '<div class="card">' +
+              '<div class="flex flex-wrap items-center justify-between gap-3">' +
+                '<h3 class="text-headline-md text-primary">Tracking fee</h3>' + F.chip(payMeta) + "</div>" +
+              '<div class="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-3">' +
+                '<div><p class="text-caption text-on-surface-variant">Amount</p><p class="text-body-lg font-semibold text-on-surface">' + esc(F.fcfa(pay.amount)) + "</p></div>" +
+                '<div><p class="text-caption text-on-surface-variant">Method</p><p class="text-body-md text-on-surface">' + esc(pay.method) + "</p></div>" +
+                '<div><p class="text-caption text-on-surface-variant">Reference</p><p class="text-body-md text-on-surface">' + esc(pay.reference) + "</p></div>" +
+              "</div>" +
+              (pay.proofFileName ? '<p class="mt-3 flex items-center gap-2 text-body-md text-on-surface-variant">' +
+                '<span class="material-symbols-outlined text-[18px] text-primary">receipt_long</span>' + esc(pay.proofFileName) + "</p>" : "") +
+              (pay.status === "pending"
+                ? '<div class="mt-5 flex flex-wrap gap-3">' +
+                    '<button type="button" class="btn btn-primary" id="pay-approve">Confirm payment</button>' +
+                    '<button type="button" class="btn btn-outline" id="pay-reject">Can\'t confirm</button>' +
+                  "</div>" +
+                  '<p class="mt-3 text-caption text-on-surface-variant">Check the reference against the operator statement before confirming. Confirming moves the case to the authority queue.</p>'
+                : '<p class="mt-4 text-caption text-on-surface-variant">Reviewed ' + esc(T.formatDateTime(pay.reviewedAt)) + "</p>") +
+            "</div>"
+          : "") +
+
+        '<div class="card">' +
+          '<h3 class="text-headline-md text-primary">Move the case on</h3>' +
+          '<p class="page-sub">The citizen sees every change on their timeline, with the note you write.</p>' +
+          '<div class="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">' +
+            '<div><label class="field-label" for="next-stage">Next stage</label>' +
+              '<select class="field" id="next-stage">' +
+                nextStages(c).map(function (s) { return '<option value="' + esc(s.id) + '">' + esc(s.label) + "</option>"; }).join("") +
+              "</select></div>" +
+            '<div><label class="field-label" for="stage-note">Note for the citizen</label>' +
+              '<input class="field" id="stage-note" placeholder="What changed and why"></div>' +
+          "</div>" +
+          '<button type="button" class="btn btn-primary mt-4" id="advance-btn"' +
+            (nextStages(c).length ? "" : " disabled") + ">Update the case</button>" +
+        "</div>" +
+
+        '<div class="card">' +
+          '<h3 class="text-headline-md text-primary">Ask for more evidence</h3>' +
+          '<p class="page-sub">Attaches a request to this case — the citizen uploads onto the existing file rather than opening a new one.</p>' +
+          '<label class="field-label mt-4" for="ev-msg">What do you need?</label>' +
+          '<textarea id="ev-msg" rows="3" class="w-full rounded border border-outline-variant bg-surface-container-lowest px-4 py-3 text-body-md outline-none focus:border-primary" placeholder="Be specific: which document, showing what."></textarea>' +
+          '<div class="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">' +
+            '<div><label class="field-label" for="ev-by">Requested by</label>' +
+              '<select class="field" id="ev-by"><option>Judicial Police</option><option>Gendarmerie</option><option>VARNIS</option></select></div>' +
+            '<div><label class="field-label" for="ev-due">Due by</label><input class="field" id="ev-due" type="date"></div>' +
+          "</div>" +
+          '<button type="button" class="btn btn-outline mt-4" id="ev-btn">Send the request</button>' +
+          ((c.evidenceRequests || []).length
+            ? '<ul class="mt-5 flex flex-col gap-2 border-t border-outline-variant pt-4">' + c.evidenceRequests.map(function (r) {
+                return '<li class="flex items-start gap-2 text-caption text-on-surface-variant">' +
+                  '<span class="material-symbols-outlined text-[16px] ' + (r.status === "pending" ? "text-error" : "text-secondary") + '">' +
+                  (r.status === "pending" ? "hourglass_top" : "check_circle") + "</span>" +
+                  '<span>' + esc(r.message) + " <em>(" + esc(r.status) + ", " + esc(T.formatDate(r.requestedAt)) + ")</em></span></li>";
+              }).join("") + "</ul>"
+            : "") +
+        "</div>" +
+      "</div>";
+
+    wirePanel(c);
+  }
+
+  function wirePanel(c) {
+    var approve = document.getElementById("pay-approve");
+    if (approve) approve.addEventListener("click", function () {
+      API.recovery.reviewPayment(c.id, "approve", "Payment reference confirmed against the operator statement.")
+        .then(refreshInto).catch(function () { toast("That didn't save.", "error"); });
+    });
+    var reject = document.getElementById("pay-reject");
+    if (reject) reject.addEventListener("click", function () {
+      API.recovery.reviewPayment(c.id, "reject", "We couldn't match this reference. Re-upload the receipt or send the correct reference.")
+        .then(refreshInto).catch(function () { toast("That didn't save.", "error"); });
+    });
+
+    var adv = document.getElementById("advance-btn");
+    if (adv) adv.addEventListener("click", function () {
+      var stage = document.getElementById("next-stage").value;
+      var note = document.getElementById("stage-note").value.trim();
+      if (!note) { toast("Write a short note — the citizen sees this on their timeline.", "error"); return; }
+      API.recovery.advance(c.id, stage, note).then(refreshInto).catch(function () { toast("That didn't save.", "error"); });
+    });
+
+    var ev = document.getElementById("ev-btn");
+    if (ev) ev.addEventListener("click", function () {
+      var msg = document.getElementById("ev-msg").value.trim();
+      if (msg.length < 10) { toast("Say what you need in at least ten characters.", "error"); return; }
+      API.recovery.requestEvidence(c.id, {
+        message: msg,
+        requestedBy: document.getElementById("ev-by").value,
+        dueAt: document.getElementById("ev-due").value || null,
+      }).then(function (updated) {
+        toast("Request sent. The citizen has been notified.", "success");
+        refreshInto(updated);
+      }).catch(function () { toast("That didn't send.", "error"); });
+    });
+  }
+
+  function refreshInto(updated) {
+    var i = cases.findIndex(function (x) { return x.id === updated.id; });
+    if (i >= 0) cases[i] = updated;
+    kpis(); renderList(); renderPanel(updated);
+    toast("Case updated.", "success");
+  }
+
+  function select(id) {
+    selectedId = id;
+    var c = cases.find(function (x) { return x.id === id; });
+    renderList();
+    if (c) renderPanel(c);
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    document.getElementById("case-search").addEventListener("input", renderList);
+    document.querySelectorAll("#stage-filters [data-f]").forEach(function (b) {
+      b.addEventListener("click", function () {
+        filter = b.getAttribute("data-f");
+        document.querySelectorAll("#stage-filters [data-f]").forEach(function (x) {
+          x.classList.toggle("bg-primary", x === b);
+          x.classList.toggle("text-on-primary", x === b);
+        });
+        renderList();
+      });
+    });
+    var all = document.querySelector('#stage-filters [data-f=""]');
+    if (all) all.classList.add("bg-primary", "text-on-primary");
+
+    API.recovery.list().then(function (res) {
+      cases = (res && res.items) || [];
+      kpis(); renderList();
+      if (cases.length) select(cases[0].id);
+    }).catch(function () {
+      document.getElementById("case-list").innerHTML =
+        '<div class="card"><p class="text-body-md text-on-surface-variant">Cases could not be loaded.</p></div>';
+    });
+  });
+})();
+</script>
+</body>
+</html>

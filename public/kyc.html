@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Identity Verification | VARNIS</title>
+<link rel="icon" type="image/jpeg" href="../assets/img/varnis-logo.jpeg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700;900&family=Work+Sans:wght@500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/tailwind-output.css">
+<link rel="stylesheet" href="../assets/css/site.css">
+<style>
+  .step-panel { display: none; }
+  .step-panel.active { display: block; }
+  .doc-option.is-picked { border-color: #002869; background: rgba(0,40,105,0.04); }
+</style>
+<script src="../assets/js/auth-guard.js"></script>
+</head>
+<body class="cyv-shell">
+<div class="cyv-rail-scrim fixed inset-0 z-30 hidden bg-black/40 lg:hidden" id="cyv-rail-scrim"></div>
+<aside class="cyv-rail" id="side-nav">
+      <div class="cyv-brand">
+        <div class="grid h-9 w-9 place-items-center overflow-hidden rounded-md bg-white">
+          <img src="../assets/img/varnis-logo.jpeg" alt="VARNIS" class="h-full w-full object-contain p-0.5">
+        </div>
+        <div class="leading-tight">
+          <p class="text-body-lg font-bold">VARNIS</p>
+          <p class="text-label-md text-on-primary/60">Civic Safety Portal</p>
+        </div>
+      </div>
+      <nav class="cyv-nav">
+        <a href="index.html" class="cyv-nav-item"><span class="material-symbols-outlined">home</span><span data-i18n="nav.home">Home</span></a>
+        <a href="my-reports.html" class="cyv-nav-item"><span class="material-symbols-outlined">description</span><span data-i18n="nav.reports">Reports</span></a>
+        <a href="recovery.html" class="cyv-nav-item"><span class="material-symbols-outlined">travel_explore</span><span data-i18n="nav.recovery">Recovery</span></a>
+        <a href="community.html" class="cyv-nav-item"><span class="material-symbols-outlined">groups</span><span data-i18n="nav.community">Community</span></a>
+        <a href="learn.html" class="cyv-nav-item"><span class="material-symbols-outlined">school</span><span data-i18n="nav.learn">Learn</span></a>
+        <a href="assistant.html" class="cyv-nav-item"><span class="material-symbols-outlined">smart_toy</span><span data-i18n="nav.assistant">Ask AI</span></a>
+        <a href="profile.html" class="cyv-nav-item is-active"><span class="material-symbols-outlined">account_circle</span><span data-i18n="nav.profile">Profile</span></a>
+      </nav>
+      <div class="cyv-rail-foot">
+        <a href="report-incident.html" class="cyv-emergency">
+          <span class="material-symbols-outlined text-[20px]">emergency</span> <span data-i18n="nav.emergency">Emergency Alert</span>
+        </a>
+        <a href="settings.html" class="cyv-nav-item"><span class="material-symbols-outlined">settings</span><span data-i18n="nav.settings">Settings</span></a>
+        <a href="support.html" class="cyv-nav-item"><span class="material-symbols-outlined">help</span><span data-i18n="nav.support">Support</span></a>
+      </div>
+    </aside>
+
+<div class="cyv-main">
+      <header class="cyv-topbar">
+        <button class="cyv-iconbtn lg:hidden" id="cyv-rail-toggle" aria-label="Open menu">
+          <span class="material-symbols-outlined">menu</span>
+        </button>
+        <label class="cyv-search">
+          <span class="material-symbols-outlined text-[20px]">search</span>
+          <input type="search" placeholder="Search safety database…" aria-label="Search">
+        </label>
+        <button type="button" class="cyv-iconbtn" data-lang-toggle aria-label="Switch language" title="English / Français"><span class="material-symbols-outlined">language</span><span class="absolute -bottom-0.5 right-0 text-[9px] font-bold text-primary" data-lang-label>EN</span></button>
+        <a href="notifications.html" class="cyv-iconbtn" aria-label="Notifications"><span class="material-symbols-outlined">notifications</span></a>
+        <a href="settings.html" class="cyv-iconbtn" aria-label="Settings"><span class="material-symbols-outlined">settings</span></a>
+        <a href="support.html" class="cyv-iconbtn max-sm:hidden" aria-label="Help"><span class="material-symbols-outlined">help</span></a>
+        <a href="report-incident.html" class="btn btn-primary btn-sm max-sm:hidden" data-i18n="top.report_incident">Report Incident</a>
+        <a href="profile.html" class="grid h-10 w-10 place-items-center overflow-hidden rounded-full bg-primary/10 text-primary" aria-label="Profile">
+          <span class="material-symbols-outlined">person</span>
+        </a>
+      </header>
+
+<main class="cyv-canvas" data-page="kyc">
+  <nav class="breadcrumb mb-3" aria-label="Breadcrumb">
+    <a href="profile.html" class="hover:text-primary">Profile</a>
+    <span class="material-symbols-outlined text-[16px]">chevron_right</span>
+    <span class="text-on-surface">Identity verification</span>
+  </nav>
+
+  <div class="mb-6 flex flex-wrap items-end justify-between gap-4">
+    <div>
+      <h1 class="page-title">Identity verification</h1>
+      <p class="page-sub max-w-2xl">One check, done once. It confirms you are a real person before you file reports or recovery cases that reach the authorities.</p>
+    </div>
+    <div id="kyc-status-chip"></div>
+  </div>
+
+  <!-- Status banner: reflects draft / submitted / under review / approved / rejected / expired -->
+  <section id="kyc-banner" class="mb-6"></section>
+
+  <div class="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_20rem] lg:items-start">
+    <div id="kyc-primary">
+      <!-- ============ WIZARD (draft · rejected · expired) ============ -->
+      <div id="kyc-wizard" class="hidden overflow-hidden rounded-md border border-outline-variant bg-surface-container-lowest">
+        <div class="border-b border-outline-variant px-6 py-6 lg:px-8">
+          <div class="step-rail mx-auto max-w-2xl">
+            <div class="flex cursor-pointer flex-col items-center gap-2" data-goto="1">
+              <div class="step-node is-active" id="node-1">1</div>
+              <span class="text-label-md font-semibold text-primary" id="label-1">Your details</span>
+            </div>
+            <div class="step-line" id="line-1"></div>
+            <div class="flex cursor-pointer flex-col items-center gap-2" data-goto="2">
+              <div class="step-node is-todo" id="node-2">2</div>
+              <span class="text-label-md text-on-surface-variant" id="label-2">Document</span>
+            </div>
+            <div class="step-line" id="line-2"></div>
+            <div class="flex cursor-pointer flex-col items-center gap-2" data-goto="3">
+              <div class="step-node is-todo" id="node-3">3</div>
+              <span class="text-label-md text-on-surface-variant" id="label-3">Photo</span>
+            </div>
+            <div class="step-line" id="line-3"></div>
+            <div class="flex cursor-pointer flex-col items-center gap-2" data-goto="4">
+              <div class="step-node is-todo" id="node-4">4</div>
+              <span class="text-label-md text-on-surface-variant" id="label-4">Review</span>
+            </div>
+          </div>
+        </div>
+
+        <form id="kyc-form" class="min-h-[420px] p-6 lg:p-8" novalidate>
+          <!-- STEP 1 -->
+          <div class="step-panel active" id="step-1">
+            <h2 class="text-headline-md text-primary">Who you are</h2>
+            <p class="mt-1 text-body-md text-on-surface-variant">These must match the document you upload next, character for character.</p>
+            <div class="mt-6 grid max-w-3xl grid-cols-1 gap-5 sm:grid-cols-2">
+              <div class="sm:col-span-2">
+                <label class="field-label" for="k-name">Full name as printed on your ID</label>
+                <input class="field" id="k-name" name="fullName" autocomplete="name" placeholder="e.g. Precious Ngum">
+              </div>
+              <div>
+                <label class="field-label" for="k-dob">Date of birth</label>
+                <input class="field" id="k-dob" name="dob" type="date">
+              </div>
+              <div>
+                <label class="field-label" for="k-gender">Gender</label>
+                <select class="field" id="k-gender" name="gender">
+                  <option value="">Select</option>
+                  <option>Female</option><option>Male</option><option>Prefer not to say</option>
+                </select>
+              </div>
+              <div>
+                <label class="field-label" for="k-nationality">Nationality</label>
+                <input class="field" id="k-nationality" name="nationality" value="Cameroonian">
+              </div>
+              <div>
+                <label class="field-label" for="k-region">Region of residence</label>
+                <select class="field" id="k-region" name="region">
+                  <option value="">Select region</option>
+                  <option>Adamawa</option><option>Centre</option><option>East</option><option>Far North</option>
+                  <option>Littoral</option><option>North</option><option>North-West</option><option>South</option>
+                  <option>South-West</option><option>West</option>
+                </select>
+              </div>
+              <div>
+                <label class="field-label" for="k-city">City or town</label>
+                <input class="field" id="k-city" name="city" placeholder="e.g. Yaoundé">
+              </div>
+              <div>
+                <label class="field-label" for="k-occupation">Occupation <span class="font-normal text-outline">(optional)</span></label>
+                <input class="field" id="k-occupation" name="occupation" placeholder="e.g. Teacher">
+              </div>
+              <div class="sm:col-span-2">
+                <label class="field-label" for="k-address">Home address</label>
+                <input class="field" id="k-address" name="address" placeholder="Neighbourhood, street, landmark">
+              </div>
+            </div>
+          </div>
+
+          <!-- STEP 2 -->
+          <div class="step-panel" id="step-2">
+            <h2 class="text-headline-md text-primary">Your identity document</h2>
+            <p class="mt-1 text-body-md text-on-surface-variant">Photograph it flat, in daylight, with all four corners visible.</p>
+            <div class="mt-6 grid max-w-3xl grid-cols-1 gap-3 sm:grid-cols-2" id="doc-types"></div>
+
+            <div class="mt-6 grid max-w-3xl grid-cols-1 gap-5 sm:grid-cols-2">
+              <div>
+                <label class="field-label" for="k-docnum">Document number</label>
+                <input class="field" id="k-docnum" name="docNumber" placeholder="As printed on the document">
+              </div>
+              <div>
+                <label class="field-label" for="k-docissued">Issued on</label>
+                <input class="field" id="k-docissued" name="docIssued" type="date">
+              </div>
+              <div>
+                <label class="field-label" for="k-docexpiry">Expires on</label>
+                <input class="field" id="k-docexpiry" name="docExpiry" type="date">
+                <p class="mt-1 text-caption text-on-surface-variant">Verification expires with your document.</p>
+              </div>
+            </div>
+
+            <div class="mt-6 grid max-w-3xl grid-cols-1 gap-5 sm:grid-cols-2">
+              <div>
+                <p class="field-label">Front of document</p>
+                <label for="k-front" class="flex h-40 cursor-pointer flex-col items-center justify-center rounded-md border-2 border-dashed border-outline-variant transition-colors hover:border-primary hover:bg-surface-container-low">
+                  <span class="material-symbols-outlined text-[32px] text-primary">add_a_photo</span>
+                  <span class="mt-1 text-label-lg text-on-surface">Add the front</span>
+                  <span class="text-caption text-on-surface-variant">JPG, PNG or PDF · max 5 MB</span>
+                  <input type="file" id="k-front" accept="image/jpeg,image/png,image/webp,application/pdf" class="sr-only">
+                </label>
+                <ul id="k-front-list" class="mt-3 space-y-2"></ul>
+              </div>
+              <div id="k-back-wrap">
+                <p class="field-label">Back of document</p>
+                <label for="k-back" class="flex h-40 cursor-pointer flex-col items-center justify-center rounded-md border-2 border-dashed border-outline-variant transition-colors hover:border-primary hover:bg-surface-container-low">
+                  <span class="material-symbols-outlined text-[32px] text-primary">add_a_photo</span>
+                  <span class="mt-1 text-label-lg text-on-surface">Add the back</span>
+                  <span class="text-caption text-on-surface-variant">JPG, PNG or PDF · max 5 MB</span>
+                  <input type="file" id="k-back" accept="image/jpeg,image/png,image/webp,application/pdf" class="sr-only">
+                </label>
+                <ul id="k-back-list" class="mt-3 space-y-2"></ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- STEP 3 -->
+          <div class="step-panel" id="step-3">
+            <h2 class="text-headline-md text-primary">A photo of you holding the document</h2>
+            <p class="mt-1 text-body-md text-on-surface-variant">Your face and the document must both be readable in the same frame. This is what proves the ID is yours.</p>
+            <div class="mt-6 grid max-w-3xl grid-cols-1 gap-6 sm:grid-cols-[1fr_16rem]">
+              <div>
+                <label for="k-selfie" class="flex h-52 cursor-pointer flex-col items-center justify-center rounded-md border-2 border-dashed border-outline-variant transition-colors hover:border-primary hover:bg-surface-container-low">
+                  <span class="material-symbols-outlined text-[36px] text-primary">photo_camera</span>
+                  <span class="mt-1 text-label-lg text-on-surface">Take or upload the photo</span>
+                  <span class="text-caption text-on-surface-variant">JPG, PNG or WebP · max 5 MB</span>
+                  <input type="file" id="k-selfie" accept="image/jpeg,image/png,image/webp" capture="user" class="sr-only">
+                </label>
+                <ul id="k-selfie-list" class="mt-3 space-y-2"></ul>
+              </div>
+              <div class="rounded-md bg-surface-container-low p-4">
+                <p class="text-label-lg text-primary">Get it right first time</p>
+                <ul class="mt-3 space-y-2 text-body-md text-on-surface-variant">
+                  <li class="flex gap-2"><span class="material-symbols-outlined text-[18px] text-secondary">check</span>Plain wall behind you</li>
+                  <li class="flex gap-2"><span class="material-symbols-outlined text-[18px] text-secondary">check</span>No hat, no sunglasses</li>
+                  <li class="flex gap-2"><span class="material-symbols-outlined text-[18px] text-secondary">check</span>Document text sharp, not blurred</li>
+                  <li class="flex gap-2"><span class="material-symbols-outlined text-[18px] text-error">close</span>No screenshots or photocopies</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- STEP 4 -->
+          <div class="step-panel" id="step-4">
+            <h2 class="text-headline-md text-primary">Check and send</h2>
+            <p class="mt-1 text-body-md text-on-surface-variant">A reviewer compares these against the document images. Mismatches are the main reason submissions come back.</p>
+            <dl class="mt-6 max-w-2xl divide-y divide-outline-variant rounded-md border border-outline-variant bg-surface-container-low px-5" id="kyc-review"></dl>
+            <label class="mt-6 flex max-w-2xl cursor-pointer items-start gap-3">
+              <input type="checkbox" id="k-consent" class="mt-1 h-4 w-4 accent-primary">
+              <span class="text-body-md text-on-surface-variant">
+                I confirm these documents are mine and authentic, and I consent to ANTIC verifying them for identity purposes under Cameroon's personal data rules. Submitting false documents is an offence.
+              </span>
+            </label>
+          </div>
+
+          <!-- Actions -->
+          <div class="mt-10 flex flex-wrap items-center gap-3 border-t border-outline-variant pt-6">
+            <button type="button" id="k-prev" class="btn btn-outline hidden">Back</button>
+            <button type="button" id="k-draft" class="btn btn-ghost btn-sm">Save and finish later</button>
+            <div class="flex-1"></div>
+            <button type="button" id="k-next" class="btn btn-primary">
+              Continue <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- ============ STATUS VIEW (submitted · under review · approved) ============ -->
+      <div id="kyc-statusview" class="hidden"></div>
+    </div>
+
+    <!-- Side column -->
+    <aside class="flex flex-col gap-6">
+      <div class="card">
+        <h2 class="text-label-lg uppercase tracking-wider text-on-surface-variant">What verification unlocks</h2>
+        <ul class="mt-4 space-y-3" id="kyc-unlocks">
+          <li class="flex items-start gap-3"><span class="material-symbols-outlined text-[20px] text-outline">lock</span><span><span class="block text-body-md text-on-surface">Reporting incidents</span><span class="block text-caption text-on-surface-variant">Reports that can reach the authorities</span></span></li>
+          <li class="flex items-start gap-3"><span class="material-symbols-outlined text-[20px] text-outline">lock</span><span><span class="block text-body-md text-on-surface">Learning Academy</span><span class="block text-caption text-on-surface-variant">Courses, quizzes and XP</span></span></li>
+          <li class="flex items-start gap-3"><span class="material-symbols-outlined text-[20px] text-outline">lock</span><span><span class="block text-body-md text-on-surface">Certification</span><span class="block text-caption text-on-surface-variant">QR-verifiable certificates in your name</span></span></li>
+          <li class="flex items-start gap-3"><span class="material-symbols-outlined text-[20px] text-outline">lock</span><span><span class="block text-body-md text-on-surface">Device recovery</span><span class="block text-caption text-on-surface-variant">Trace a stolen phone, laptop or vehicle</span></span></li>
+        </ul>
+      </div>
+      <div class="card">
+        <h2 class="text-label-lg uppercase tracking-wider text-on-surface-variant">How your documents are handled</h2>
+        <p class="mt-3 text-body-md text-on-surface-variant">Images are stored encrypted and are visible only to accredited reviewers. They are never shown on your public profile, in the community feed or on a certificate.</p>
+        <a href="support-tickets.html?category=kyc" class="btn btn-outline btn-sm mt-4">Ask about verification</a>
+      </div>
+    </aside>
+  </div>
+</main>
+</div>
+
+<script src="../assets/js/config.js"></script>
+<script src="../assets/js/storage.js"></script>
+<script src="../assets/js/mock-data.js"></script>
+<script src="../assets/js/api.js"></script>
+<script src="../assets/js/templates.js"></script>
+<script src="../assets/js/validation.js"></script>
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/features.js"></script>
+<script src="../assets/js/app.js"></script>
+<script defer src="../assets/js/site.js"></script>
+<script>
+(function () {
+  "use strict";
+  var F = window.VarnisFeatures;
+  var API = window.VarnisAPI;
+  var esc = F.esc;
+  var $ = function (id) { return document.getElementById(id); };
+
+  var TOTAL = 4;
+  var step = 1;
+  var record = null;
+  var docTypes = [];
+  var pickedDoc = "cni";
+  var up = {};
+
+  function toast(msg, type) { if (window.showToast) window.showToast(msg, type || "info"); }
+
+  /* ---------- Status rendering ---------- */
+
+  function unlocksState(approved) {
+    var items = $("kyc-unlocks").querySelectorAll("li");
+    items.forEach(function (li) {
+      var icon = li.querySelector(".material-symbols-outlined");
+      icon.textContent = approved ? "check_circle" : "lock";
+      icon.className = "material-symbols-outlined text-[20px] " + (approved ? "text-secondary" : "text-outline");
+    });
+  }
+
+  function renderBanner(rec) {
+    var status = rec.status || "draft";
+    var meta = F.KYC_STATUS[status] || F.KYC_STATUS.draft;
+    $("kyc-status-chip").innerHTML = F.chip(meta);
+
+    var tone = meta.tone === "good" ? "border-secondary/40 bg-secondary/5"
+             : meta.tone === "bad" ? "border-error/40 bg-error/5"
+             : meta.tone === "info" ? "border-primary/30 bg-primary/5"
+             : "border-outline-variant bg-surface-container-low";
+    var iconColor = meta.tone === "good" ? "text-secondary" : meta.tone === "bad" ? "text-error" : "text-primary";
+
+    var extra = "";
+    if (status === "rejected" && rec.rejectionReason) {
+      extra = '<p class="mt-3 rounded-md border border-error/30 bg-surface-container-lowest px-4 py-3 text-body-md text-on-surface">' +
+              '<span class="font-semibold text-error">Reason: </span>' + esc(rec.rejectionReason) + "</p>";
+    }
+    if (status === "approved" && rec.expiresAt) {
+      extra = '<p class="mt-3 text-body-md text-on-surface-variant">Valid until ' +
+              esc(new Date(rec.expiresAt).toLocaleDateString(undefined, { day: "2-digit", month: "long", year: "numeric" })) +
+              ". We'll remind you 30 days before it lapses.</p>";
+    }
+    if (status === "submitted" || status === "under_review") {
+      extra = '<p class="mt-3 text-body-md text-on-surface-variant">Submitted ' +
+              esc(rec.submittedAt ? window.VarnisTemplates.timeAgo(rec.submittedAt) : "just now") +
+              ". Reviews take up to three working days. You'll get a notification either way.</p>";
+    }
+
+    $("kyc-banner").innerHTML =
+      '<div class="rounded-md border ' + tone + ' p-6">' +
+        '<div class="flex items-start gap-4">' +
+          '<span class="material-symbols-outlined text-[32px] ' + iconColor + '">' + esc(meta.icon) + "</span>" +
+          '<div class="flex-1">' +
+            '<h2 class="text-headline-md text-on-surface">' + esc(meta.label) + "</h2>" +
+            '<p class="mt-1 text-body-md text-on-surface-variant">' + esc(meta.blurb) + "</p>" +
+            extra +
+          "</div>" +
+        "</div>" +
+      "</div>";
+
+    unlocksState(status === "approved");
+  }
+
+  function renderStatusView(rec) {
+    var status = rec.status;
+    var stages = [
+      { key: "submitted",    label: "Documents received", note: rec.submittedAt ? window.VarnisTemplates.formatDateTime(rec.submittedAt) : "" },
+      { key: "under_review", label: "Reviewer checking",  note: status === "under_review" ? "In progress" : (status === "approved" || status === "rejected" ? "Done" : "Queued") },
+      { key: "decision",     label: "Decision",           note: status === "approved" ? "Approved" : status === "rejected" ? "Rejected" : "Pending" },
+    ];
+    var reachedIdx = status === "submitted" ? 0 : status === "under_review" ? 1 : 2;
+
+    var timeline = stages.map(function (s, i) {
+      var done = i < reachedIdx, here = i === reachedIdx;
+      var dot = done ? "bg-secondary text-on-secondary" : here ? "bg-primary text-on-primary" : "bg-surface-container-high text-on-surface-variant";
+      var icon = done ? "check" : here ? "radio_button_checked" : "radio_button_unchecked";
+      return '<li class="flex gap-4">' +
+        '<div class="flex flex-col items-center">' +
+          '<span class="grid h-8 w-8 place-items-center rounded-full ' + dot + '"><span class="material-symbols-outlined text-[18px]">' + icon + "</span></span>" +
+          (i < stages.length - 1 ? '<span class="w-px flex-1 bg-outline-variant"></span>' : "") +
+        "</div>" +
+        '<div class="pb-6"><p class="text-body-md font-semibold text-on-surface">' + esc(s.label) + "</p>" +
+        '<p class="text-caption text-on-surface-variant">' + esc(s.note) + "</p></div></li>";
+    }).join("");
+
+    var p = rec.personal || {}, d = rec.document || {};
+    var docName = (docTypes.find(function (t) { return t.id === d.type; }) || {}).name || d.type || "—";
+    var rows = [
+      ["Full name", p.fullName], ["Date of birth", p.dob], ["Region", p.region], ["City", p.city],
+      ["Document", docName], ["Document number", d.number],
+    ].filter(function (r) { return r[1]; }).map(function (r) {
+      return '<div class="flex justify-between gap-4 py-3"><dt class="text-body-md text-on-surface-variant">' + esc(r[0]) +
+             '</dt><dd class="text-body-md text-on-surface">' + esc(r[1]) + "</dd></div>";
+    }).join("");
+
+    var actions = status === "approved"
+      ? '<a href="recovery.html" class="btn btn-primary">Go to Recovery Center</a>' +
+        '<a href="report-incident.html" class="btn btn-outline">File a report</a>'
+      : '<a href="support-tickets.html?category=kyc" class="btn btn-outline">Ask about my review</a>';
+
+    $("kyc-statusview").innerHTML =
+      '<div class="card card-lg">' +
+        '<h2 class="text-headline-md text-primary">Where your submission is</h2>' +
+        '<ol class="mt-6 max-w-md">' + timeline + "</ol>" +
+        (rows ? '<h3 class="mt-2 text-label-lg uppercase tracking-wider text-on-surface-variant">What you sent</h3>' +
+                '<dl class="mt-3 max-w-xl divide-y divide-outline-variant rounded-md border border-outline-variant px-5">' + rows + "</dl>" : "") +
+        '<div class="mt-6 flex flex-wrap gap-3">' + actions + "</div>" +
+      "</div>";
+    $("kyc-statusview").classList.remove("hidden");
+  }
+
+  /* ---------- Wizard ---------- */
+
+  function renderDocTypes() {
+    $("doc-types").innerHTML = docTypes.map(function (t) {
+      return '<button type="button" class="doc-option flex items-start gap-3 rounded-md border border-outline-variant p-4 text-left transition-colors hover:border-primary' +
+        (t.id === pickedDoc ? " is-picked" : "") + '" data-doc="' + esc(t.id) + '">' +
+        '<span class="material-symbols-outlined text-primary">badge</span>' +
+        '<span><span class="block text-label-lg text-on-surface">' + esc(t.name) + "</span>" +
+        '<span class="block text-caption text-on-surface-variant">' + esc(t.hint) + "</span></span></button>";
+    }).join("");
+    $("doc-types").querySelectorAll("[data-doc]").forEach(function (b) {
+      b.addEventListener("click", function () {
+        pickedDoc = b.getAttribute("data-doc");
+        renderDocTypes();
+        $("k-back-wrap").classList.toggle("hidden", pickedDoc === "passport");
+      });
+    });
+    $("k-back-wrap").classList.toggle("hidden", pickedDoc === "passport");
+  }
+
+  function collect() {
+    return {
+      personal: {
+        fullName: $("k-name").value.trim(), dob: $("k-dob").value, gender: $("k-gender").value,
+        nationality: $("k-nationality").value.trim(), region: $("k-region").value,
+        city: $("k-city").value.trim(), address: $("k-address").value.trim(),
+        occupation: $("k-occupation").value.trim(),
+      },
+      document: {
+        type: pickedDoc, number: $("k-docnum").value.trim(),
+        issuedAt: $("k-docissued").value, expiresAt: $("k-docexpiry").value,
+        frontFileName: (up.front.files()[0] || {}).fileName || "",
+        backFileName: (up.back.files()[0] || {}).fileName || "",
+        front: up.front.files()[0] || null,
+        back: up.back.files()[0] || null,
+      },
+      selfie: { fileName: (up.selfie.files()[0] || {}).fileName || "", file: up.selfie.files()[0] || null },
+    };
+  }
+
+  function validateStep(n) {
+    var d = collect();
+    if (n === 1) {
+      if (!d.personal.fullName) return "Enter your full name exactly as it appears on your ID.";
+      if (!d.personal.dob) return "Enter your date of birth.";
+      if (!d.personal.region) return "Choose your region of residence.";
+      if (!d.personal.city) return "Enter your city or town.";
+      var age = (Date.now() - new Date(d.personal.dob)) / 31557600000;
+      if (age < 15) return "You must be at least 15 to verify an account.";
+    }
+    if (n === 2) {
+      if (!d.document.number) return "Enter the document number.";
+      if (!d.document.expiresAt) return "Enter the document expiry date.";
+      if (new Date(d.document.expiresAt) < new Date()) return "That document has already expired. Use a current one.";
+      if (!d.document.front) return "Add a photo of the front of your document.";
+      if (pickedDoc !== "passport" && !d.document.back) return "Add a photo of the back of your document.";
+    }
+    if (n === 3 && !d.selfie.file) return "Add a photo of yourself holding the document.";
+    if (n === 4 && !$("k-consent").checked) return "Tick the confirmation box to submit.";
+    return null;
+  }
+
+  function paintSteps() {
+    for (var i = 1; i <= TOTAL; i++) {
+      var node = $("node-" + i), label = $("label-" + i);
+      node.className = "step-node " + (i < step ? "is-done" : i === step ? "is-active" : "is-todo");
+      node.innerHTML = i < step ? '<span class="material-symbols-outlined text-[18px]">check</span>' : String(i);
+      label.className = "text-label-md " + (i <= step ? "font-semibold text-primary" : "text-on-surface-variant");
+      if (i < TOTAL) $("line-" + i).style.background = i < step ? "#002869" : "";
+      $("step-" + i).classList.toggle("active", i === step);
+    }
+    $("k-prev").classList.toggle("hidden", step === 1);
+    $("k-next").innerHTML = step === TOTAL
+      ? 'Submit for verification <span class="material-symbols-outlined text-[18px]">send</span>'
+      : 'Continue <span class="material-symbols-outlined text-[18px]">arrow_forward</span>';
+    if (step === TOTAL) renderReview();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function renderReview() {
+    var d = collect();
+    var docName = (docTypes.find(function (t) { return t.id === d.document.type; }) || {}).name || d.document.type;
+    var rows = [
+      ["Full name", d.personal.fullName], ["Date of birth", d.personal.dob], ["Gender", d.personal.gender],
+      ["Nationality", d.personal.nationality], ["Region", d.personal.region], ["City", d.personal.city],
+      ["Address", d.personal.address], ["Occupation", d.personal.occupation],
+      ["Document", docName], ["Number", d.document.number], ["Expires", d.document.expiresAt],
+      ["Front image", d.document.frontFileName], ["Back image", d.document.backFileName],
+      ["Photo with document", d.selfie.fileName],
+    ].filter(function (r) { return r[1]; });
+    $("kyc-review").innerHTML = rows.map(function (r) {
+      return '<div class="flex flex-wrap justify-between gap-4 py-3"><dt class="text-body-md text-on-surface-variant">' + esc(r[0]) +
+             '</dt><dd class="text-body-md text-on-surface">' + esc(r[1]) + "</dd></div>";
+    }).join("");
+  }
+
+  function prefill(rec) {
+    var p = rec.personal || {}, d = rec.document || {};
+    if (p.fullName) $("k-name").value = p.fullName;
+    if (p.dob) $("k-dob").value = p.dob;
+    if (p.gender) $("k-gender").value = p.gender;
+    if (p.nationality) $("k-nationality").value = p.nationality;
+    if (p.region) $("k-region").value = p.region;
+    if (p.city) $("k-city").value = p.city;
+    if (p.address) $("k-address").value = p.address;
+    if (p.occupation) $("k-occupation").value = p.occupation;
+    if (d.type) pickedDoc = d.type;
+    if (d.number) $("k-docnum").value = d.number;
+    if (d.issuedAt) $("k-docissued").value = d.issuedAt;
+    if (d.expiresAt) $("k-docexpiry").value = d.expiresAt;
+  }
+
+  function submit() {
+    var d = collect();
+    var payload = {
+      personal: d.personal,
+      document: {
+        type: d.document.type, number: d.document.number,
+        issuedAt: d.document.issuedAt, expiresAt: d.document.expiresAt,
+        frontFileName: d.document.frontFileName, backFileName: d.document.backFileName,
+        front: d.document.front, back: d.document.back,
+      },
+      selfie: { fileName: d.selfie.fileName, file: d.selfie.file },
+    };
+    $("k-next").disabled = true;
+    API.kyc.submit(payload).then(function (rec) {
+      record = rec;
+      toast("Verification submitted. We'll notify you when it's reviewed.", "success");
+      show(rec);
+    }).catch(function (err) {
+      $("k-next").disabled = false;
+      toast(err.message || "Could not submit right now. Try again.", "error");
+    });
+  }
+
+  function show(rec) {
+    renderBanner(rec);
+    var editable = ["draft", "rejected", "expired"].indexOf(rec.status) !== -1;
+    $("kyc-wizard").classList.toggle("hidden", !editable);
+    $("kyc-statusview").classList.toggle("hidden", editable);
+    if (editable) {
+      prefill(rec);
+      renderDocTypes();
+      step = 1;
+      $("k-next").disabled = false;
+      if (rec.status === "rejected" || rec.status === "expired") {
+        $("k-next").innerHTML = 'Continue <span class="material-symbols-outlined text-[18px]">arrow_forward</span>';
+      }
+      paintSteps();
+    } else {
+      renderStatusView(rec);
+    }
+  }
+
+  /* ---------- Boot ---------- */
+  document.addEventListener("DOMContentLoaded", function () {
+    up.front = F.attachUploader({ input: "k-front", list: "k-front-list" });
+    up.back = F.attachUploader({ input: "k-back", list: "k-back-list" });
+    up.selfie = F.attachUploader({ input: "k-selfie", list: "k-selfie-list" });
+
+    $("k-next").addEventListener("click", function () {
+      var problem = validateStep(step);
+      if (problem) { toast(problem, "error"); return; }
+      if (step === TOTAL) { submit(); return; }
+      step++; paintSteps();
+    });
+    $("k-prev").addEventListener("click", function () { if (step > 1) { step--; paintSteps(); } });
+    $("k-draft").addEventListener("click", function () {
+      var d = collect();
+      API.kyc.saveDraft({ personal: d.personal, document: { type: d.document.type, number: d.document.number, issuedAt: d.document.issuedAt, expiresAt: d.document.expiresAt } })
+        .then(function () { toast("Saved. Pick up where you left off any time.", "success"); })
+        .catch(function () { toast("Could not save your draft.", "error"); });
+    });
+    document.querySelectorAll("[data-goto]").forEach(function (el) {
+      el.addEventListener("click", function () {
+        var target = Number(el.getAttribute("data-goto"));
+        if (target < step) { step = target; paintSteps(); }
+      });
+    });
+
+    Promise.all([API.kyc.documentTypes(), API.kyc.get()]).then(function (res) {
+      docTypes = (res[0] && res[0].items) || [];
+      record = res[1] || { status: "draft" };
+      show(record);
+    }).catch(function () {
+      $("kyc-banner").innerHTML = '<div class="card"><p class="text-body-md text-on-surface-variant">Verification is unavailable right now. Try again in a moment.</p></div>';
+    });
+  });
+})();
+</script>
+</body>
+</html>

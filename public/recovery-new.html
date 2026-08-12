@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>New Recovery Request | VARNIS</title>
+<link rel="icon" type="image/jpeg" href="../assets/img/varnis-logo.jpeg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700;900&family=Work+Sans:wght@500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/tailwind-output.css">
+<link rel="stylesheet" href="../assets/css/site.css">
+<style>
+  .step-panel { display: none; }
+  .step-panel.active { display: block; }
+  .pick-card.is-picked { border-color: #002869; background: rgba(0,40,105,0.04); }
+  .pay-card.is-picked { border-color: #002869; background: rgba(0,40,105,0.04); }
+</style>
+<script src="../assets/js/auth-guard.js"></script>
+</head>
+<body class="cyv-shell">
+<div class="cyv-rail-scrim fixed inset-0 z-30 hidden bg-black/40 lg:hidden" id="cyv-rail-scrim"></div>
+<aside class="cyv-rail" id="side-nav">
+      <div class="cyv-brand">
+        <div class="grid h-9 w-9 place-items-center overflow-hidden rounded-md bg-white">
+          <img src="../assets/img/varnis-logo.jpeg" alt="VARNIS" class="h-full w-full object-contain p-0.5">
+        </div>
+        <div class="leading-tight">
+          <p class="text-body-lg font-bold">VARNIS</p>
+          <p class="text-label-md text-on-primary/60">Civic Safety Portal</p>
+        </div>
+      </div>
+      <nav class="cyv-nav">
+        <a href="index.html" class="cyv-nav-item"><span class="material-symbols-outlined">home</span><span data-i18n="nav.home">Home</span></a>
+        <a href="my-reports.html" class="cyv-nav-item"><span class="material-symbols-outlined">description</span><span data-i18n="nav.reports">Reports</span></a>
+        <a href="recovery.html" class="cyv-nav-item is-active"><span class="material-symbols-outlined">travel_explore</span><span data-i18n="nav.recovery">Recovery</span></a>
+        <a href="community.html" class="cyv-nav-item"><span class="material-symbols-outlined">groups</span><span data-i18n="nav.community">Community</span></a>
+        <a href="learn.html" class="cyv-nav-item"><span class="material-symbols-outlined">school</span><span data-i18n="nav.learn">Learn</span></a>
+        <a href="assistant.html" class="cyv-nav-item"><span class="material-symbols-outlined">smart_toy</span><span data-i18n="nav.assistant">Ask AI</span></a>
+        <a href="profile.html" class="cyv-nav-item"><span class="material-symbols-outlined">account_circle</span><span data-i18n="nav.profile">Profile</span></a>
+      </nav>
+      <div class="cyv-rail-foot">
+        <a href="report-incident.html" class="cyv-emergency">
+          <span class="material-symbols-outlined text-[20px]">emergency</span> <span data-i18n="nav.emergency">Emergency Alert</span>
+        </a>
+        <a href="settings.html" class="cyv-nav-item"><span class="material-symbols-outlined">settings</span><span data-i18n="nav.settings">Settings</span></a>
+        <a href="support.html" class="cyv-nav-item"><span class="material-symbols-outlined">help</span><span data-i18n="nav.support">Support</span></a>
+      </div>
+    </aside>
+
+<div class="cyv-main">
+      <header class="cyv-topbar">
+        <button class="cyv-iconbtn lg:hidden" id="cyv-rail-toggle" aria-label="Open menu">
+          <span class="material-symbols-outlined">menu</span>
+        </button>
+        <label class="cyv-search">
+          <span class="material-symbols-outlined text-[20px]">search</span>
+          <input type="search" placeholder="Search safety database…" aria-label="Search">
+        </label>
+        <button type="button" class="cyv-iconbtn" data-lang-toggle aria-label="Switch language" title="English / Français"><span class="material-symbols-outlined">language</span><span class="absolute -bottom-0.5 right-0 text-[9px] font-bold text-primary" data-lang-label>EN</span></button>
+        <a href="notifications.html" class="cyv-iconbtn" aria-label="Notifications"><span class="material-symbols-outlined">notifications</span></a>
+        <a href="settings.html" class="cyv-iconbtn" aria-label="Settings"><span class="material-symbols-outlined">settings</span></a>
+        <a href="support.html" class="cyv-iconbtn max-sm:hidden" aria-label="Help"><span class="material-symbols-outlined">help</span></a>
+        <a href="profile.html" class="grid h-10 w-10 place-items-center overflow-hidden rounded-full bg-primary/10 text-primary" aria-label="Profile">
+          <span class="material-symbols-outlined">person</span>
+        </a>
+      </header>
+
+<main class="cyv-canvas" data-page="recovery-new">
+  <nav class="breadcrumb mb-3" aria-label="Breadcrumb">
+    <a href="recovery.html" class="hover:text-primary">Recovery Center</a>
+    <span class="material-symbols-outlined text-[16px]">chevron_right</span>
+    <span class="text-on-surface">New request</span>
+  </nav>
+  <div class="mb-6">
+    <h1 class="page-title">Start a recovery request</h1>
+    <p class="page-sub max-w-2xl">Six steps. Have the asset's IMEI, serial number or plate to hand, plus proof that it belongs to you.</p>
+  </div>
+
+  <div id="recovery-gate"></div>
+
+  <!-- Success panel -->
+  <section id="done-panel" class="hidden"></section>
+
+  <div id="wizard-wrap" class="hidden overflow-hidden rounded-md border border-outline-variant bg-surface-container-lowest">
+    <div class="border-b border-outline-variant px-6 py-6 lg:px-8">
+      <div class="step-rail mx-auto max-w-4xl" id="step-rail"></div>
+    </div>
+
+    <form id="rec-form" class="min-h-[440px] p-6 lg:p-8" novalidate>
+
+      <!-- STEP 1 — Ownership verification -->
+      <div class="step-panel active" id="step-1">
+        <h2 class="text-headline-md text-primary">Prove the asset is yours</h2>
+        <p class="mt-1 max-w-2xl text-body-md text-on-surface-variant">
+          Enter the details of the VARNIS account the asset belongs to. <strong class="text-on-surface">Any two of the three must match</strong> — so a case can still be filed when the owner's phone, SIM or email is gone with the device.
+        </p>
+
+        <div class="mt-6 grid max-w-2xl grid-cols-1 gap-3 sm:grid-cols-2">
+          <button type="button" class="pick-card is-picked flex items-start gap-3 rounded-md border border-outline-variant p-4 text-left transition-colors hover:border-primary" data-filer="self">
+            <span class="material-symbols-outlined text-primary">person</span>
+            <span><span class="block text-label-lg text-on-surface">It's mine</span><span class="block text-caption text-on-surface-variant">The asset is on my own account</span></span>
+          </button>
+          <button type="button" class="pick-card flex items-start gap-3 rounded-md border border-outline-variant p-4 text-left transition-colors hover:border-primary" data-filer="behalf">
+            <span class="material-symbols-outlined text-primary">group</span>
+            <span><span class="block text-label-lg text-on-surface">I'm filing for someone else</span><span class="block text-caption text-on-surface-variant">They can't reach their phone or email</span></span>
+          </button>
+        </div>
+
+        <div class="mt-6 grid max-w-2xl grid-cols-1 gap-5">
+          <div>
+            <label class="field-label" for="o-name">Account full name</label>
+            <input class="field" id="o-name" name="ownerName" autocomplete="off" placeholder="Name on the VARNIS account">
+          </div>
+          <div>
+            <label class="field-label" for="o-phone">Telephone number</label>
+            <input class="field" id="o-phone" name="ownerPhone" type="tel" inputmode="tel" placeholder="+237 6XX XXX XXX">
+          </div>
+          <div>
+            <label class="field-label" for="o-pass">Account password</label>
+            <div class="relative">
+              <input class="field pr-12" id="o-pass" name="ownerPassword" type="password" autocomplete="off" placeholder="Leave blank if you don't have it">
+              <button type="button" id="o-pass-toggle" class="absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-primary" aria-label="Show password">
+                <span class="material-symbols-outlined text-[20px]">visibility</span>
+              </button>
+            </div>
+            <p class="mt-1 text-caption text-on-surface-variant">Never share a password you don't own. Two matching fields are enough — leave this blank if it isn't yours to give.</p>
+          </div>
+          <div class="flex flex-wrap items-center gap-3">
+            <button type="button" id="o-verify" class="btn btn-primary">Check ownership</button>
+            <span id="o-result" class="text-body-md"></span>
+          </div>
+        </div>
+
+        <div class="mt-6 max-w-2xl rounded-md bg-surface-container-low p-4">
+          <p class="flex items-center gap-2 text-label-lg text-primary"><span class="material-symbols-outlined text-[20px]">info</span>Why it works this way</p>
+          <p class="mt-2 text-body-md text-on-surface-variant">A stolen phone usually takes the SIM and the email with it. Requiring every field would lock the real owner out at the worst moment; requiring two keeps impersonation hard while leaving a route open for a trusted relative or colleague.</p>
+        </div>
+      </div>
+
+      <!-- STEP 2 — Asset type -->
+      <div class="step-panel" id="step-2">
+        <h2 class="text-headline-md text-primary">What was taken?</h2>
+        <p class="mt-1 text-body-md text-on-surface-variant">This decides which details the authorities need and which tracking fee applies.</p>
+        <div class="mt-6 grid max-w-3xl grid-cols-1 gap-4 sm:grid-cols-2">
+          <button type="button" class="pick-card flex flex-col items-start gap-3 rounded-md border border-outline-variant p-6 text-left transition-colors hover:border-primary" data-asset="electronics">
+            <span class="material-symbols-outlined text-[36px] text-primary">smartphone</span>
+            <span class="text-body-lg font-semibold text-on-surface">Electronic device</span>
+            <span class="text-body-md text-on-surface-variant">Phone, laptop, tablet, smartwatch, camera or console. Traced by IMEI or serial number.</span>
+            <span class="mt-auto text-label-lg font-bold text-primary" data-fee-for="electronics">—</span>
+          </button>
+          <button type="button" class="pick-card flex flex-col items-start gap-3 rounded-md border border-outline-variant p-6 text-left transition-colors hover:border-primary" data-asset="vehicle">
+            <span class="material-symbols-outlined text-[36px] text-primary">directions_car</span>
+            <span class="text-body-lg font-semibold text-on-surface">Vehicle</span>
+            <span class="text-body-md text-on-surface-variant">Car, motorcycle, tricycle, van, truck or bus. Circulated by plate and VIN.</span>
+            <span class="mt-auto text-label-lg font-bold text-primary" data-fee-for="vehicle">—</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- STEP 3 — Asset details -->
+      <div class="step-panel" id="step-3">
+        <h2 class="text-headline-md text-primary" id="details-title">Asset details</h2>
+        <p class="mt-1 text-body-md text-on-surface-variant">The more precise this is, the better the chance of a match at a checkpoint or on a network.</p>
+
+        <!-- Electronic device form -->
+        <div class="mt-6 hidden grid max-w-3xl grid-cols-1 gap-5 sm:grid-cols-2" id="form-electronics">
+          <div>
+            <label class="field-label" for="d-type">Device type</label>
+            <select class="field" id="d-type"><option value="">Select type</option></select>
+          </div>
+          <div>
+            <label class="field-label" for="d-brand">Brand</label>
+            <input class="field" id="d-brand" list="brand-list" placeholder="Type to search" autocomplete="off">
+            <datalist id="brand-list"></datalist>
+          </div>
+          <div>
+            <label class="field-label" for="d-model">Model</label>
+            <input class="field" id="d-model" placeholder="e.g. Galaxy A54">
+          </div>
+          <div>
+            <label class="field-label" for="d-color">Colour</label>
+            <input class="field" id="d-color" placeholder="e.g. Black">
+          </div>
+          <div>
+            <label class="field-label" for="d-imei">IMEI</label>
+            <input class="field" id="d-imei" inputmode="numeric" maxlength="17" placeholder="15 digits — dial *#06# on a phone">
+            <p class="mt-1 text-caption text-on-surface-variant" id="imei-hint">On the box, the receipt, or in your Google/Apple account.</p>
+          </div>
+          <div>
+            <label class="field-label" for="d-serial">Serial number</label>
+            <input class="field" id="d-serial" placeholder="For laptops, tablets, cameras">
+          </div>
+          <p class="text-caption text-on-surface-variant sm:col-span-2">Give at least one of IMEI or serial number — without one there is nothing for operators to trace.</p>
+        </div>
+
+        <!-- Vehicle form -->
+        <div class="mt-6 hidden grid max-w-3xl grid-cols-1 gap-5 sm:grid-cols-2" id="form-vehicle">
+          <div>
+            <label class="field-label" for="v-type">Vehicle type</label>
+            <select class="field" id="v-type"><option value="">Select type</option></select>
+          </div>
+          <div>
+            <label class="field-label" for="v-make">Manufacturer</label>
+            <input class="field" id="v-make" list="make-list" placeholder="Type to search" autocomplete="off">
+            <datalist id="make-list"></datalist>
+          </div>
+          <div>
+            <label class="field-label" for="v-model">Model</label>
+            <input class="field" id="v-model" placeholder="e.g. Corolla">
+          </div>
+          <div>
+            <label class="field-label" for="v-year">Year</label>
+            <input class="field" id="v-year" inputmode="numeric" maxlength="4" placeholder="e.g. 2016">
+          </div>
+          <div>
+            <label class="field-label" for="v-plate">Plate number</label>
+            <input class="field" id="v-plate" placeholder="e.g. LT 447 AB" style="text-transform:uppercase">
+          </div>
+          <div>
+            <label class="field-label" for="v-vin">VIN <span class="font-normal text-outline">(optional)</span></label>
+            <input class="field" id="v-vin" maxlength="17" placeholder="17 characters, on the carte grise">
+          </div>
+          <div>
+            <label class="field-label" for="v-color">Colour</label>
+            <input class="field" id="v-color" placeholder="e.g. Silver">
+          </div>
+        </div>
+
+        <div class="mt-6 grid max-w-3xl grid-cols-1 gap-5 border-t border-outline-variant pt-6 sm:grid-cols-2">
+          <div>
+            <label class="field-label" for="a-date">When did you lose it?</label>
+            <input class="field" id="a-date" type="date">
+          </div>
+          <div>
+            <label class="field-label" for="a-seen">Last known place</label>
+            <input class="field" id="a-seen" placeholder="e.g. Marché Central, Yaoundé">
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 4 — Ownership document -->
+      <div class="step-panel" id="step-4">
+        <h2 class="text-headline-md text-primary">Proof that it belongs to you</h2>
+        <p class="mt-1 max-w-2xl text-body-md text-on-surface-variant">A purchase invoice, warranty card, carte grise or registration certificate. It must show the IMEI, serial number or plate you entered.</p>
+        <div class="mt-6 grid max-w-3xl grid-cols-1 gap-6 sm:grid-cols-[1fr_16rem]">
+          <div>
+            <label for="own-doc" class="flex h-48 cursor-pointer flex-col items-center justify-center rounded-md border-2 border-dashed border-outline-variant transition-colors hover:border-primary hover:bg-surface-container-low">
+              <span class="material-symbols-outlined text-[36px] text-primary">upload_file</span>
+              <span class="mt-1 text-label-lg text-on-surface">Upload the document</span>
+              <span class="text-caption text-on-surface-variant">JPG, PNG, WebP or PDF · max 5 MB</span>
+              <input type="file" id="own-doc" accept="image/jpeg,image/png,image/webp,application/pdf" class="sr-only">
+            </label>
+            <ul id="own-doc-list" class="mt-3 space-y-2"></ul>
+          </div>
+          <div class="rounded-md bg-surface-container-low p-4">
+            <p class="text-label-lg text-primary">Accepted proof</p>
+            <ul class="mt-3 space-y-2 text-body-md text-on-surface-variant">
+              <li class="flex gap-2"><span class="material-symbols-outlined text-[18px] text-secondary">check</span>Shop invoice or receipt</li>
+              <li class="flex gap-2"><span class="material-symbols-outlined text-[18px] text-secondary">check</span>Warranty or IMEI card</li>
+              <li class="flex gap-2"><span class="material-symbols-outlined text-[18px] text-secondary">check</span>Carte grise / registration</li>
+              <li class="flex gap-2"><span class="material-symbols-outlined text-[18px] text-secondary">check</span>Insurance certificate</li>
+            </ul>
+            <p class="mt-3 text-caption text-on-surface-variant">No document? Investigators can accept the original packaging photographed next to your ID.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 5 — Fee & payment -->
+      <div class="step-panel" id="step-5">
+        <h2 class="text-headline-md text-primary">Tracking fee</h2>
+        <p class="mt-1 max-w-2xl text-body-md text-on-surface-variant">One fee covers the whole case: filing with the authorities, network tracing and status updates until it closes.</p>
+
+        <div class="mt-6 max-w-3xl rounded-md border border-outline-variant">
+          <div class="flex flex-wrap items-center justify-between gap-3 border-b border-outline-variant bg-surface-container-low px-5 py-4">
+            <div>
+              <p class="text-label-md uppercase tracking-wider text-on-surface-variant">Amount due</p>
+              <p class="text-headline-lg text-primary" id="fee-amount">—</p>
+            </div>
+            <p class="max-w-sm text-caption text-on-surface-variant" id="fee-note"></p>
+          </div>
+          <div class="p-5">
+            <p class="field-label">Pay with</p>
+            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2" id="pay-methods"></div>
+
+            <div class="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2">
+              <div>
+                <label class="field-label" for="p-ref">Transaction reference</label>
+                <input class="field" id="p-ref" placeholder="From the confirmation SMS" autocomplete="off">
+                <p class="mt-1 text-caption text-on-surface-variant">The ID in the message the operator sent you.</p>
+              </div>
+              <div>
+                <label class="field-label" for="p-from">Number you paid from</label>
+                <input class="field" id="p-from" type="tel" inputmode="tel" placeholder="+237 6XX XXX XXX">
+              </div>
+            </div>
+
+            <div class="mt-6">
+              <p class="field-label">Proof of payment</p>
+              <label for="pay-proof" class="flex h-36 cursor-pointer flex-col items-center justify-center rounded-md border-2 border-dashed border-outline-variant transition-colors hover:border-primary hover:bg-surface-container-low">
+                <span class="material-symbols-outlined text-[32px] text-primary">receipt_long</span>
+                <span class="mt-1 text-label-lg text-on-surface">Upload the receipt or SMS screenshot</span>
+                <span class="text-caption text-on-surface-variant">JPG, PNG, WebP or PDF · max 5 MB</span>
+                <input type="file" id="pay-proof" accept="image/jpeg,image/png,image/webp,application/pdf" class="sr-only">
+              </label>
+              <ul id="pay-proof-list" class="mt-3 space-y-2"></ul>
+            </div>
+
+            <p class="mt-5 flex items-start gap-2 rounded-md bg-error/5 px-4 py-3 text-body-md text-on-surface-variant">
+              <span class="material-symbols-outlined text-[20px] text-error">shield</span>
+              VARNIS never phones you for a PIN or a one-time code. Pay only to the merchant number shown after you pick an operator, and never to an individual who calls you about this case.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 6 — Review -->
+      <div class="step-panel" id="step-6">
+        <h2 class="text-headline-md text-primary">Check and file</h2>
+        <p class="mt-1 text-body-md text-on-surface-variant">Once filed, the case goes to review and then to the authorities. Details can still be corrected by replying on the case page.</p>
+        <dl class="mt-6 max-w-2xl divide-y divide-outline-variant rounded-md border border-outline-variant bg-surface-container-low px-5" id="review-list"></dl>
+        <label class="mt-6 flex max-w-2xl cursor-pointer items-start gap-3">
+          <input type="checkbox" id="r-consent" class="mt-1 h-4 w-4 accent-primary">
+          <span class="text-body-md text-on-surface-variant">
+            I declare that this asset is genuinely mine or that I have the owner's authority to file, and that these details are true. I understand a false declaration to the authorities is an offence.
+          </span>
+        </label>
+      </div>
+
+      <!-- Actions -->
+      <div class="mt-10 flex flex-wrap items-center gap-3 border-t border-outline-variant pt-6">
+        <button type="button" id="r-prev" class="btn btn-outline hidden">Back</button>
+        <a href="recovery.html" class="btn btn-ghost btn-sm">Cancel</a>
+        <div class="flex-1"></div>
+        <button type="button" id="r-next" class="btn btn-primary">
+          Continue <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</main>
+</div>
+
+<script src="../assets/js/config.js"></script>
+<script src="../assets/js/storage.js"></script>
+<script src="../assets/js/mock-data.js"></script>
+<script src="../assets/js/api.js"></script>
+<script src="../assets/js/templates.js"></script>
+<script src="../assets/js/validation.js"></script>
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/features.js"></script>
+<script src="../assets/js/app.js"></script>
+<script defer src="../assets/js/site.js"></script>
+<script>
+(function () {
+  "use strict";
+  var F = window.VarnisFeatures, API = window.VarnisAPI;
+  var esc = F.esc;
+  var $ = function (id) { return document.getElementById(id); };
+
+  var STEPS = [
+    { n: 1, label: "Ownership" }, { n: 2, label: "Asset type" }, { n: 3, label: "Details" },
+    { n: 4, label: "Document" }, { n: 5, label: "Payment" }, { n: 6, label: "Review" },
+  ];
+  var TOTAL = STEPS.length;
+  var step = 1;
+  var filer = "self";
+  var assetType = null;
+  var payMethod = null;
+  var ownership = { verified: false, matched: [], matchCount: 0 };
+  var fees = null, catalog = null;
+  var up = {};
+
+  function toast(m, t) { if (window.showToast) window.showToast(m, t || "info"); }
+
+  /* ---------- Step rail ---------- */
+  function buildRail() {
+    $("step-rail").innerHTML = STEPS.map(function (s, i) {
+      return '<div class="flex cursor-pointer flex-col items-center gap-2" data-goto="' + s.n + '">' +
+        '<div class="step-node is-todo" id="node-' + s.n + '">' + s.n + "</div>" +
+        '<span class="text-label-md text-on-surface-variant max-sm:hidden" id="label-' + s.n + '">' + s.label + "</span></div>" +
+        (i < STEPS.length - 1 ? '<div class="step-line" id="line-' + s.n + '"></div>' : "");
+    }).join("");
+    $("step-rail").querySelectorAll("[data-goto]").forEach(function (el) {
+      el.addEventListener("click", function () {
+        var t = Number(el.getAttribute("data-goto"));
+        if (t < step) { step = t; paint(); }
+      });
+    });
+  }
+
+  function paint() {
+    STEPS.forEach(function (s) {
+      var node = $("node-" + s.n), label = $("label-" + s.n);
+      node.className = "step-node " + (s.n < step ? "is-done" : s.n === step ? "is-active" : "is-todo");
+      node.innerHTML = s.n < step ? '<span class="material-symbols-outlined text-[18px]">check</span>' : String(s.n);
+      if (label) label.className = "text-label-md max-sm:hidden " + (s.n <= step ? "font-semibold text-primary" : "text-on-surface-variant");
+      if (s.n < TOTAL) { var line = $("line-" + s.n); if (line) line.style.background = s.n < step ? "#002869" : ""; }
+      $("step-" + s.n).classList.toggle("active", s.n === step);
+    });
+    $("r-prev").classList.toggle("hidden", step === 1);
+    $("r-next").innerHTML = step === TOTAL
+      ? 'File the recovery request <span class="material-symbols-outlined text-[18px]">send</span>'
+      : 'Continue <span class="material-symbols-outlined text-[18px]">arrow_forward</span>';
+    if (step === 3) renderDetailsStep();
+    if (step === 5) renderFeeStep();
+    if (step === TOTAL) renderReview();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  /* ---------- Step 1: ownership ---------- */
+  function setFiler(v) {
+    filer = v;
+    document.querySelectorAll("[data-filer]").forEach(function (b) {
+      b.classList.toggle("is-picked", b.getAttribute("data-filer") === v);
+    });
+    if (v === "self") {
+      var u = (window.VarnisStore && window.VarnisStore.getUser()) || (window.VarnisMockData || {}).currentUser || {};
+      if (!$("o-name").value) $("o-name").value = u.name || "";
+      if (!$("o-phone").value) $("o-phone").value = u.phone || "";
+    }
+    ownership = { verified: false, matched: [], matchCount: 0 };
+    $("o-result").innerHTML = "";
+  }
+
+  function verifyOwnership() {
+    var payload = {
+      fullName: $("o-name").value.trim(),
+      phone: $("o-phone").value.trim(),
+      password: $("o-pass").value,
+      onBehalf: filer === "behalf",
+    };
+    var supplied = [payload.fullName, payload.phone, payload.password].filter(function (v) { return String(v || "").trim(); }).length;
+    if (supplied < 2) { toast("Fill in at least two of the three fields.", "error"); return; }
+
+    $("o-verify").disabled = true;
+    $("o-result").innerHTML = '<span class="text-on-surface-variant">Checking…</span>';
+    API.recovery.verifyOwnership(payload).then(function (res) {
+      $("o-verify").disabled = false;
+      ownership = res;
+      if (res.verified) {
+        $("o-result").innerHTML = '<span class="chip chip-secure"><span class="material-symbols-outlined text-[15px]">check_circle</span> ' +
+          res.matchCount + " of 3 matched — ownership confirmed</span>";
+      } else {
+        $("o-result").innerHTML = '<span class="chip chip-error"><span class="material-symbols-outlined text-[15px]">error</span> ' +
+          "Only " + res.matchCount + " field matched. Two are required.</span>";
+      }
+    }).catch(function () {
+      $("o-verify").disabled = false;
+      $("o-result").innerHTML = '<span class="text-error">Check failed. Try again.</span>';
+    });
+  }
+
+  /* ---------- Step 2: asset type ---------- */
+  function setAsset(v) {
+    assetType = v;
+    document.querySelectorAll("[data-asset]").forEach(function (b) {
+      b.classList.toggle("is-picked", b.getAttribute("data-asset") === v);
+    });
+  }
+
+  /* ---------- Step 3: details ---------- */
+  function renderDetailsStep() {
+    $("details-title").textContent = assetType === "vehicle" ? "Vehicle details" : "Device details";
+    $("form-electronics").classList.toggle("hidden", assetType !== "electronics");
+    $("form-vehicle").classList.toggle("hidden", assetType !== "vehicle");
+  }
+
+  function fillCatalog(cat) {
+    catalog = cat;
+    $("d-type").innerHTML = '<option value="">Select type</option>' +
+      (cat.deviceTypes || []).map(function (t) { return "<option>" + esc(t) + "</option>"; }).join("");
+    $("brand-list").innerHTML = (cat.deviceBrands || []).map(function (b) { return '<option value="' + esc(b) + '"></option>'; }).join("");
+    $("v-type").innerHTML = '<option value="">Select type</option>' +
+      (cat.vehicleTypes || []).map(function (t) { return "<option>" + esc(t) + "</option>"; }).join("");
+    $("make-list").innerHTML = (cat.vehicleManufacturers || []).map(function (m) { return '<option value="' + esc(m) + '"></option>'; }).join("");
+  }
+
+  function assetPayload() {
+    if (assetType === "vehicle") {
+      return {
+        vehicleType: $("v-type").value, manufacturer: $("v-make").value.trim(), model: $("v-model").value.trim(),
+        year: $("v-year").value.trim(), plate: $("v-plate").value.trim().toUpperCase(),
+        vin: $("v-vin").value.trim().toUpperCase(), color: $("v-color").value.trim(),
+      };
+    }
+    return {
+      deviceType: $("d-type").value, brand: $("d-brand").value.trim(), model: $("d-model").value.trim(),
+      color: $("d-color").value.trim(), imei: $("d-imei").value.replace(/\s/g, ""), serial: $("d-serial").value.trim(),
+    };
+  }
+
+  /* ---------- Step 5: fee & payment ---------- */
+  function renderFeeStep() {
+    if (!fees || !assetType) return;
+    var f = fees[assetType];
+    $("fee-amount").textContent = F.fcfa(f.amount);
+    $("fee-note").textContent = fees.note || "";
+    if (!$("pay-methods").innerHTML) {
+      $("pay-methods").innerHTML = F.PAYMENT_METHODS.map(function (m) {
+        return '<button type="button" class="pay-card flex items-center gap-3 rounded-md border border-outline-variant p-4 text-left transition-colors hover:border-primary" data-pay="' + esc(m.name) + '">' +
+          '<span class="grid h-10 w-10 place-items-center rounded-md" style="background:' + m.accent + '22">' +
+          '<span class="material-symbols-outlined" style="color:' + m.accent + '">account_balance_wallet</span></span>' +
+          '<span><span class="block text-label-lg text-on-surface">' + esc(m.name) + "</span>" +
+          '<span class="block text-caption text-on-surface-variant">Dial ' + esc(m.shortcode) + " to confirm your balance</span></span></button>";
+      }).join("");
+      $("pay-methods").querySelectorAll("[data-pay]").forEach(function (b) {
+        b.addEventListener("click", function () {
+          payMethod = b.getAttribute("data-pay");
+          $("pay-methods").querySelectorAll("[data-pay]").forEach(function (x) { x.classList.toggle("is-picked", x === b); });
+        });
+      });
+    }
+  }
+
+  /* ---------- Step 6: review ---------- */
+  function renderReview() {
+    var a = assetPayload();
+    var rows = [["Filed by", filer === "self" ? "Myself (owner)" : "On behalf of the owner"],
+                ["Account name", $("o-name").value.trim()],
+                ["Telephone", $("o-phone").value.trim()],
+                ["Ownership check", ownership.matchCount + " of 3 fields matched"],
+                ["Asset", assetType === "vehicle" ? "Vehicle" : "Electronic device"]];
+    if (assetType === "vehicle") {
+      rows = rows.concat([["Type", a.vehicleType], ["Manufacturer", a.manufacturer], ["Model", a.model],
+                          ["Year", a.year], ["Plate", a.plate], ["VIN", a.vin], ["Colour", a.color]]);
+    } else {
+      rows = rows.concat([["Type", a.deviceType], ["Brand", a.brand], ["Model", a.model],
+                          ["Colour", a.color], ["IMEI", a.imei], ["Serial", a.serial]]);
+    }
+    rows = rows.concat([
+      ["Lost on", $("a-date").value], ["Last seen", $("a-seen").value.trim()],
+      ["Ownership document", (up.doc.files()[0] || {}).fileName],
+      ["Tracking fee", fees && assetType ? F.fcfa(fees[assetType].amount) : ""],
+      ["Payment method", payMethod], ["Reference", $("p-ref").value.trim()],
+      ["Paid from", $("p-from").value.trim()], ["Proof", (up.proof.files()[0] || {}).fileName],
+    ]);
+    $("review-list").innerHTML = rows.filter(function (r) { return r[1]; }).map(function (r) {
+      return '<div class="flex flex-wrap justify-between gap-4 py-3"><dt class="text-body-md text-on-surface-variant">' + esc(r[0]) +
+             '</dt><dd class="text-body-md text-on-surface">' + esc(r[1]) + "</dd></div>";
+    }).join("");
+  }
+
+  /* ---------- Validation ---------- */
+  function validate(n) {
+    if (n === 1) {
+      if (!ownership.verified) return "Run the ownership check and get two matching fields before continuing.";
+    }
+    if (n === 2 && !assetType) return "Choose whether this is a device or a vehicle.";
+    if (n === 3) {
+      var a = assetPayload();
+      if (assetType === "vehicle") {
+        if (!a.vehicleType) return "Choose the vehicle type.";
+        if (!a.manufacturer) return "Enter the manufacturer.";
+        if (!a.model) return "Enter the model.";
+        if (!a.plate) return "Enter the plate number — it's what checkpoints match on.";
+        if (a.vin && a.vin.length !== 17) return "A VIN is 17 characters. Leave it blank if you don't have it.";
+        if (a.year && !/^(19|20)\d{2}$/.test(a.year)) return "Enter the year as four digits, e.g. 2016.";
+      } else {
+        if (!a.deviceType) return "Choose the device type.";
+        if (!a.brand) return "Enter the brand.";
+        if (!a.model) return "Enter the model.";
+        if (!a.imei && !a.serial) return "Enter an IMEI or a serial number — one of them is required to trace the device.";
+        if (a.imei && !/^\d{14,16}$/.test(a.imei)) return "An IMEI is 14 to 16 digits. Dial *#06# on the device to check.";
+      }
+      if (!$("a-date").value) return "Enter the date you lost it.";
+      if (new Date($("a-date").value) > new Date()) return "The date you lost it can't be in the future.";
+      if (!$("a-seen").value.trim()) return "Enter the last place you had it.";
+    }
+    if (n === 4 && !up.doc.files().length) return "Upload a document showing you own the asset.";
+    if (n === 5) {
+      if (!payMethod) return "Choose MTN Mobile Money or Orange Money.";
+      if (!$("p-ref").value.trim()) return "Enter the transaction reference from your confirmation SMS.";
+      if (!up.proof.files().length) return "Upload your proof of payment.";
+    }
+    if (n === TOTAL && !$("r-consent").checked) return "Tick the declaration to file the request.";
+    return null;
+  }
+
+  /* ---------- Submit ---------- */
+  function submit() {
+    var payload = {
+      assetType: assetType,
+      asset: assetPayload(),
+      onBehalf: filer === "behalf",
+      owner: { name: $("o-name").value.trim(), phone: $("o-phone").value.trim() },
+      ownership: { verified: ownership.verified, matched: ownership.matched },
+      ownershipDocument: up.doc.files()[0] || null,
+      incidentDate: $("a-date").value,
+      lastSeen: $("a-seen").value.trim(),
+      payment: {
+        method: payMethod,
+        amount: fees[assetType].amount,
+        reference: $("p-ref").value.trim(),
+        payerPhone: $("p-from").value.trim(),
+        proof: up.proof.files()[0] || null,
+      },
+    };
+    $("r-next").disabled = true;
+    API.recovery.create(payload).then(function (c) {
+      $("wizard-wrap").classList.add("hidden");
+      $("done-panel").classList.remove("hidden");
+      $("done-panel").innerHTML =
+        '<div class="card card-lg max-w-2xl">' +
+          '<div class="flex items-start gap-4">' +
+            '<span class="material-symbols-outlined text-[36px] text-secondary">task_alt</span>' +
+            "<div>" +
+              '<h2 class="text-headline-md text-primary">Case filed</h2>' +
+              '<p class="mt-2 text-body-md text-on-surface-variant">Keep this tracking number — you\'ll need it when you speak to the authorities.</p>' +
+              '<p class="mt-4 rounded-md border border-outline-variant bg-surface-container-low px-4 py-3 text-headline-md tracking-wide text-primary">' + esc(c.trackingId) + "</p>" +
+              '<p class="mt-4 text-body-md text-on-surface-variant">Your payment is being confirmed. Once approved, the case goes to the competent unit and every step appears on the case timeline.</p>' +
+              '<div class="mt-6 flex flex-wrap gap-3">' +
+                '<a href="recovery-detail.html?id=' + esc(c.id) + '" class="btn btn-primary">Follow this case</a>' +
+                '<a href="recovery.html" class="btn btn-outline">Back to Recovery Center</a>' +
+              "</div>" +
+            "</div>" +
+          "</div>" +
+        "</div>";
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }).catch(function (err) {
+      $("r-next").disabled = false;
+      toast(err.message || "The request could not be filed. Try again.", "error");
+    });
+  }
+
+  /* ---------- Boot ---------- */
+  document.addEventListener("DOMContentLoaded", function () {
+    buildRail();
+    up.doc = F.attachUploader({ input: "own-doc", list: "own-doc-list" });
+    up.proof = F.attachUploader({ input: "pay-proof", list: "pay-proof-list" });
+
+    document.querySelectorAll("[data-filer]").forEach(function (b) {
+      b.addEventListener("click", function () { setFiler(b.getAttribute("data-filer")); });
+    });
+    document.querySelectorAll("[data-asset]").forEach(function (b) {
+      b.addEventListener("click", function () { setAsset(b.getAttribute("data-asset")); });
+    });
+    $("o-verify").addEventListener("click", verifyOwnership);
+    $("o-pass-toggle").addEventListener("click", function () {
+      var f = $("o-pass");
+      f.type = f.type === "password" ? "text" : "password";
+      $("o-pass-toggle").querySelector("span").textContent = f.type === "password" ? "visibility" : "visibility_off";
+    });
+    ["o-name", "o-phone", "o-pass"].forEach(function (id) {
+      $(id).addEventListener("input", function () {
+        if (ownership.verified) { ownership = { verified: false, matched: [], matchCount: 0 }; $("o-result").innerHTML = ""; }
+      });
+    });
+
+    $("r-next").addEventListener("click", function () {
+      var problem = validate(step);
+      if (problem) { toast(problem, "error"); return; }
+      if (step === TOTAL) { submit(); return; }
+      step++; paint();
+    });
+    $("r-prev").addEventListener("click", function () { if (step > 1) { step--; paint(); } });
+
+    F.gateOnKyc({
+      host: $("recovery-gate"),
+      feature: "Device recovery",
+      onReady: function () {
+        $("wizard-wrap").classList.remove("hidden");
+        setFiler("self");
+        paint();
+        API.recovery.catalog().then(fillCatalog).catch(function () {});
+        API.recovery.fees().then(function (f) {
+          fees = f;
+          document.querySelectorAll("[data-fee-for]").forEach(function (el) {
+            var k = el.getAttribute("data-fee-for");
+            if (f[k]) el.textContent = F.fcfa(f[k].amount);
+          });
+        }).catch(function () {});
+      },
+    });
+  });
+})();
+</script>
+</body>
+</html>

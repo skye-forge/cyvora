@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Recovery Case | VARNIS</title>
+<link rel="icon" type="image/jpeg" href="../assets/img/varnis-logo.jpeg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700;900&family=Work+Sans:wght@500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/tailwind-output.css">
+<link rel="stylesheet" href="../assets/css/site.css">
+<script src="../assets/js/auth-guard.js"></script>
+</head>
+<body class="cyv-shell">
+<div class="cyv-rail-scrim fixed inset-0 z-30 hidden bg-black/40 lg:hidden" id="cyv-rail-scrim"></div>
+<aside class="cyv-rail" id="side-nav">
+      <div class="cyv-brand">
+        <div class="grid h-9 w-9 place-items-center overflow-hidden rounded-md bg-white">
+          <img src="../assets/img/varnis-logo.jpeg" alt="VARNIS" class="h-full w-full object-contain p-0.5">
+        </div>
+        <div class="leading-tight">
+          <p class="text-body-lg font-bold">VARNIS</p>
+          <p class="text-label-md text-on-primary/60">Civic Safety Portal</p>
+        </div>
+      </div>
+      <nav class="cyv-nav">
+        <a href="index.html" class="cyv-nav-item"><span class="material-symbols-outlined">home</span><span data-i18n="nav.home">Home</span></a>
+        <a href="my-reports.html" class="cyv-nav-item"><span class="material-symbols-outlined">description</span><span data-i18n="nav.reports">Reports</span></a>
+        <a href="recovery.html" class="cyv-nav-item is-active"><span class="material-symbols-outlined">travel_explore</span><span data-i18n="nav.recovery">Recovery</span></a>
+        <a href="community.html" class="cyv-nav-item"><span class="material-symbols-outlined">groups</span><span data-i18n="nav.community">Community</span></a>
+        <a href="learn.html" class="cyv-nav-item"><span class="material-symbols-outlined">school</span><span data-i18n="nav.learn">Learn</span></a>
+        <a href="assistant.html" class="cyv-nav-item"><span class="material-symbols-outlined">smart_toy</span><span data-i18n="nav.assistant">Ask AI</span></a>
+        <a href="profile.html" class="cyv-nav-item"><span class="material-symbols-outlined">account_circle</span><span data-i18n="nav.profile">Profile</span></a>
+      </nav>
+      <div class="cyv-rail-foot">
+        <a href="report-incident.html" class="cyv-emergency">
+          <span class="material-symbols-outlined text-[20px]">emergency</span> <span data-i18n="nav.emergency">Emergency Alert</span>
+        </a>
+        <a href="settings.html" class="cyv-nav-item"><span class="material-symbols-outlined">settings</span><span data-i18n="nav.settings">Settings</span></a>
+        <a href="support.html" class="cyv-nav-item"><span class="material-symbols-outlined">help</span><span data-i18n="nav.support">Support</span></a>
+      </div>
+    </aside>
+
+<div class="cyv-main">
+      <header class="cyv-topbar">
+        <button class="cyv-iconbtn lg:hidden" id="cyv-rail-toggle" aria-label="Open menu">
+          <span class="material-symbols-outlined">menu</span>
+        </button>
+        <label class="cyv-search">
+          <span class="material-symbols-outlined text-[20px]">search</span>
+          <input type="search" placeholder="Search safety database…" aria-label="Search">
+        </label>
+        <button type="button" class="cyv-iconbtn" data-lang-toggle aria-label="Switch language" title="English / Français"><span class="material-symbols-outlined">language</span><span class="absolute -bottom-0.5 right-0 text-[9px] font-bold text-primary" data-lang-label>EN</span></button>
+        <a href="notifications.html" class="cyv-iconbtn" aria-label="Notifications"><span class="material-symbols-outlined">notifications</span></a>
+        <a href="settings.html" class="cyv-iconbtn" aria-label="Settings"><span class="material-symbols-outlined">settings</span></a>
+        <a href="support.html" class="cyv-iconbtn max-sm:hidden" aria-label="Help"><span class="material-symbols-outlined">help</span></a>
+        <a href="profile.html" class="grid h-10 w-10 place-items-center overflow-hidden rounded-full bg-primary/10 text-primary" aria-label="Profile">
+          <span class="material-symbols-outlined">person</span>
+        </a>
+      </header>
+
+<main class="cyv-canvas" data-page="recovery-detail">
+  <nav class="breadcrumb mb-3" aria-label="Breadcrumb">
+    <a href="recovery.html" class="hover:text-primary">Recovery Center</a>
+    <span class="material-symbols-outlined text-[16px]">chevron_right</span>
+    <span class="text-on-surface" id="crumb-id">Case</span>
+  </nav>
+
+  <div id="case-root">
+    <div class="card"><p class="text-body-md text-on-surface-variant">Loading the case…</p></div>
+  </div>
+</main>
+</div>
+
+<script src="../assets/js/config.js"></script>
+<script src="../assets/js/storage.js"></script>
+<script src="../assets/js/mock-data.js"></script>
+<script src="../assets/js/api.js"></script>
+<script src="../assets/js/templates.js"></script>
+<script src="../assets/js/validation.js"></script>
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/features.js"></script>
+<script src="../assets/js/app.js"></script>
+<script defer src="../assets/js/site.js"></script>
+<script>
+(function () {
+  "use strict";
+  var F = window.VarnisFeatures, API = window.VarnisAPI, T = window.VarnisTemplates;
+  var esc = F.esc;
+  var caseId = new URLSearchParams(location.search).get("id");
+  var current = null;
+  var uploader = null;
+
+  function toast(m, t) { if (window.showToast) window.showToast(m, t || "info"); }
+
+  /* ---------- Timeline ---------- */
+  function timeline(c) {
+    var reached = {};
+    (c.timeline || []).forEach(function (e) { reached[e.stage] = e; });
+    var currentIdx = F.stageIndex(c.stage);
+
+    var stages = F.RECOVERY_STAGES.filter(function (s) {
+      return !s.optional || reached[s.id]; // optional stages only when they happened
+    });
+
+    return stages.map(function (s, i) {
+      var entry = reached[s.id];
+      var idx = F.stageIndex(s.id);
+      var isDone = !!entry && idx < currentIdx;
+      var isNow = idx === currentIdx;
+      var dot = isDone ? "bg-secondary text-on-secondary" : isNow ? "bg-primary text-on-primary ring-4 ring-primary/15" : "bg-surface-container-high text-on-surface-variant";
+      var last = i === stages.length - 1;
+
+      return '<li class="flex gap-4">' +
+        '<div class="flex flex-col items-center">' +
+          '<span class="grid h-9 w-9 shrink-0 place-items-center rounded-full ' + dot + '">' +
+            '<span class="material-symbols-outlined text-[18px]">' + (isDone ? "check" : esc(s.icon)) + "</span></span>" +
+          (last ? "" : '<span class="w-px flex-1 ' + (isDone ? "bg-secondary/40" : "bg-outline-variant") + '"></span>') +
+        "</div>" +
+        '<div class="' + (last ? "pb-1" : "pb-7") + '">' +
+          '<div class="flex flex-wrap items-center gap-2">' +
+            '<p class="text-body-md font-semibold ' + (entry ? "text-on-surface" : "text-on-surface-variant") + '">' + esc(s.label) + "</p>" +
+            (isNow ? '<span class="chip chip-review">Now</span>' : "") +
+          "</div>" +
+          (entry
+            ? '<p class="mt-0.5 text-caption text-on-surface-variant">' + esc(T.formatDateTime(entry.at)) +
+              (entry.actor ? " · " + esc(entry.actor) : "") + "</p>" +
+              (entry.note ? '<p class="mt-1 max-w-lg text-body-md text-on-surface-variant">' + esc(entry.note) + "</p>" : "")
+            : '<p class="mt-0.5 text-caption text-outline">' + esc(s.blurb) + "</p>") +
+        "</div></li>";
+    }).join("");
+  }
+
+  /* ---------- Evidence requests ---------- */
+  function evidencePanel(c) {
+    var reqs = c.evidenceRequests || [];
+    if (!reqs.length) {
+      return '<div class="card">' +
+        '<h2 class="text-headline-md text-primary">Additional evidence</h2>' +
+        '<p class="mt-2 text-body-md text-on-surface-variant">Nothing is being asked of you right now. If investigators need more documents, the request appears here and you upload straight onto this case — no new request needed.</p></div>';
+    }
+    return reqs.map(function (r) {
+      var pending = r.status === "pending";
+      return '<div class="card ' + (pending ? "border-error/40 bg-error/5" : "") + '">' +
+        '<div class="flex flex-wrap items-start justify-between gap-3">' +
+          '<h2 class="text-headline-md text-primary">Additional evidence</h2>' +
+          (pending ? '<span class="chip chip-error"><span class="material-symbols-outlined text-[15px]">priority_high</span> Action needed</span>'
+                   : '<span class="chip chip-secure"><span class="material-symbols-outlined text-[15px]">check_circle</span> Supplied</span>') +
+        "</div>" +
+        '<p class="mt-3 text-caption text-on-surface-variant">Requested by ' + esc(r.requestedBy) + " · " + esc(T.formatDateTime(r.requestedAt)) +
+          (r.dueAt ? " · due " + esc(T.formatDate(r.dueAt)) : "") + "</p>" +
+        '<p class="mt-2 max-w-2xl text-body-md text-on-surface">' + esc(r.message) + "</p>" +
+        (r.files && r.files.length
+          ? '<ul class="mt-4 space-y-2">' + r.files.map(function (f) {
+              return '<li class="flex items-center gap-2 text-body-md text-on-surface-variant">' +
+                '<span class="material-symbols-outlined text-[18px] text-secondary">check_circle</span>' + esc(f.name) +
+                '<span class="text-caption text-outline">· ' + esc(T.formatDate(f.uploadedAt)) + "</span></li>";
+            }).join("") + "</ul>"
+          : "") +
+        (pending
+          ? '<div class="mt-5" data-req="' + esc(r.id) + '">' +
+              '<label for="ev-input" class="flex h-32 cursor-pointer flex-col items-center justify-center rounded-md border-2 border-dashed border-outline-variant bg-surface-container-lowest transition-colors hover:border-primary">' +
+                '<span class="material-symbols-outlined text-[28px] text-primary">upload_file</span>' +
+                '<span class="mt-1 text-label-lg text-on-surface">Upload what was asked for</span>' +
+                '<span class="text-caption text-on-surface-variant">JPG, PNG, WebP or PDF · max 5 MB each</span>' +
+                '<input type="file" id="ev-input" multiple accept="image/jpeg,image/png,image/webp,application/pdf" class="sr-only">' +
+              "</label>" +
+              '<ul id="ev-list" class="mt-3 space-y-2"></ul>' +
+              '<label class="field-label mt-4" for="ev-note">Add a note <span class="font-normal text-outline">(optional)</span></label>' +
+              '<textarea id="ev-note" rows="2" class="w-full rounded border border-outline-variant bg-surface-container-lowest px-4 py-3 text-body-md outline-none focus:border-primary" placeholder="Anything the investigator should know about these files"></textarea>' +
+              '<button type="button" id="ev-submit" class="btn btn-primary mt-4">Send evidence</button>' +
+            "</div>"
+          : "") +
+        "</div>";
+    }).join("");
+  }
+
+  /* ---------- Page ---------- */
+  function render(c) {
+    current = c;
+    document.getElementById("crumb-id").textContent = c.trackingId;
+    document.title = c.trackingId + " | VARNIS";
+
+    var meta = F.stageMeta(c.stage);
+    var done = c.stage === "recovered" || c.stage === "closed";
+    var pay = c.payment;
+    var payMeta = pay ? F.PAYMENT_STATUS[pay.status] : null;
+
+    var assetRows = c.assetType === "vehicle"
+      ? [["Type", c.asset.vehicleType], ["Manufacturer", c.asset.manufacturer], ["Model", c.asset.model],
+         ["Year", c.asset.year], ["Plate", c.asset.plate], ["VIN", c.asset.vin], ["Colour", c.asset.color]]
+      : [["Type", c.asset.deviceType], ["Brand", c.asset.brand], ["Model", c.asset.model],
+         ["Colour", c.asset.color], ["IMEI", c.asset.imei], ["Serial", c.asset.serial]];
+    assetRows = assetRows.concat([["Lost on", c.incidentDate], ["Last seen", c.lastSeen]]);
+
+    var html =
+      '<div class="mb-6 flex flex-wrap items-start justify-between gap-4">' +
+        "<div>" +
+          '<div class="flex flex-wrap items-center gap-3">' +
+            '<span class="material-symbols-outlined text-[28px] text-primary">' + (c.assetType === "vehicle" ? "directions_car" : "smartphone") + "</span>" +
+            '<h1 class="page-title">' + esc(c.assetLabel) + "</h1>" +
+          "</div>" +
+          '<p class="page-sub">' + esc(c.trackingId) + (c.caseFile ? " · filed as " + esc(c.caseFile) : "") +
+            " · opened " + esc(T.formatDate(c.createdAt)) + "</p>" +
+          (c.onBehalf ? '<p class="mt-1 text-body-md text-on-surface-variant">Filed on behalf of ' + esc((c.owner || {}).name || "the owner") + "</p>" : "") +
+        "</div>" +
+        '<div class="flex flex-wrap items-center gap-2">' +
+          '<span class="chip ' + (done ? "chip-secure" : "chip-review") + '">' +
+            '<span class="material-symbols-outlined text-[15px]">' + esc(meta.icon) + "</span> " + esc(meta.label) + "</span>" +
+        "</div>" +
+      "</div>" +
+
+      (c.eta && !done
+        ? '<div class="mb-6 flex flex-wrap items-center gap-4 rounded-md border border-primary/30 bg-primary/5 px-5 py-4">' +
+            '<span class="material-symbols-outlined text-primary">schedule</span>' +
+            '<div><p class="text-label-lg text-primary">Estimated update by ' + esc(T.formatDate(c.eta)) + "</p>" +
+            '<p class="text-caption text-on-surface-variant">Investigators post to this timeline as soon as there is something to report.</p></div></div>'
+        : "") +
+
+      (c.location
+        ? '<div class="mb-6 flex flex-wrap items-center justify-between gap-4 rounded-md border ' +
+            (done ? "border-secondary/40 bg-secondary/5" : "border-outline-variant bg-surface-container-low") + ' px-5 py-4">' +
+            '<div class="flex items-center gap-4">' +
+              '<span class="material-symbols-outlined ' + (done ? "text-secondary" : "text-primary") + '">location_on</span>' +
+              '<div><p class="text-label-lg text-on-surface">' + esc(c.location.label) + "</p>" +
+              '<p class="text-caption text-on-surface-variant">Updated ' + esc(T.timeAgo(c.location.updatedAt)) + "</p></div></div>" +
+            '<div class="text-right"><p class="text-label-md uppercase tracking-wider text-on-surface-variant">Confidence</p>' +
+            '<p class="text-headline-md ' + (done ? "text-secondary" : "text-primary") + '">' + esc(c.location.confidence) + "%</p></div></div>"
+        : "") +
+
+      '<div class="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_20rem] lg:items-start">' +
+        '<div class="flex flex-col gap-6">' +
+          '<div class="card card-lg">' +
+            '<h2 class="text-headline-md text-primary">Tracking</h2>' +
+            '<p class="page-sub">Every step is recorded here, with who did it and when.</p>' +
+            '<ol class="mt-6">' + timeline(c) + "</ol>" +
+          "</div>" +
+          '<div id="evidence-host">' + evidencePanel(c) + "</div>" +
+        "</div>" +
+
+        '<aside class="flex flex-col gap-6">' +
+          (pay
+            ? '<div class="card">' +
+                '<div class="flex items-center justify-between gap-3">' +
+                  '<h2 class="text-label-lg uppercase tracking-wider text-on-surface-variant">Tracking fee</h2>' +
+                  F.chip(payMeta) +
+                "</div>" +
+                '<p class="mt-3 text-headline-md text-primary">' + esc(F.fcfa(pay.amount)) + "</p>" +
+                '<dl class="mt-4 flex flex-col gap-2 text-body-md">' +
+                  '<div class="flex justify-between gap-3"><dt class="text-on-surface-variant">Method</dt><dd class="text-on-surface">' + esc(pay.method) + "</dd></div>" +
+                  '<div class="flex flex-wrap justify-between gap-3"><dt class="text-on-surface-variant">Reference</dt><dd class="text-on-surface">' + esc(pay.reference) + "</dd></div>" +
+                  '<div class="flex justify-between gap-3"><dt class="text-on-surface-variant">Sent</dt><dd class="text-on-surface">' + esc(T.formatDate(pay.submittedAt)) + "</dd></div>" +
+                  (pay.reviewedAt ? '<div class="flex justify-between gap-3"><dt class="text-on-surface-variant">Confirmed</dt><dd class="text-on-surface">' + esc(T.formatDate(pay.reviewedAt)) + "</dd></div>" : "") +
+                "</dl>" +
+                (pay.status === "pending"
+                  ? '<p class="mt-4 text-caption text-on-surface-variant">Payments sent after 17:00 WAT are confirmed the next working morning.</p>'
+                  : pay.status === "rejected"
+                    ? '<a href="support-tickets.html?category=payment" class="btn btn-outline btn-sm mt-4">Resolve this payment</a>' : "") +
+              "</div>"
+            : "") +
+
+          '<div class="card">' +
+            '<h2 class="text-label-lg uppercase tracking-wider text-on-surface-variant">' + (c.assetType === "vehicle" ? "Vehicle" : "Device") + "</h2>" +
+            '<dl class="mt-3 flex flex-col divide-y divide-outline-variant">' +
+              assetRows.filter(function (r) { return r[1]; }).map(function (r) {
+                return '<div class="flex flex-wrap justify-between gap-3 py-2"><dt class="text-body-md text-on-surface-variant">' + esc(r[0]) +
+                       '</dt><dd class="text-body-md text-on-surface">' + esc(r[1]) + "</dd></div>";
+              }).join("") +
+            "</dl></div>" +
+
+          '<div class="card">' +
+            '<h2 class="text-label-lg uppercase tracking-wider text-on-surface-variant">Documents on file</h2>' +
+            ((c.documents || []).length
+              ? '<ul class="mt-3 flex flex-col gap-3">' + c.documents.map(function (d) {
+                  return '<li class="flex items-start gap-3">' +
+                    '<span class="material-symbols-outlined text-[20px] text-primary">' + (/\.pdf$/i.test(d.name) ? "picture_as_pdf" : "image") + "</span>" +
+                    '<span class="min-w-0"><span class="block truncate text-body-md text-on-surface">' + esc(d.name) + "</span>" +
+                    '<span class="block text-caption text-on-surface-variant">' + esc(d.kind) + " · " + esc(T.formatDate(d.uploadedAt)) + "</span></span></li>";
+                }).join("") + "</ul>"
+              : '<p class="mt-3 text-body-md text-on-surface-variant">Nothing uploaded yet.</p>') +
+          "</div>" +
+
+          '<div class="card">' +
+            '<h2 class="text-label-lg uppercase tracking-wider text-on-surface-variant">Need help with this case?</h2>' +
+            '<p class="mt-3 text-body-md text-on-surface-variant">Support can chase the payment confirmation or pass a message to the investigating unit.</p>' +
+            '<a href="support-tickets.html?category=recovery&amp;subject=' + encodeURIComponent("Case " + c.trackingId) + '" class="btn btn-outline btn-sm mt-4">Open a support ticket</a>' +
+          "</div>" +
+        "</aside>" +
+      "</div>";
+
+    document.getElementById("case-root").innerHTML = html;
+    wireEvidence();
+  }
+
+  function wireEvidence() {
+    var input = document.getElementById("ev-input");
+    if (!input) return;
+    uploader = F.attachUploader({ input: "ev-input", list: "ev-list", multiple: true });
+    document.getElementById("ev-submit").addEventListener("click", function () {
+      var files = uploader.files();
+      if (!files.length) { toast("Choose at least one file to send.", "error"); return; }
+      var wrap = document.querySelector("[data-req]");
+      var btn = document.getElementById("ev-submit");
+      btn.disabled = true;
+      API.recovery.submitEvidence(current.id, {
+        requestId: wrap ? wrap.getAttribute("data-req") : null,
+        note: (document.getElementById("ev-note") || {}).value || "",
+        files: files,
+      }).then(function (updated) {
+        toast("Evidence sent to the investigating unit.", "success");
+        render(updated);
+      }).catch(function (err) {
+        btn.disabled = false;
+        toast(err.message || "The files could not be sent. Try again.", "error");
+      });
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    if (!caseId) {
+      document.getElementById("case-root").innerHTML =
+        '<div class="card"><p class="text-body-md text-on-surface">No case was specified.</p>' +
+        '<a href="recovery.html" class="btn btn-primary mt-4">Back to Recovery Center</a></div>';
+      return;
+    }
+    API.recovery.get(caseId).then(render).catch(function () {
+      document.getElementById("case-root").innerHTML =
+        '<div class="card"><p class="text-body-md text-on-surface">That case could not be found. It may belong to another account.</p>' +
+        '<a href="recovery.html" class="btn btn-primary mt-4">Back to Recovery Center</a></div>';
+    });
+  });
+})();
+</script>
+</body>
+</html>

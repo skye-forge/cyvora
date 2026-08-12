@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Support Tickets | VARNIS</title>
+<link rel="icon" type="image/jpeg" href="../assets/img/varnis-logo.jpeg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700;900&family=Work+Sans:wght@500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/tailwind-output.css">
+<link rel="stylesheet" href="../assets/css/site.css">
+<style>
+  .ticket-row.is-active { border-color: #002869; background: rgba(0,40,105,0.04); }
+</style>
+<script src="../assets/js/auth-guard.js"></script>
+</head>
+<body class="cyv-shell">
+<div class="cyv-rail-scrim fixed inset-0 z-30 hidden bg-black/40 lg:hidden" id="cyv-rail-scrim"></div>
+<aside class="cyv-rail" id="side-nav">
+      <div class="cyv-brand">
+        <div class="grid h-9 w-9 place-items-center overflow-hidden rounded-md bg-white">
+          <img src="../assets/img/varnis-logo.jpeg" alt="VARNIS" class="h-full w-full object-contain p-0.5">
+        </div>
+        <div class="leading-tight">
+          <p class="text-body-lg font-bold">VARNIS</p>
+          <p class="text-label-md text-on-primary/60">Civic Safety Portal</p>
+        </div>
+      </div>
+      <nav class="cyv-nav">
+        <a href="index.html" class="cyv-nav-item"><span class="material-symbols-outlined">home</span><span data-i18n="nav.home">Home</span></a>
+        <a href="my-reports.html" class="cyv-nav-item"><span class="material-symbols-outlined">description</span><span data-i18n="nav.reports">Reports</span></a>
+        <a href="recovery.html" class="cyv-nav-item"><span class="material-symbols-outlined">travel_explore</span><span data-i18n="nav.recovery">Recovery</span></a>
+        <a href="community.html" class="cyv-nav-item"><span class="material-symbols-outlined">groups</span><span data-i18n="nav.community">Community</span></a>
+        <a href="learn.html" class="cyv-nav-item"><span class="material-symbols-outlined">school</span><span data-i18n="nav.learn">Learn</span></a>
+        <a href="assistant.html" class="cyv-nav-item"><span class="material-symbols-outlined">smart_toy</span><span data-i18n="nav.assistant">Ask AI</span></a>
+        <a href="profile.html" class="cyv-nav-item"><span class="material-symbols-outlined">account_circle</span><span data-i18n="nav.profile">Profile</span></a>
+      </nav>
+      <div class="cyv-rail-foot">
+        <a href="report-incident.html" class="cyv-emergency">
+          <span class="material-symbols-outlined text-[20px]">emergency</span> <span data-i18n="nav.emergency">Emergency Alert</span>
+        </a>
+        <a href="settings.html" class="cyv-nav-item"><span class="material-symbols-outlined">settings</span><span data-i18n="nav.settings">Settings</span></a>
+        <a href="support.html" class="cyv-nav-item is-active"><span class="material-symbols-outlined">help</span><span data-i18n="nav.support">Support</span></a>
+      </div>
+    </aside>
+
+<div class="cyv-main">
+      <header class="cyv-topbar">
+        <button class="cyv-iconbtn lg:hidden" id="cyv-rail-toggle" aria-label="Open menu">
+          <span class="material-symbols-outlined">menu</span>
+        </button>
+        <label class="cyv-search">
+          <span class="material-symbols-outlined text-[20px]">search</span>
+          <input type="search" placeholder="Search safety database…" aria-label="Search">
+        </label>
+        <button type="button" class="cyv-iconbtn" data-lang-toggle aria-label="Switch language" title="English / Français"><span class="material-symbols-outlined">language</span><span class="absolute -bottom-0.5 right-0 text-[9px] font-bold text-primary" data-lang-label>EN</span></button>
+        <a href="notifications.html" class="cyv-iconbtn" aria-label="Notifications"><span class="material-symbols-outlined">notifications</span></a>
+        <a href="settings.html" class="cyv-iconbtn" aria-label="Settings"><span class="material-symbols-outlined">settings</span></a>
+        <a href="chat.html" class="cyv-iconbtn max-sm:hidden" aria-label="Live chat"><span class="material-symbols-outlined">forum</span></a>
+        <a href="profile.html" class="grid h-10 w-10 place-items-center overflow-hidden rounded-full bg-primary/10 text-primary" aria-label="Profile">
+          <span class="material-symbols-outlined">person</span>
+        </a>
+      </header>
+
+<main class="cyv-canvas" data-page="support-tickets">
+  <nav class="breadcrumb mb-3" aria-label="Breadcrumb">
+    <a href="support.html" class="hover:text-primary">Support</a>
+    <span class="material-symbols-outlined text-[16px]">chevron_right</span>
+    <span class="text-on-surface">Tickets</span>
+  </nav>
+
+  <div class="mb-6 flex flex-wrap items-end justify-between gap-4">
+    <div>
+      <h1 class="page-title">Your support tickets</h1>
+      <p class="page-sub max-w-2xl">Anything that needs a person and a paper trail. Live chat is faster for quick questions.</p>
+    </div>
+    <div class="flex gap-3">
+      <a href="chat.html" class="btn btn-outline"><span class="material-symbols-outlined text-[20px]">forum</span> Live chat</a>
+      <button type="button" id="new-ticket" class="btn btn-primary"><span class="material-symbols-outlined text-[20px]">add</span> New ticket</button>
+    </div>
+  </div>
+
+  <!-- Create form -->
+  <section id="create-panel" class="mb-6 hidden">
+    <div class="card card-lg">
+      <div class="flex items-start justify-between gap-4">
+        <div>
+          <h2 class="text-headline-md text-primary">Open a ticket</h2>
+          <p class="page-sub">Tell us what happened and what you expected instead. Screenshots help most.</p>
+        </div>
+        <button type="button" id="cancel-create" class="cyv-iconbtn" aria-label="Close"><span class="material-symbols-outlined">close</span></button>
+      </div>
+      <form id="ticket-form" class="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2" novalidate>
+        <div class="sm:col-span-2">
+          <label class="field-label" for="t-subject">Subject</label>
+          <input class="field" id="t-subject" placeholder="One line that says what's wrong">
+        </div>
+        <div>
+          <label class="field-label" for="t-category">What's it about?</label>
+          <select class="field" id="t-category"></select>
+          <p class="mt-1 text-caption text-on-surface-variant" id="t-category-hint"></p>
+        </div>
+        <div>
+          <label class="field-label" for="t-priority">How urgent is it?</label>
+          <select class="field" id="t-priority">
+            <option value="low">Low — a question, no rush</option>
+            <option value="normal" selected>Normal — it's slowing me down</option>
+            <option value="high">High — I'm blocked</option>
+          </select>
+        </div>
+        <div class="sm:col-span-2">
+          <label class="field-label" for="t-description">What happened?</label>
+          <textarea id="t-description" rows="5" class="w-full rounded border border-outline-variant bg-surface-container-lowest px-4 py-3 text-body-md outline-none focus:border-primary focus:ring-2 focus:ring-primary/15" placeholder="What you did, what happened, and what you expected. Include any tracking or reference numbers."></textarea>
+          <p class="mt-1 text-caption text-on-surface-variant"><span id="t-count">0</span> / 2000 characters</p>
+        </div>
+        <div class="sm:col-span-2">
+          <p class="field-label">Attachments <span class="font-normal text-outline">(optional)</span></p>
+          <label for="t-files" class="flex h-28 cursor-pointer flex-col items-center justify-center rounded-md border-2 border-dashed border-outline-variant transition-colors hover:border-primary hover:bg-surface-container-low">
+            <span class="material-symbols-outlined text-[26px] text-primary">attach_file</span>
+            <span class="mt-1 text-label-lg text-on-surface">Add screenshots or documents</span>
+            <span class="text-caption text-on-surface-variant">JPG, PNG, WebP or PDF · max 5 MB each</span>
+            <input type="file" id="t-files" multiple accept="image/jpeg,image/png,image/webp,application/pdf" class="sr-only">
+          </label>
+          <ul id="t-files-list" class="mt-3 space-y-2"></ul>
+        </div>
+        <div class="flex justify-end gap-3 sm:col-span-2">
+          <button type="button" id="cancel-create-2" class="btn btn-outline">Cancel</button>
+          <button type="submit" class="btn btn-primary">Send ticket</button>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <div class="grid grid-cols-1 gap-6 lg:grid-cols-[22rem_1fr] lg:items-start">
+    <!-- List -->
+    <section>
+      <div class="mb-3 flex flex-wrap gap-2" id="status-filters">
+        <button class="btn btn-outline btn-sm" data-status="">All</button>
+        <button class="btn btn-outline btn-sm" data-status="open">Open</button>
+        <button class="btn btn-outline btn-sm" data-status="pending">Pending</button>
+        <button class="btn btn-outline btn-sm" data-status="resolved">Resolved</button>
+        <button class="btn btn-outline btn-sm" data-status="closed">Closed</button>
+      </div>
+      <div id="ticket-list" class="flex flex-col gap-3">
+        <div class="card"><p class="text-body-md text-on-surface-variant">Loading…</p></div>
+      </div>
+    </section>
+
+    <!-- Detail -->
+    <section id="ticket-detail">
+      <div class="card card-lg flex flex-col items-center gap-3 py-16 text-center">
+        <span class="material-symbols-outlined text-[40px] text-outline">forum</span>
+        <p class="text-body-lg text-on-surface">Pick a ticket to read the conversation</p>
+        <p class="max-w-sm text-body-md text-on-surface-variant">Replies from the support desk land here, and you can answer in the same thread.</p>
+      </div>
+    </section>
+  </div>
+</main>
+</div>
+
+<script src="../assets/js/config.js"></script>
+<script src="../assets/js/storage.js"></script>
+<script src="../assets/js/mock-data.js"></script>
+<script src="../assets/js/api.js"></script>
+<script src="../assets/js/templates.js"></script>
+<script src="../assets/js/validation.js"></script>
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/features.js"></script>
+<script src="../assets/js/app.js"></script>
+<script defer src="../assets/js/site.js"></script>
+<script>
+(function () {
+  "use strict";
+  var F = window.VarnisFeatures, API = window.VarnisAPI, T = window.VarnisTemplates;
+  var esc = F.esc;
+  var $ = function (id) { return document.getElementById(id); };
+  var params = new URLSearchParams(location.search);
+
+  var tickets = [];
+  var categories = [];
+  var statusFilter = "";
+  var selectedId = null;
+  var files = null;
+
+  function toast(m, t) { if (window.showToast) window.showToast(m, t || "info"); }
+  function catName(id) {
+    var c = categories.find(function (x) { return x.id === id; });
+    return c ? c.name : id;
+  }
+
+  /* ---------- List ---------- */
+  function renderList() {
+    var items = statusFilter ? tickets.filter(function (t) { return t.status === statusFilter; }) : tickets;
+    var host = $("ticket-list");
+    if (!items.length) {
+      host.innerHTML = '<div class="card py-10 text-center">' +
+        '<p class="text-body-md text-on-surface">' + (tickets.length ? "Nothing with that status." : "No tickets yet.") + "</p>" +
+        (tickets.length ? "" : '<p class="mt-2 text-body-md text-on-surface-variant">When something goes wrong, open a ticket and it stays here until it\'s sorted.</p>') +
+        "</div>";
+      return;
+    }
+    host.innerHTML = items.map(function (t) {
+      var meta = F.TICKET_STATUS[t.status] || F.TICKET_STATUS.open;
+      var last = t.messages[t.messages.length - 1];
+      return '<button type="button" class="ticket-row card card-hover w-full text-left' + (t.id === selectedId ? " is-active" : "") + '" data-id="' + esc(t.id) + '">' +
+        '<div class="flex items-start justify-between gap-3">' +
+          '<p class="text-label-md uppercase tracking-wider text-on-surface-variant">' + esc(t.reference) + "</p>" +
+          F.chip(meta) +
+        "</div>" +
+        '<p class="mt-2 line-clamp-2 text-body-md font-semibold text-on-surface">' + esc(t.subject) + "</p>" +
+        '<p class="mt-1 truncate text-caption text-on-surface-variant">' + esc(catName(t.category)) + " · " +
+          (last.from === "agent" ? "Support replied " : "You wrote ") + esc(T.timeAgo(t.updatedAt)) + "</p>" +
+        "</button>";
+    }).join("");
+    host.querySelectorAll("[data-id]").forEach(function (b) {
+      b.addEventListener("click", function () { select(b.getAttribute("data-id")); });
+    });
+  }
+
+  /* ---------- Detail ---------- */
+  function renderDetail(t) {
+    var meta = F.TICKET_STATUS[t.status] || F.TICKET_STATUS.open;
+    var thread = t.messages.map(function (m) {
+      var mine = m.from === "user";
+      return '<li class="flex gap-3 ' + (mine ? "flex-row-reverse" : "") + '">' +
+        '<span class="grid h-9 w-9 shrink-0 place-items-center rounded-full ' + (mine ? "bg-primary/10 text-primary" : "bg-secondary/10 text-secondary") + '">' +
+          '<span class="material-symbols-outlined text-[20px]">' + (mine ? "person" : "support_agent") + "</span></span>" +
+        '<div class="max-w-[36rem] rounded-md border border-outline-variant ' + (mine ? "bg-primary/5" : "bg-surface-container-lowest") + ' px-4 py-3">' +
+          '<p class="text-label-md text-on-surface-variant">' + esc(m.author) + " · " + esc(T.formatDateTime(m.at)) + "</p>" +
+          '<p class="mt-1 whitespace-pre-line text-body-md text-on-surface">' + esc(m.body) + "</p>" +
+        "</div></li>";
+    }).join("");
+
+    var closed = t.status === "closed";
+    $("ticket-detail").innerHTML =
+      '<div class="card card-lg">' +
+        '<div class="flex flex-wrap items-start justify-between gap-4 border-b border-outline-variant pb-5">' +
+          "<div>" +
+            '<h2 class="text-headline-md text-primary">' + esc(t.subject) + "</h2>" +
+            '<p class="page-sub">' + esc(t.reference) + " · " + esc(catName(t.category)) +
+              " · opened " + esc(T.formatDate(t.createdAt)) +
+              (t.agent ? " · handled by " + esc(t.agent) : " · waiting for an agent") + "</p>" +
+          "</div>" +
+          '<div class="flex items-center gap-2">' + F.chip(meta) + "</div>" +
+        "</div>" +
+        '<p class="mt-4 text-caption text-on-surface-variant">' + esc(meta.blurb) + "</p>" +
+        '<ul class="mt-6 flex flex-col gap-5">' + thread + "</ul>" +
+        (closed
+          ? '<div class="mt-6 rounded-md bg-surface-container-low px-4 py-4">' +
+              '<p class="text-body-md text-on-surface-variant">This ticket is closed. If the same thing happens again, open a new one so it gets a fresh agent.</p>' +
+              '<button type="button" id="t-reopen" class="btn btn-outline btn-sm mt-3">Reopen</button></div>'
+          : '<div class="mt-6 border-t border-outline-variant pt-5">' +
+              '<label class="field-label" for="t-reply">Reply</label>' +
+              '<textarea id="t-reply" rows="3" class="w-full rounded border border-outline-variant bg-surface-container-lowest px-4 py-3 text-body-md outline-none focus:border-primary focus:ring-2 focus:ring-primary/15" placeholder="Add anything new — a reference number, a screenshot description, what you already tried."></textarea>' +
+              '<div class="mt-3 flex flex-wrap items-center justify-end gap-3">' +
+                (t.status === "resolved"
+                  ? '<button type="button" id="t-close" class="btn btn-ghost btn-sm">That fixed it — close</button>'
+                  : '<button type="button" id="t-resolve" class="btn btn-ghost btn-sm">Mark as resolved</button>') +
+                '<button type="button" id="t-send" class="btn btn-primary">Send reply</button>' +
+              "</div></div>") +
+      "</div>";
+
+    var send = $("t-send");
+    if (send) send.addEventListener("click", function () {
+      var body = $("t-reply").value.trim();
+      if (!body) { toast("Write something before sending.", "error"); return; }
+      send.disabled = true;
+      API.support.tickets.reply(t.id, body).then(function (updated) {
+        replaceTicket(updated); select(updated.id); toast("Reply sent.", "success");
+      }).catch(function () { send.disabled = false; toast("The reply didn't send. Try again.", "error"); });
+    });
+    ["t-resolve", "t-close", "t-reopen"].forEach(function (id) {
+      var btn = $(id);
+      if (!btn) return;
+      btn.addEventListener("click", function () {
+        var next = id === "t-resolve" ? "resolved" : id === "t-close" ? "closed" : "open";
+        API.support.tickets.setStatus(t.id, next).then(function (updated) {
+          replaceTicket(updated); select(updated.id);
+          toast(next === "open" ? "Ticket reopened." : next === "closed" ? "Ticket closed." : "Marked as resolved.", "success");
+        }).catch(function () { toast("That didn't go through. Try again.", "error"); });
+      });
+    });
+  }
+
+  function replaceTicket(t) {
+    var i = tickets.findIndex(function (x) { return x.id === t.id; });
+    if (i >= 0) tickets[i] = t; else tickets.unshift(t);
+  }
+
+  function select(id) {
+    selectedId = id;
+    var t = tickets.find(function (x) { return x.id === id; });
+    renderList();
+    if (t) renderDetail(t);
+  }
+
+  /* ---------- Create ---------- */
+  function openCreate(prefill) {
+    $("create-panel").classList.remove("hidden");
+    if (prefill && prefill.category) $("t-category").value = prefill.category;
+    if (prefill && prefill.subject) $("t-subject").value = prefill.subject;
+    updateCatHint();
+    $("t-subject").focus();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+  function closeCreate() { $("create-panel").classList.add("hidden"); }
+
+  function updateCatHint() {
+    var c = categories.find(function (x) { return x.id === $("t-category").value; });
+    $("t-category-hint").textContent = c ? c.desc : "";
+  }
+
+  /* ---------- Boot ---------- */
+  document.addEventListener("DOMContentLoaded", function () {
+    files = F.attachUploader({ input: "t-files", list: "t-files-list", multiple: true });
+
+    categories = (window.VarnisMockData || {}).supportCategories || [];
+    $("t-category").innerHTML = categories.map(function (c) {
+      return '<option value="' + esc(c.id) + '">' + esc(c.name) + "</option>";
+    }).join("");
+    $("t-category").addEventListener("change", updateCatHint);
+    updateCatHint();
+
+    $("t-description").addEventListener("input", function () {
+      $("t-count").textContent = String($("t-description").value.length);
+    });
+
+    $("new-ticket").addEventListener("click", function () { openCreate(); });
+    $("cancel-create").addEventListener("click", closeCreate);
+    $("cancel-create-2").addEventListener("click", closeCreate);
+
+    $("ticket-form").addEventListener("submit", function (e) {
+      e.preventDefault();
+      var subject = $("t-subject").value.trim();
+      var description = $("t-description").value.trim();
+      if (subject.length < 5) { toast("Give the ticket a subject of at least five characters.", "error"); return; }
+      if (description.length < 20) { toast("Describe the problem in at least twenty characters so an agent can act on it.", "error"); return; }
+      if (description.length > 2000) { toast("Trim the description to 2000 characters.", "error"); return; }
+      var btn = $("ticket-form").querySelector('button[type="submit"]');
+      btn.disabled = true;
+      API.support.tickets.create({
+        subject: subject, category: $("t-category").value, priority: $("t-priority").value,
+        description: description, channel: "form", attachments: files.files(),
+      }).then(function (t) {
+        btn.disabled = false;
+        $("ticket-form").reset(); files.clear(); $("t-count").textContent = "0";
+        closeCreate();
+        tickets.unshift(t);
+        statusFilter = "";
+        select(t.id);
+        toast("Ticket " + t.reference + " opened. We'll reply here.", "success");
+      }).catch(function (err) {
+        btn.disabled = false;
+        toast(err.message || "The ticket didn't send. Try again.", "error");
+      });
+    });
+
+    document.querySelectorAll("#status-filters [data-status]").forEach(function (b) {
+      b.addEventListener("click", function () {
+        statusFilter = b.getAttribute("data-status");
+        document.querySelectorAll("#status-filters [data-status]").forEach(function (x) {
+          x.classList.toggle("bg-primary", x === b);
+          x.classList.toggle("text-on-primary", x === b);
+        });
+        renderList();
+      });
+    });
+    var allBtn = document.querySelector('#status-filters [data-status=""]');
+    if (allBtn) allBtn.classList.add("bg-primary", "text-on-primary");
+
+    API.support.tickets.list().then(function (res) {
+      tickets = (res && res.items) || [];
+      renderList();
+      if (params.get("id")) select(params.get("id"));
+      else if (tickets.length && !params.get("category")) select(tickets[0].id);
+      if (params.get("category") || params.get("subject")) {
+        openCreate({ category: params.get("category"), subject: params.get("subject") });
+      }
+    }).catch(function () {
+      $("ticket-list").innerHTML = '<div class="card"><p class="text-body-md text-on-surface-variant">Tickets could not be loaded. Refresh to try again.</p></div>';
+    });
+  });
+})();
+</script>
+</body>
+</html>
