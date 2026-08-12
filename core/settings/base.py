@@ -77,8 +77,14 @@ MIDDLEWARE = [
 ]
 
 CORS_ALLOW_ALL_ORIGINS = [
-    "http://localhost:8000",
-    "http://127.0.0.1:8000",
+    # "https://varnis.up.railway.app",
+]
+
+# Local dev servers use random ports — match any localhost/127.0.0.1 port
+# instead of chasing a moving target:
+CORS_ALLOWED_ORIGIN_REGEXES = [
+    r"^http://localhost:\d+$",
+    r"^http://127\.0\.0\.1:\d+$",
 ]
 ROOT_URLCONF = "core.urls"
 
