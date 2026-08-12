@@ -76,6 +76,10 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
+CORS_ALLOW_ALL_ORIGINS = [
+    "http://localhost:8000",
+    "http://127.0.0.1:8000",
+]
 ROOT_URLCONF = "core.urls"
 
 TEMPLATES = [
@@ -210,7 +214,7 @@ SPECTACULAR_SETTINGS = {
     "SERVE_INCLUDE_SCHEMA": False,
 }
 
-CORS_ALLOW_ALL_ORIGINS = env.bool("CORS_ALLOW_ALL_ORIGINS", "http://localhost:8000", "http://127.0.0.1:8000", default=True)
+CORS_ALLOW_ALL_ORIGINS = env.bool("CORS_ALLOW_ALL_ORIGINS", default=True)
 
 # ---------------------------------------------------------------------------
 # Celery
