@@ -1,0 +1,11 @@
+{% if language == "fr" %}
+<p>Bonjour {{ name }},</p>
+<p>Votre code de vérification Varnis est :</p>
+<h2 style="letter-spacing: 4px;">{{ code }}</h2>
+<p>Ce code expire dans {{ minutes }} minutes. Si vous n'avez pas demandé ce code, ignorez cet e-mail.</p>
+{% else %}
+<p>Hi {{ name }},</p>
+<p>Your Varnis verification code is:</p>
+<h2 style="letter-spacing: 4px;">{{ code }}</h2>
+<p>This code expires in {{ minutes }} minutes. If you didn't request this, you can safely ignore this email.</p>
+{% endif %}

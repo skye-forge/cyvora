@@ -128,13 +128,30 @@ def _generate_code():
     return f"{random.randint(0, 999999):06d}"
 
 
+from apps.notifications.tasks import send_email_task
+
+
 def _send_otp_email(user, code):
-    send_mail(
-        subject="Your Varnis verification code",
-        message=f"Your verification code is {code}. It expires in {OTP_TTL_MINUTES} minutes.",
-        from_email=settings.DEFAULT_FROM_EMAIL,  # ← must be set — see note below
-        recipient_list=[user.email],
-        fail_silently=False,
+    # Called directly (NOT .delay()) — an OTP code is something the user is
+    # actively waiting on, unlike the welcome email. Queuing it through
+    # Celery makes the broker a single point of failure on a path where the
+    # person is already looking at a "check your email" screen. Calling the
+    # task object directly runs send_email_task's exact same logic
+    # in-process, synchronously, with no dependency on Redis at all.
+    send_email_task(
+        to=user.email,
+        subject=(
+            "Your Varnis verification code"
+            if user.language == "en"
+            else "Votre code de vérification Varnis"
+        ),
+        template_name="emails/otp_code.html",
+        context={
+            "name": user.name,
+            "code": code,
+            "minutes": OTP_TTL_MINUTES,
+            "language": user.language,
+        },
     )
 
 

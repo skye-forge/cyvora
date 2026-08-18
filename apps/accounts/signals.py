@@ -8,7 +8,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 from .models import User
-from .tasks import send_welcome_email  # adjust import to match your actual task module
+from .tasks import send_welcome_email  
 
 logger = logging.getLogger(__name__)
 
